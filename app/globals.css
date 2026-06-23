@@ -1,0 +1,193 @@
+/* ============================================================
+   GAM Group — global styles
+   Base layout is authored as inline styles on each element
+   (faithful to the design prototype). This file holds what
+   inline styles cannot express: resets, keyframes, the reveal
+   animation, media queries, Leaflet overrides, and :hover /
+   :focus states (hover rules use !important to win over the
+   inline base styles).
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  font-family: "Manrope", system-ui, sans-serif;
+  color: #1b2a4a;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection {
+  background: #3cc8bd;
+  color: #06231f;
+}
+input,
+textarea,
+button {
+  font-family: inherit;
+}
+[data-track]::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+  display: none;
+}
+
+/* ---- Keyframes ---- */
+@keyframes gam-rise {
+  from {
+    opacity: 0;
+    transform: translateY(34px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes gam-cue {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 1;
+  }
+}
+@keyframes gam-marq {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes gam-ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* ---- Scroll reveal (progressive enhancement) ---- */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    [data-rise] {
+      animation: gam-rise both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 26%;
+    }
+  }
+}
+
+/* ---- Leaflet overrides ---- */
+.leaflet-container {
+  background: #0f1828 !important;
+  font-family: "Space Mono", monospace !important;
+}
+.leaflet-control-attribution {
+  font-size: 9px !important;
+  background: rgba(16, 27, 48, 0.5) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+.leaflet-control-attribution a {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+.leaflet-bar a {
+  background: #16233f !important;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+.leaflet-bar a:hover {
+  background: #1b2a4a !important;
+}
+
+/* ---- Hover / focus states (override inline base styles) ---- */
+.cta-pill:hover {
+  background: #3cc8bd !important;
+  transform: translateY(-2px);
+}
+.btn-navy:hover {
+  background: #3cc8bd !important;
+  transform: translateY(-2px);
+}
+.btn-ghost:hover {
+  border-color: #3cc8bd !important;
+  color: #3cc8bd !important;
+}
+.btn-teal:hover {
+  background: #fff !important;
+  transform: translateY(-2px);
+}
+.svc-row:hover,
+.job-row:hover {
+  padding-left: 14px !important;
+}
+.chan-cell:hover {
+  background: #f6f7f9 !important;
+}
+.project-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(60, 200, 189, 0.45) !important;
+}
+.link-teal-white:hover {
+  color: #fff !important;
+}
+.map-dir:hover {
+  color: #3cc8bd !important;
+}
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.24) !important;
+}
+.field-input:focus {
+  border-bottom-color: #3cc8bd !important;
+}
+
+/* ---- Responsive (mirrors the prototype data-* breakpoints) ---- */
+@media (max-width: 960px) {
+  [data-desktop-nav] {
+    display: none !important;
+  }
+  [data-burger] {
+    display: flex !important;
+  }
+  [data-grid-2] {
+    grid-template-columns: 1fr !important;
+  }
+  [data-form-row] {
+    grid-template-columns: 1fr !important;
+  }
+  [data-sticky] {
+    position: static !important;
+  }
+  [data-svc-row] {
+    grid-template-columns: auto 1fr !important;
+  }
+  [data-svc-tags] {
+    grid-column: 1 / -1 !important;
+    padding-left: 0 !important;
+    margin-top: 18px !important;
+  }
+  [data-chan] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  [data-job-row] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 20px !important;
+  }
+}
+@media (max-width: 600px) {
+  [data-chan] {
+    grid-template-columns: 1fr !important;
+  }
+}

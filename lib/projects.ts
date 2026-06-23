@@ -1,0 +1,151 @@
+import { kv } from "@vercel/kv";
+import { randomUUID } from "crypto";
+
+/**
+ * A Case Study ("I progetti" / modal content).
+ * Field names map 1:1 to the README modal blocks:
+ *   challenge   -> "La sfida"
+ *   description -> "Il progetto"
+ *   benefits    -> "Benefici" (rendered as the 2-col ✓ list)
+ */
+export type Project = {
+  id: string;
+  sector: string; // pill label, e.g. "Fashion"
+  img: string; // placeholder caption for the card/modal banner, e.g. "[ fashion retail ]"
+  title: string;
+  challenge: string;
+  description: string;
+  benefits: string[];
+};
+
+export type ProjectInput = Omit<Project, "id">;
+
+/**
+ * Vercel KV data structure
+ * -------------------------
+ * Projects are stored as a single Redis LIST under `gam:projects`.
+ * Each list element is a Project object (the @vercel/kv client serialises
+ * objects to JSON on write and parses them on read). Ordering is insertion
+ * order (RPUSH appends), which is exactly the order the horizontal gallery
+ * renders. Reading the whole gallery is one `LRANGE 0 -1`.
+ */
+export const PROJECTS_KEY = "gam:projects";
+
+export const DEFAULT_PROJECTS: Project[] = [
+  {
+    id: "seed-fashion-helpdesk",
+    sector: "Fashion",
+    img: "[ fashion retail ]",
+    title: "Help Desk e Supporto Sistemistico per l’Efficienza Operativa",
+    challenge:
+      "Garantire la continuità operativa tra sede e punti vendita, con tempi di risposta rapidi su postazioni, reti e applicativi di negozio.",
+    description:
+      "Abbiamo attivato un servizio di Help Desk HD1 e HD2 con presidio sistemistico dedicato, gestendo richieste, incidenti e manutenzione di postazioni e infrastruttura.",
+    benefits: [
+      "Riduzione dei tempi di fermo",
+      "SLA rispettati con costanza",
+      "Un unico punto di contatto",
+      "Maggiore continuità operativa",
+    ],
+  },
+  {
+    id: "seed-automotive-as400",
+    sector: "Automotive",
+    img: "[ linea automotive ]",
+    title: "Innovazione e Supporto Continuo nell’Area AS400",
+    challenge:
+      "Mantenere ed evolvere sistemi gestionali IBM i-Series critici per la produzione, senza interruzioni del servizio.",
+    description:
+      "Manutenzione correttiva ed evolutiva su AS400, con sviluppi mirati e affiancamento costante ai team interni del cliente.",
+    benefits: [
+      "Sistemi sempre disponibili",
+      "Evoluzioni rilasciate in sicurezza",
+      "Know-how preservato nel tempo",
+      "Costi di gestione ottimizzati",
+    ],
+  },
+  {
+    id: "seed-manufacturing-edi",
+    sector: "Manufacturing",
+    img: "[ stabilimento ]",
+    title: "Soluzioni EDI e Budgeting per un’Operatività Globale",
+    challenge:
+      "Integrare i flussi documentali con partner internazionali e strutturare il processo di budgeting su più sedi.",
+    description:
+      "Implementazione di flussi EDI e di strumenti di budgeting integrati con l’ERP, allineando i processi a livello globale.",
+    benefits: [
+      "Scambio dati automatizzato",
+      "Meno errori manuali",
+      "Visibilità puntuale sui costi",
+      "Processi allineati tra le sedi",
+    ],
+  },
+  {
+    id: "seed-pharma-ams",
+    sector: "Farmaceutico",
+    img: "[ laboratorio ]",
+    title: "Supporto AMS Affidabile per la Crescita Continua",
+    challenge:
+      "Assicurare una manutenzione applicativa affidabile in un settore regolamentato e in espansione.",
+    description:
+      "Servizio AMS strutturato con presidio applicativo, gestione delle richieste e miglioramento continuo delle soluzioni.",
+    benefits: [
+      "Applicazioni stabili e monitorate",
+      "Richieste gestite con SLA",
+      "Conformità mantenuta",
+      "Supporto scalabile con la crescita",
+    ],
+  },
+];
+
+/** True only when the KV REST credentials are present in the environment. */
+function kvConfigured(): boolean {
+  return Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+}
+
+/**
+ * Read all case studies in display order.
+ * Falls back to the in-memory seed when KV is not configured (local dev) or
+ * unreachable, so the site always renders. Lazily seeds an empty store so the
+ * very first deploy shows the four reference case studies.
+ */
+export async function getProjects(): Promise<Project[]> {
+  if (!kvConfigured()) return DEFAULT_PROJECTS;
+  try {
+    const items = await kv.lrange<Project>(PROJECTS_KEY, 0, -1);
+    if (!items || items.length === 0) {
+      await kv.rpush(PROJECTS_KEY, ...DEFAULT_PROJECTS);
+      return DEFAULT_PROJECTS;
+    }
+    return items;
+  } catch (err) {
+    console.error("[projects] KV read failed, serving defaults:", err);
+    return DEFAULT_PROJECTS;
+  }
+}
+
+/** Append a new case study to KV and return the stored record. */
+export async function addProject(input: ProjectInput): Promise<Project> {
+  const project: Project = {
+    id: randomUUID(),
+    sector: input.sector.trim(),
+    img: input.img?.trim() || "[ case study ]",
+    title: input.title.trim(),
+    challenge: input.challenge.trim(),
+    description: input.description.trim(),
+    benefits: input.benefits.map((b) => b.trim()).filter(Boolean),
+  };
+
+  if (!kvConfigured()) {
+    throw new Error(
+      "Vercel KV is not configured. Set KV_REST_API_URL and KV_REST_API_TOKEN."
+    );
+  }
+
+  // Seed defaults if the list is still empty, so admin additions append after them.
+  const len = await kv.llen(PROJECTS_KEY);
+  if (!len) await kv.rpush(PROJECTS_KEY, ...DEFAULT_PROJECTS);
+
+  await kv.rpush(PROJECTS_KEY, project);
+  return project;
+}
