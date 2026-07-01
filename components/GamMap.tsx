@@ -34,13 +34,17 @@ export default function GamMap() {
       }).setView([LAT, LNG], 14);
 
       L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
         {
           subdomains: "abcd",
           maxZoom: 19,
           attribution: "&copy; OpenStreetMap &copy; CARTO",
         }
       ).addTo(map);
+
+      // Drop Leaflet's default prefix (the "Leaflet" name + Ukrainian flag),
+      // keeping the licence-required OSM/CARTO attribution.
+      map.attributionControl?.setPrefix(false);
 
       // Custom teal pulsing pin via divIcon (avoids the default-marker 404).
       const icon = L.divIcon({
@@ -85,7 +89,7 @@ export default function GamMap() {
           borderRadius: 24,
           overflow: "hidden",
           border: "1px solid rgba(255,255,255,.12)",
-          background: "#0f1828",
+          background: "#e7ecf2",
           isolation: "isolate",
         }}
       />

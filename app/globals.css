@@ -91,24 +91,24 @@ button {
 
 /* ---- Leaflet overrides ---- */
 .leaflet-container {
-  background: #0f1828 !important;
+  background: #e7ecf2 !important;
   font-family: "Space Mono", monospace !important;
 }
 .leaflet-control-attribution {
   font-size: 9px !important;
-  background: rgba(16, 27, 48, 0.5) !important;
-  color: rgba(255, 255, 255, 0.4) !important;
+  background: rgba(255, 255, 255, 0.75) !important;
+  color: #6b7686 !important;
 }
 .leaflet-control-attribution a {
-  color: rgba(255, 255, 255, 0.55) !important;
+  color: #1b2a4a !important;
 }
 .leaflet-bar a {
-  background: #16233f !important;
-  color: #fff !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: #fff !important;
+  color: #1b2a4a !important;
+  border-color: rgba(27, 42, 74, 0.12) !important;
 }
 .leaflet-bar a:hover {
-  background: #1b2a4a !important;
+  background: #f0f2f6 !important;
 }
 
 /* ---- Hover / focus states (override inline base styles) ---- */
@@ -128,12 +128,27 @@ button {
   background: #fff !important;
   transform: translateY(-2px);
 }
-.svc-row:hover,
-.job-row:hover {
-  padding-left: 14px !important;
+/* editorial list rows: teal wash + left accent bar on hover / tap */
+.svc-row,
+.job-row {
+  transition: padding-left 0.4s ease, background 0.3s ease, box-shadow 0.3s ease !important;
 }
-.chan-cell:hover {
+.svc-row:hover,
+.svc-row:active,
+.job-row:hover,
+.job-row:active {
+  padding-left: 18px !important;
+  background: rgba(60, 200, 189, 0.06);
+  box-shadow: inset 3px 0 0 #3cc8bd;
+}
+/* channel cells: subtle wash + teal top accent on hover / tap */
+.chan-cell {
+  transition: background 0.4s ease, box-shadow 0.3s ease !important;
+}
+.chan-cell:hover,
+.chan-cell:active {
   background: #f6f7f9 !important;
+  box-shadow: inset 0 3px 0 #3cc8bd;
 }
 .project-card:hover {
   transform: translateY(-6px);
@@ -150,6 +165,32 @@ button {
 }
 .field-input:focus {
   border-bottom-color: #3cc8bd !important;
+}
+
+/* nav links: teal on hover (scroll-spy sets the active colour inline) */
+.nav-link:hover {
+  color: #3cc8bd !important;
+}
+
+/* tag / sector chips: teal outline on hover-tap, and when their row is hovered */
+.chip {
+  transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+}
+.chip:hover,
+.chip:active {
+  border-color: rgba(100, 125, 182, 0.7) !important;
+  color: #4c5fa6 !important; /* readable periwinkle (darkened #647DB6) */
+  background: rgba(100, 125, 182, 0.12);
+}
+.svc-row:hover .chip,
+.job-row:hover .chip {
+  border-color: rgba(100, 125, 182, 0.45) !important;
+}
+
+/* subtle teal flash on tap (mobile) */
+a,
+button {
+  -webkit-tap-highlight-color: rgba(60, 200, 189, 0.18);
 }
 
 /* ---- Responsive (mirrors the prototype data-* breakpoints) ---- */

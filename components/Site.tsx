@@ -22,7 +22,7 @@ const GamMap = dynamic(() => import("@/components/GamMap"), {
         height: "clamp(340px,40vw,500px)",
         borderRadius: 24,
         border: "1px solid rgba(255,255,255,.12)",
-        background: "#0f1828",
+        background: "#e7ecf2",
       }}
     />
   ),
@@ -31,6 +31,7 @@ const GamMap = dynamic(() => import("@/components/GamMap"), {
 /* ---- tokens ---- */
 const NAVY = "#1B2A4A";
 const TEAL = "#3CC8BD";
+const PERI = "#647DB6"; // brand periwinkle (from the logo) — 2nd accent, readable on white
 const GREY = "#6B7686";
 const MUT = "#9aa4b2";
 const S2 = "#475569";
@@ -317,6 +318,7 @@ export default function Site({ projects }: { projects: Project[] }) {
             <a
               key={key}
               data-nav={key}
+              className="nav-link"
               href={id === "top" ? "#" : `#${id}`}
               onClick={nav(id)}
               style={{ fontSize: 15, fontWeight: 500, color: NAVY, textDecoration: "none", cursor: "pointer", transition: "color .3s ease" }}
@@ -374,7 +376,7 @@ export default function Site({ projects }: { projects: Project[] }) {
           background: "#fff",
         }}
       >
-        <span data-rise style={{ fontFamily: MONO, fontSize: 12, letterSpacing: ".3em", textTransform: "uppercase", color: MUT }}>
+        <span data-rise style={{ fontFamily: MONO, fontSize: 12, letterSpacing: ".3em", textTransform: "uppercase", color: TEAL }}>
           Consulenza IT — System Integration — dal 2001
         </span>
         <h1 style={{ margin: "30px 0 0", fontFamily: GRO, fontWeight: 700, fontSize: "clamp(58px,10vw,164px)", lineHeight: 0.92, letterSpacing: "-.035em", color: NAVY }}>
@@ -382,9 +384,13 @@ export default function Site({ projects }: { projects: Project[] }) {
             Benvenuti in
           </span>
           <br />
-          <span data-rise style={{ display: "inline-block", color: TEAL }}>
-            GAM
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            data-rise
+            src="/gam-wordmark-blue.svg"
+            alt="GAM"
+            style={{ display: "inline-block", verticalAlign: "top", height: "clamp(46px,8vw,140px)", width: "auto", marginTop: "clamp(10px,1.4vw,22px)" }}
+          />
         </h1>
         <p data-rise style={{ margin: "36px 0 0", maxWidth: 540, fontWeight: 300, fontSize: "clamp(17px,1.7vw,22px)", lineHeight: 1.62, color: GREY }}>
           Evolviamo e ottimizziamo i processi aziendali dei nostri clienti, dalla consulenza ai sistemi.
@@ -451,13 +457,13 @@ export default function Site({ projects }: { projects: Project[] }) {
             <span style={eyebrow()}>01 — 04</span>
             <h2 style={h2}>I nostri servizi</h2>
           </div>
-          <div style={{ borderTop: "1px solid rgba(27,42,74,.12)" }}>
+          <div style={{ borderTop: "1px solid rgba(60,200,189,.32)" }}>
             {services.map((svc) => (
               <div
                 key={svc.num}
                 data-svc-row
                 className="svc-row"
-                style={{ display: "grid", gridTemplateColumns: "64px minmax(220px,1fr) 1.2fr", gap: 28, alignItems: "center", padding: "clamp(28px,3.4vw,46px) 0", borderBottom: "1px solid rgba(27,42,74,.12)", transition: "padding-left .4s ease", cursor: "default" }}
+                style={{ display: "grid", gridTemplateColumns: "64px minmax(220px,1fr) 1.2fr", gap: 28, alignItems: "center", padding: "clamp(28px,3.4vw,46px) 0", borderBottom: "1px solid rgba(60,200,189,.32)", transition: "padding-left .4s ease", cursor: "default" }}
               >
                 <span style={{ fontFamily: MONO, fontSize: 14, color: TEAL }}>{svc.num}</span>
                 <div>
@@ -465,7 +471,7 @@ export default function Site({ projects }: { projects: Project[] }) {
                 </div>
                 <div data-svc-tags style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {svc.tags.map((t) => (
-                    <span key={t} style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".04em", color: "#56627a", border: "1px solid rgba(27,42,74,.16)", borderRadius: 999, padding: "6px 13px" }}>
+                    <span key={t} className="chip" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".04em", color: "#56627a", border: "1px solid rgba(27,42,74,.16)", borderRadius: 999, padding: "6px 13px" }}>
                       {t}
                     </span>
                   ))}
@@ -483,9 +489,9 @@ export default function Site({ projects }: { projects: Project[] }) {
             <span style={eyebrow()}>Tecnologie</span>
             <h2 style={h2}>I nostri canali</h2>
           </div>
-          <div data-chan style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", borderTop: "1px solid rgba(27,42,74,.12)", borderLeft: "1px solid rgba(27,42,74,.12)" }}>
+          <div data-chan style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", borderTop: "1px solid rgba(60,200,189,.32)", borderLeft: "1px solid rgba(60,200,189,.32)" }}>
             {channels.map((ch) => (
-              <div key={ch.name} className="chan-cell" style={{ borderRight: "1px solid rgba(27,42,74,.12)", borderBottom: "1px solid rgba(27,42,74,.12)", padding: "clamp(26px,2.4vw,40px)", minHeight: 260, display: "flex", flexDirection: "column", transition: "background .4s ease" }}>
+              <div key={ch.name} className="chan-cell" style={{ borderRight: "1px solid rgba(60,200,189,.32)", borderBottom: "1px solid rgba(60,200,189,.32)", padding: "clamp(26px,2.4vw,40px)", minHeight: 260, display: "flex", flexDirection: "column", transition: "background .4s ease" }}>
                 <span style={{ fontFamily: GRO, fontWeight: 700, fontSize: "clamp(22px,1.9vw,28px)", letterSpacing: "-.01em", color: NAVY }}>{ch.name}</span>
                 <span style={{ width: 26, height: 3, background: TEAL, margin: "16px 0 22px" }} />
                 <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 9 }}>
@@ -526,13 +532,13 @@ export default function Site({ projects }: { projects: Project[] }) {
           </div>
           <div>
             <p data-rise style={{ margin: 0, fontWeight: 300, fontSize: "clamp(17px,1.7vw,22px)", lineHeight: 1.7, color: S2 }}>
-              GAM Group è un’azienda italiana fondata nel <strong style={{ fontWeight: 600, color: NAVY }}>2001</strong>, con sede a <strong style={{ fontWeight: 600, color: NAVY }}>Treviso</strong>. Da oltre vent’anni affianchiamo le imprese nell’evoluzione e nella gestione dei loro sistemi IT.
+              GAM Group è un’azienda italiana fondata nel <strong style={{ fontWeight: 700, color: PERI }}>2001</strong>, con sede a <strong style={{ fontWeight: 700, color: PERI }}>Treviso</strong>. Da oltre vent’anni affianchiamo le imprese nell’evoluzione e nella gestione dei loro sistemi IT.
             </p>
-            <div data-rise style={{ marginTop: 40, paddingTop: 34, borderTop: "1px solid rgba(27,42,74,.12)" }}>
+            <div data-rise style={{ marginTop: 40, paddingTop: 34, borderTop: "1px solid rgba(60,200,189,.32)" }}>
               <p style={{ margin: "0 0 18px", fontFamily: MONO, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: MUT }}>Settori</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
                 {sectors.map((sec) => (
-                  <span key={sec} style={{ fontFamily: GRO, fontWeight: 500, fontSize: "clamp(15px,1.4vw,19px)", color: NAVY, border: "1px solid rgba(27,42,74,.16)", borderRadius: 999, padding: "9px 18px" }}>{sec}</span>
+                  <span key={sec} className="chip" style={{ fontFamily: GRO, fontWeight: 500, fontSize: "clamp(15px,1.4vw,19px)", color: NAVY, border: "1px solid rgba(27,42,74,.16)", borderRadius: 999, padding: "9px 18px" }}>{sec}</span>
                 ))}
               </div>
             </div>
@@ -595,9 +601,9 @@ export default function Site({ projects }: { projects: Project[] }) {
           <p data-rise style={{ margin: "0 0 clamp(40px,5vw,64px)", maxWidth: 560, fontWeight: 300, fontSize: "clamp(17px,1.6vw,21px)", lineHeight: 1.6, color: GREY }}>
             Unisciti a un team di esperti IT. Le posizioni aperte, in continua crescita.
           </p>
-          <div style={{ borderTop: "1px solid rgba(27,42,74,.12)" }}>
+          <div style={{ borderTop: "1px solid rgba(60,200,189,.32)" }}>
             {jobs.map((job) => (
-              <div key={job.title} data-job-row className="job-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 32, padding: "clamp(26px,3vw,40px) 0", borderBottom: "1px solid rgba(27,42,74,.12)", transition: "padding-left .4s ease" }}>
+              <div key={job.title} data-job-row className="job-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 32, padding: "clamp(26px,3vw,40px) 0", borderBottom: "1px solid rgba(60,200,189,.32)", transition: "padding-left .4s ease" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                   <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(22px,2.4vw,32px)", lineHeight: 1.1, letterSpacing: "-.015em", color: NAVY }}>{job.title}</h3>
                   <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10 }}>
@@ -607,7 +613,7 @@ export default function Site({ projects }: { projects: Project[] }) {
                   </div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {job.tags.map((t) => (
-                      <span key={t} style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".04em", color: "#56627a", border: "1px solid rgba(27,42,74,.16)", borderRadius: 999, padding: "6px 13px" }}>{t}</span>
+                      <span key={t} className="chip" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".04em", color: "#56627a", border: "1px solid rgba(27,42,74,.16)", borderRadius: 999, padding: "6px 13px" }}>{t}</span>
                     ))}
                   </div>
                 </div>
