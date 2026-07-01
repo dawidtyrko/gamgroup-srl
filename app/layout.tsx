@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
 
@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: "GAM Group — Consulenza IT & System Integration dal 2001",
   description:
     "GAM Group Srl: evolviamo e ottimizziamo i processi aziendali dei nostri clienti, dalla consulenza ai sistemi. Treviso, dal 2001.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#647DB6",
 };
 
 export default function RootLayout({

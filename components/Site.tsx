@@ -299,12 +299,11 @@ export default function Site({ projects }: { projects: Project[] }) {
         <a
           href="#"
           onClick={nav("top")}
-          style={{ display: "flex", flexDirection: "column", textDecoration: "none", lineHeight: 1, cursor: "pointer" }}
+          aria-label="GAM Group — Home"
+          style={{ display: "flex", alignItems: "center", textDecoration: "none", lineHeight: 1, cursor: "pointer" }}
         >
-          <span style={{ fontFamily: GRO, fontWeight: 700, fontSize: 26, letterSpacing: "-.01em", color: NAVY }}>GAM</span>
-          <span style={{ fontFamily: MONO, fontSize: 8.5, letterSpacing: ".26em", textTransform: "uppercase", color: GREY, marginTop: 4 }}>
-            It’s my world
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/gam-logo-blue.svg" alt="GAM Group — It's my world" width={77} height={46} style={{ display: "block", height: 46, width: "auto" }} />
         </a>
 
         <nav ref={navRef} data-desktop-nav style={{ display: "flex", alignItems: "center", gap: 38 }}>
@@ -669,9 +668,9 @@ export default function Site({ projects }: { projects: Project[] }) {
 
       {/* ---- Footer ---- */}
       <footer style={{ background: "#101b30", color: "rgba(255,255,255,.55)", padding: "34px 6vw", display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "space-between", alignItems: "center", fontWeight: 300, fontSize: 13 }}>
-        <div style={{ display: "flex", flexDirection: "column", lineHeight: 1 }}>
-          <span style={{ fontFamily: GRO, fontWeight: 700, fontSize: 20, color: "#fff" }}>GAM</span>
-          <span style={{ fontFamily: MONO, fontSize: 8, letterSpacing: ".24em", textTransform: "uppercase", color: TEAL, marginTop: 4 }}>It’s my world</span>
+        <div style={{ display: "flex", alignItems: "center", lineHeight: 1 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/gam-logo-white.svg" alt="GAM Group — It's my world" width={67} height={40} style={{ display: "block", height: 40, width: "auto" }} />
         </div>
         <span>© 2026 GAM Group Srl — Via Callalta 31/E, 31100 Treviso (TV)</span>
       </footer>
@@ -713,9 +712,9 @@ export default function Site({ projects }: { projects: Project[] }) {
       {menuOpen && (
         <div style={{ position: "fixed", inset: 0, zIndex: 1100, background: "#fff", display: "flex", flexDirection: "column", padding: "26px 6vw" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1 }}>
-              <span style={{ fontFamily: GRO, fontWeight: 700, fontSize: 24, color: NAVY }}>GAM</span>
-              <span style={{ fontFamily: MONO, fontSize: 8, letterSpacing: ".24em", textTransform: "uppercase", color: TEAL, marginTop: 4 }}>It’s my world</span>
+            <div style={{ display: "flex", alignItems: "center", lineHeight: 1 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/gam-logo-blue.svg" alt="GAM Group — It's my world" width={80} height={48} style={{ display: "block", height: 48, width: "auto" }} />
             </div>
             <button onClick={() => setMenuOpen(false)} aria-label="Chiudi" style={{ background: "none", border: "none", color: NAVY, fontSize: 38, lineHeight: 1, cursor: "pointer", fontWeight: 300 }}>×</button>
           </div>

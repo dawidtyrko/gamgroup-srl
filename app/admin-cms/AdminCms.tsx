@@ -159,6 +159,8 @@ export default function AdminCms() {
       }}
     >
       <div style={{ maxWidth: 720, margin: "0 auto" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/gam-logo-blue.svg" alt="GAM Group" width={67} height={40} style={{ display: "block", height: 40, width: "auto", marginBottom: 24 }} />
         <p style={{ ...labelStyle, color: TEAL, margin: "0 0 10px" }}>Admin CMS</p>
         <h1 style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(28px,4vw,46px)", letterSpacing: "-.02em", color: NAVY }}>
           Gestione case study
