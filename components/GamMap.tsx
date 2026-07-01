@@ -156,7 +156,7 @@ export default function GamMap() {
             transition: "color .3s ease",
           }}
         >
-          Ottieni indicazioni &rarr;
+          Ottieni indicazioni →
         </a>
       </div>
     </div>

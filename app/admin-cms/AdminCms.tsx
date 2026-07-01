@@ -92,8 +92,8 @@ export default function AdminCms() {
         </h1>
         <p style={{ marginTop: 14, color: "#6B7686", fontWeight: 300, fontSize: 16, lineHeight: 1.6 }}>
           I progetti vengono salvati su Vercel KV e pubblicati nella sezione
-          &laquo;I progetti&raquo;. La home si aggiorna automaticamente (ISR)
-          dopo l&rsquo;invio.
+          «I progetti». La home si aggiorna automaticamente (ISR)
+          dopo l’invio.
         </p>
 
         <form onSubmit={submit} style={{ marginTop: 36, display: "flex", flexDirection: "column", gap: 22 }}>

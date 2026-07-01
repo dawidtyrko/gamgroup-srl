@@ -303,7 +303,7 @@ export default function Site({ projects }: { projects: Project[] }) {
         >
           <span style={{ fontFamily: GRO, fontWeight: 700, fontSize: 26, letterSpacing: "-.01em", color: NAVY }}>GAM</span>
           <span style={{ fontFamily: MONO, fontSize: 8.5, letterSpacing: ".26em", textTransform: "uppercase", color: GREY, marginTop: 4 }}>
-            It&rsquo;s my world
+            It’s my world
           </span>
         </a>
 
@@ -376,7 +376,7 @@ export default function Site({ projects }: { projects: Project[] }) {
         }}
       >
         <span data-rise style={{ fontFamily: MONO, fontSize: 12, letterSpacing: ".3em", textTransform: "uppercase", color: MUT }}>
-          Consulenza IT &mdash; System Integration &mdash; dal 2001
+          Consulenza IT — System Integration — dal 2001
         </span>
         <h1 style={{ margin: "30px 0 0", fontFamily: GRO, fontWeight: 700, fontSize: "clamp(58px,10vw,164px)", lineHeight: 0.92, letterSpacing: "-.035em", color: NAVY }}>
           <span data-rise style={{ display: "inline-block" }}>
@@ -428,7 +428,7 @@ export default function Site({ projects }: { projects: Project[] }) {
           }}
         >
           <span style={{ fontFamily: MONO, fontSize: 13, letterSpacing: ".18em", color: "rgba(255,255,255,.22)", textTransform: "uppercase" }}>
-            [ team gam &mdash; foto a tutta larghezza ]
+            [ team gam — foto a tutta larghezza ]
           </span>
         </div>
       </section>
@@ -449,7 +449,7 @@ export default function Site({ projects }: { projects: Project[] }) {
       <section id="servizi" style={{ background: "#F6F7F9", padding: "clamp(90px,12vw,170px) 6vw" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <div data-rise style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: "clamp(40px,5vw,70px)" }}>
-            <span style={eyebrow()}>01 &mdash; 04</span>
+            <span style={eyebrow()}>01 — 04</span>
             <h2 style={h2}>I nostri servizi</h2>
           </div>
           <div style={{ borderTop: "1px solid rgba(27,42,74,.12)" }}>
@@ -522,12 +522,12 @@ export default function Site({ projects }: { projects: Project[] }) {
             <p style={{ margin: "0 0 22px", ...eyebrow() }}>Chi siamo</p>
             <h2 data-rise style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(34px,4.6vw,68px)", lineHeight: 1.02, letterSpacing: "-.025em", color: NAVY }}>Il partner di cui ti puoi fidare.</h2>
             <button data-rise onClick={nav("contatti")} className="btn-ghost" style={{ marginTop: 38, display: "inline-flex", alignItems: "center", gap: 10, background: "transparent", color: NAVY, border: "1.5px solid #d3dae4", borderRadius: 999, padding: "15px 30px", fontSize: 15, fontWeight: 600, cursor: "pointer", transition: "border-color .3s ease,color .3s ease" }}>
-              Parla con noi &rarr;
+              Parla con noi →
             </button>
           </div>
           <div>
             <p data-rise style={{ margin: 0, fontWeight: 300, fontSize: "clamp(17px,1.7vw,22px)", lineHeight: 1.7, color: S2 }}>
-              GAM Group è un&rsquo;azienda italiana fondata nel <strong style={{ fontWeight: 600, color: NAVY }}>2001</strong>, con sede a <strong style={{ fontWeight: 600, color: NAVY }}>Treviso</strong>. Da oltre vent&rsquo;anni affianchiamo le imprese nell&rsquo;evoluzione e nella gestione dei loro sistemi IT.
+              GAM Group è un’azienda italiana fondata nel <strong style={{ fontWeight: 600, color: NAVY }}>2001</strong>, con sede a <strong style={{ fontWeight: 600, color: NAVY }}>Treviso</strong>. Da oltre vent’anni affianchiamo le imprese nell’evoluzione e nella gestione dei loro sistemi IT.
             </p>
             <div data-rise style={{ marginTop: 40, paddingTop: 34, borderTop: "1px solid rgba(27,42,74,.12)" }}>
               <p style={{ margin: "0 0 18px", fontFamily: MONO, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: MUT }}>Settori</p>
@@ -563,7 +563,7 @@ export default function Site({ projects }: { projects: Project[] }) {
                   </div>
                   <div style={{ padding: 30, display: "flex", flexDirection: "column", gap: 22, minHeight: 200 }}>
                     <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(20px,1.8vw,26px)", lineHeight: 1.28, color: "#fff" }}>{p.title}</h3>
-                    <span style={{ marginTop: "auto", fontFamily: MONO, fontSize: 13, letterSpacing: ".04em", color: TEAL }}>Leggi il case study &rarr;</span>
+                    <span style={{ marginTop: "auto", fontFamily: MONO, fontSize: 13, letterSpacing: ".04em", color: TEAL }}>Leggi il case study →</span>
                   </div>
                 </div>
               ))}
@@ -571,7 +571,7 @@ export default function Site({ projects }: { projects: Project[] }) {
                 <span style={{ fontFamily: GRO, fontWeight: 500, fontSize: "clamp(22px,2.4vw,34px)", color: "rgba(255,255,255,.4)", maxWidth: "14ch", lineHeight: 1.15 }}>E molti altri progetti, in ogni settore.</span>
               </div>
             </div>
-            <p style={{ padding: "0 6vw", margin: "clamp(28px,4vh,52px) 0 0", fontFamily: MONO, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(255,255,255,.35)" }}>Scorri per esplorare &rarr;</p>
+            <p style={{ padding: "0 6vw", margin: "clamp(28px,4vh,52px) 0 0", fontFamily: MONO, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(255,255,255,.35)" }}>Scorri per esplorare →</p>
           </div>
         </div>
       </section>
@@ -617,13 +617,13 @@ export default function Site({ projects }: { projects: Project[] }) {
                   className="btn-navy"
                   style={{ flex: "none", display: "inline-flex", alignItems: "center", gap: 9, background: NAVY, color: "#fff", borderRadius: 999, padding: "14px 28px", fontSize: 15, fontWeight: 600, textDecoration: "none", transition: "background .3s ease,transform .3s ease" }}
                 >
-                  Candidati ora &rarr;
+                  Candidati ora →
                 </a>
               </div>
             ))}
           </div>
           <p data-rise style={{ margin: "clamp(36px,4vw,52px) 0 0", fontWeight: 300, fontSize: 16, color: GREY }}>
-            Candidatura spontanea &mdash; invia il CV a{" "}
+            Candidatura spontanea — invia il CV a{" "}
             <a href="mailto:recruitment@gamgroup.it" style={{ color: NAVY, fontWeight: 500, textDecoration: "none", borderBottom: `1px solid ${TEAL}` }}>recruitment@gamgroup.it</a>
           </p>
         </div>
@@ -636,7 +636,7 @@ export default function Site({ projects }: { projects: Project[] }) {
             <p data-rise style={{ margin: "0 0 22px", ...eyebrow() }}>Contatti</p>
             <h2 data-rise style={{ margin: 0, maxWidth: "15ch", fontFamily: GRO, fontWeight: 700, fontSize: "clamp(34px,4.8vw,66px)", lineHeight: 1.02, letterSpacing: "-.025em", color: "#fff" }}>Scopriamo insieme cosa possiamo fare.</h2>
             <div data-rise style={{ marginTop: 44, display: "flex", flexDirection: "column", gap: 16, fontWeight: 300, fontSize: 18 }}>
-              <span style={{ color: "rgba(255,255,255,.75)" }}>Via Callalta 31/E &ndash; 31100 Treviso</span>
+              <span style={{ color: "rgba(255,255,255,.75)" }}>Via Callalta 31/E – 31100 Treviso</span>
               <a href="mailto:info@gamgroup.it" className="link-teal-white" style={{ color: TEAL, textDecoration: "none", transition: "color .3s ease" }}>info@gamgroup.it</a>
               <a href="tel:+390422583693" className="link-teal-white" style={{ color: TEAL, textDecoration: "none", transition: "color .3s ease" }}>+39 0422 583693</a>
             </div>
@@ -657,7 +657,7 @@ export default function Site({ projects }: { projects: Project[] }) {
               </form>
             ) : (
               <div style={{ border: "1px solid rgba(60,200,189,.4)", borderRadius: 20, padding: "48px 40px", background: "rgba(60,200,189,.08)" }}>
-                <div style={{ fontSize: 40, lineHeight: 1, color: TEAL, marginBottom: 18 }}>&check;</div>
+                <div style={{ fontSize: 40, lineHeight: 1, color: TEAL, marginBottom: 18 }}>✓</div>
                 <h3 style={{ margin: "0 0 12px", fontFamily: GRO, fontWeight: 500, fontSize: 26, color: "#fff" }}>Grazie!</h3>
                 <p style={{ margin: 0, fontWeight: 300, fontSize: 17, lineHeight: 1.6, color: "rgba(255,255,255,.8)" }}>Abbiamo ricevuto il tuo messaggio e ti risponderemo al più presto.</p>
               </div>
@@ -671,9 +671,9 @@ export default function Site({ projects }: { projects: Project[] }) {
       <footer style={{ background: "#101b30", color: "rgba(255,255,255,.55)", padding: "34px 6vw", display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "space-between", alignItems: "center", fontWeight: 300, fontSize: 13 }}>
         <div style={{ display: "flex", flexDirection: "column", lineHeight: 1 }}>
           <span style={{ fontFamily: GRO, fontWeight: 700, fontSize: 20, color: "#fff" }}>GAM</span>
-          <span style={{ fontFamily: MONO, fontSize: 8, letterSpacing: ".24em", textTransform: "uppercase", color: TEAL, marginTop: 4 }}>It&rsquo;s my world</span>
+          <span style={{ fontFamily: MONO, fontSize: 8, letterSpacing: ".24em", textTransform: "uppercase", color: TEAL, marginTop: 4 }}>It’s my world</span>
         </div>
-        <span>&copy; 2026 GAM Group Srl &mdash; Via Callalta 31/E, 31100 Treviso (TV)</span>
+        <span>© 2026 GAM Group Srl — Via Callalta 31/E, 31100 Treviso (TV)</span>
       </footer>
 
       {/* ---- Case study modal ---- */}
@@ -682,7 +682,7 @@ export default function Site({ projects }: { projects: Project[] }) {
           <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 24, maxWidth: 720, width: "100%", maxHeight: "88vh", overflow: "auto", boxShadow: "0 40px 100px rgba(16,27,48,.45)" }}>
             <div style={{ position: "relative", height: "clamp(160px,22vw,220px)", display: "flex", alignItems: "flex-end", padding: 24, ...cardBanner }}>
               <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: TEAL, border: "1px solid rgba(60,200,189,.5)", padding: "6px 13px", borderRadius: 999 }}>{activeProject.sector}</span>
-              <button onClick={() => setProjectIndex(null)} aria-label="Chiudi" className="modal-close" style={{ position: "absolute", top: 18, right: 18, width: 40, height: 40, borderRadius: "50%", border: "none", background: "rgba(255,255,255,.12)", color: "#fff", fontSize: 24, lineHeight: 1, cursor: "pointer", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)", transition: "background .3s ease" }}>&times;</button>
+              <button onClick={() => setProjectIndex(null)} aria-label="Chiudi" className="modal-close" style={{ position: "absolute", top: 18, right: 18, width: 40, height: 40, borderRadius: "50%", border: "none", background: "rgba(255,255,255,.12)", color: "#fff", fontSize: 24, lineHeight: 1, cursor: "pointer", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)", transition: "background .3s ease" }}>×</button>
             </div>
             <div style={{ padding: "clamp(28px,4vw,48px)" }}>
               <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(24px,3vw,38px)", lineHeight: 1.12, letterSpacing: "-.02em", color: NAVY }}>{activeProject.title}</h3>
@@ -697,13 +697,13 @@ export default function Site({ projects }: { projects: Project[] }) {
                 <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                   {activeProject.benefits.map((b) => (
                     <li key={b} style={{ display: "flex", gap: 11, alignItems: "flex-start", fontSize: 16, fontWeight: 400, color: NAVY, lineHeight: 1.4 }}>
-                      <span style={{ marginTop: 2, color: TEAL, fontSize: 16 }}>&check;</span>
+                      <span style={{ marginTop: 2, color: TEAL, fontSize: 16 }}>✓</span>
                       <span>{b}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-              <button onClick={nav("contatti")} className="btn-navy" style={{ marginTop: "clamp(30px,3.6vw,44px)", background: NAVY, color: "#fff", border: "none", borderRadius: 999, padding: "16px 34px", fontSize: 15, fontWeight: 600, cursor: "pointer", transition: "background .3s ease,transform .3s ease" }}>Parla con noi del tuo progetto &rarr;</button>
+              <button onClick={nav("contatti")} className="btn-navy" style={{ marginTop: "clamp(30px,3.6vw,44px)", background: NAVY, color: "#fff", border: "none", borderRadius: 999, padding: "16px 34px", fontSize: 15, fontWeight: 600, cursor: "pointer", transition: "background .3s ease,transform .3s ease" }}>Parla con noi del tuo progetto →</button>
             </div>
           </div>
         </div>
@@ -715,9 +715,9 @@ export default function Site({ projects }: { projects: Project[] }) {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div style={{ display: "flex", flexDirection: "column", lineHeight: 1 }}>
               <span style={{ fontFamily: GRO, fontWeight: 700, fontSize: 24, color: NAVY }}>GAM</span>
-              <span style={{ fontFamily: MONO, fontSize: 8, letterSpacing: ".24em", textTransform: "uppercase", color: TEAL, marginTop: 4 }}>It&rsquo;s my world</span>
+              <span style={{ fontFamily: MONO, fontSize: 8, letterSpacing: ".24em", textTransform: "uppercase", color: TEAL, marginTop: 4 }}>It’s my world</span>
             </div>
-            <button onClick={() => setMenuOpen(false)} aria-label="Chiudi" style={{ background: "none", border: "none", color: NAVY, fontSize: 38, lineHeight: 1, cursor: "pointer", fontWeight: 300 }}>&times;</button>
+            <button onClick={() => setMenuOpen(false)} aria-label="Chiudi" style={{ background: "none", border: "none", color: NAVY, fontSize: 38, lineHeight: 1, cursor: "pointer", fontWeight: 300 }}>×</button>
           </div>
           <nav style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 48 }}>
             {[
