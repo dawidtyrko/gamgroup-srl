@@ -124,10 +124,18 @@ export async function getProjects(): Promise<Project[]> {
   }
 }
 
-/** Append a new case study to KV and return the stored record. */
-export async function addProject(input: ProjectInput): Promise<Project> {
-  const project: Project = {
-    id: randomUUID(),
+function requireKv() {
+  if (!kvConfigured()) {
+    throw new Error(
+      "Vercel KV is not configured. Set KV_REST_API_URL and KV_REST_API_TOKEN."
+    );
+  }
+}
+
+/** Build a clean, trimmed Project from raw input. */
+function normalize(input: ProjectInput, id: string): Project {
+  return {
+    id,
     sector: input.sector.trim(),
     img: input.img?.trim() || "[ case study ]",
     title: input.title.trim(),
@@ -135,12 +143,20 @@ export async function addProject(input: ProjectInput): Promise<Project> {
     description: input.description.trim(),
     benefits: input.benefits.map((b) => b.trim()).filter(Boolean),
   };
+}
 
-  if (!kvConfigured()) {
-    throw new Error(
-      "Vercel KV is not configured. Set KV_REST_API_URL and KV_REST_API_TOKEN."
-    );
-  }
+/** Atomically replace the whole list (used by update/delete). */
+async function writeAll(projects: Project[]): Promise<void> {
+  const tx = kv.multi();
+  tx.del(PROJECTS_KEY);
+  if (projects.length) tx.rpush(PROJECTS_KEY, ...projects);
+  await tx.exec();
+}
+
+/** Append a new case study to KV and return the stored record. */
+export async function addProject(input: ProjectInput): Promise<Project> {
+  requireKv();
+  const project = normalize(input, randomUUID());
 
   // Seed defaults if the list is still empty, so admin additions append after them.
   const len = await kv.llen(PROJECTS_KEY);
@@ -148,4 +164,64 @@ export async function addProject(input: ProjectInput): Promise<Project> {
 
   await kv.rpush(PROJECTS_KEY, project);
   return project;
+}
+
+/** Update an existing case study in place. Returns null if the id is unknown. */
+export async function updateProject(
+  id: string,
+  input: ProjectInput
+): Promise<Project | null> {
+  requireKv();
+  const items = (await kv.lrange<Project>(PROJECTS_KEY, 0, -1)) ?? [];
+  const idx = items.findIndex((p) => p.id === id);
+  if (idx === -1) return null;
+  const updated = normalize(input, id);
+  items[idx] = updated;
+  await writeAll(items);
+  return updated;
+}
+
+/** Delete a case study by id. Returns false if the id is unknown. */
+export async function deleteProject(id: string): Promise<boolean> {
+  requireKv();
+  const items = (await kv.lrange<Project>(PROJECTS_KEY, 0, -1)) ?? [];
+  const next = items.filter((p) => p.id !== id);
+  if (next.length === items.length) return false;
+  await writeAll(next);
+  return true;
+}
+
+/**
+ * Validate + normalise a raw request body into ProjectInput.
+ * `benefits` may be an array or a newline/comma-separated string.
+ */
+export function parseProjectInput(
+  body: Record<string, unknown>
+): { input: ProjectInput } | { error: string } {
+  const rawBenefits = body.benefits;
+  const benefits = Array.isArray(rawBenefits)
+    ? rawBenefits.map(String)
+    : typeof rawBenefits === "string"
+      ? rawBenefits.split(/[\n,]/)
+      : [];
+
+  const input: ProjectInput = {
+    sector: String(body.sector ?? ""),
+    img: String(body.img ?? ""),
+    title: String(body.title ?? ""),
+    challenge: String(body.challenge ?? ""),
+    description: String(body.description ?? ""),
+    benefits: benefits.map((b) => b.trim()).filter(Boolean),
+  };
+
+  const missing = (["sector", "title", "challenge", "description"] as const).filter(
+    (k) => !input[k].trim()
+  );
+  if (missing.length) {
+    return { error: `Campi obbligatori mancanti: ${missing.join(", ")}.` };
+  }
+  if (input.benefits.length === 0) {
+    return { error: "Inserisci almeno un beneficio." };
+  }
+  return { input };
 }
