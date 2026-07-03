@@ -42,6 +42,12 @@ export async function POST(req: Request) {
   if (!EMAIL_RE.test(email)) {
     return NextResponse.json({ error: "Email non valida." }, { status: 400 });
   }
+  if (body.privacy !== true) {
+    return NextResponse.json(
+      { error: "Devi accettare l'informativa privacy." },
+      { status: 400 }
+    );
+  }
 
   const fullName = [nome, cognome].filter(Boolean).join(" ");
   const resend = new Resend(apiKey);

@@ -40,6 +40,8 @@ const emptyForm = {
   description: "",
   benefits: "",
   featured: false,
+  area: "",
+  image: "",
 };
 
 export default function AdminCms() {
@@ -116,6 +118,8 @@ export default function AdminCms() {
       description: p.description,
       benefits: p.benefits.join("\n"),
       featured: Boolean(p.featured),
+      area: p.area ?? "",
+      image: p.image ?? "",
     });
     setStatus({ state: "idle" });
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -197,7 +201,16 @@ export default function AdminCms() {
             <Row label="Settore (pill)">
               <input type="text" required value={form.sector} onChange={set("sector")} style={inputStyle} placeholder="es. Retail" />
             </Row>
-            <Row label="Etichetta immagine">
+            <Row label="Area tecnica (opzionale)">
+              <input type="text" value={form.area} onChange={set("area")} style={inputStyle} placeholder="es. AMS, EDI, AS400" />
+            </Row>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+            <Row label="URL immagine (opzionale)">
+              <input type="text" value={form.image} onChange={set("image")} style={inputStyle} placeholder="https://... oppure /photos/nome.jpg" />
+            </Row>
+            <Row label="Etichetta immagine (se manca la foto)">
               <input type="text" value={form.img} onChange={set("img")} style={inputStyle} placeholder="es. [ punto vendita ]" />
             </Row>
           </div>

@@ -17,6 +17,8 @@ export type Project = {
   description: string;
   benefits: string[];
   featured?: boolean; // shown in the "Case study in evidenza" block on the homepage
+  area?: string; // technical area badge, e.g. "AMS", "EDI", "AS400"
+  image?: string; // photo URL (absolute or /photos/...); rendered with the duotone treatment
 };
 
 export type ProjectInput = Omit<Project, "id">;
@@ -36,6 +38,7 @@ export const DEFAULT_PROJECTS: Project[] = [
   {
     id: "seed-fashion-helpdesk",
     sector: "Fashion",
+    area: "HD1 & HD2",
     img: "[ fashion retail ]",
     title: "Help Desk e Supporto Sistemistico per l’Efficienza Operativa",
     challenge:
@@ -52,6 +55,7 @@ export const DEFAULT_PROJECTS: Project[] = [
   {
     id: "seed-automotive-as400",
     sector: "Automotive",
+    area: "AS400",
     img: "[ linea automotive ]",
     title: "Innovazione e Supporto Continuo nell’Area AS400",
     challenge:
@@ -68,6 +72,7 @@ export const DEFAULT_PROJECTS: Project[] = [
   {
     id: "seed-manufacturing-edi",
     sector: "Manufacturing",
+    area: "EDI",
     img: "[ stabilimento ]",
     title: "Soluzioni EDI e Budgeting per un’Operatività Globale",
     challenge:
@@ -84,6 +89,7 @@ export const DEFAULT_PROJECTS: Project[] = [
   {
     id: "seed-pharma-ams",
     sector: "Farmaceutico",
+    area: "AMS",
     img: "[ laboratorio ]",
     title: "Supporto AMS Affidabile per la Crescita Continua",
     challenge:
@@ -144,6 +150,8 @@ function normalize(input: ProjectInput, id: string): Project {
     description: input.description.trim(),
     benefits: input.benefits.map((b) => b.trim()).filter(Boolean),
     featured: Boolean(input.featured),
+    area: input.area?.trim() || undefined,
+    image: input.image?.trim() || undefined,
   };
 }
 
@@ -215,7 +223,14 @@ export function parseProjectInput(
     description: String(body.description ?? ""),
     benefits: benefits.map((b) => b.trim()).filter(Boolean),
     featured: body.featured === true || body.featured === "true",
+    area: String(body.area ?? ""),
+    image: String(body.image ?? ""),
   };
+
+  const img = input.image?.trim();
+  if (img && !/^(https?:\/\/|\/)/.test(img)) {
+    return { error: "URL immagine non valido: usa un link http(s) o un percorso /..." };
+  }
 
   const missing = (["sector", "title", "challenge", "description"] as const).filter(
     (k) => !input[k].trim()

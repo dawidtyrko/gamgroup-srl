@@ -119,6 +119,9 @@ const cardBanner: CSSProperties = {
 export default function Site({ projects }: { projects: Project[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  // True once /photos/hero.jpg exists and loads — swaps the striped placeholder
+  // for the real photo without any code change (just drop the file in).
+  const [hasHeroPhoto, setHasHeroPhoto] = useState(false);
   const [formSent, setFormSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [formErr, setFormErr] = useState<string | null>(null);
@@ -300,6 +303,7 @@ export default function Site({ projects }: { projects: Project[] }) {
       email: fd.get("email"),
       azienda: fd.get("azienda"),
       messaggio: fd.get("messaggio"),
+      privacy: fd.get("privacy") === "on",
     };
     setSending(true);
     setFormErr(null);
@@ -539,9 +543,25 @@ export default function Site({ projects }: { projects: Project[] }) {
             willChange: "transform",
           }}
         >
-          <span style={{ fontFamily: MONO, fontSize: 13, letterSpacing: ".18em", color: "rgba(255,255,255,.22)", textTransform: "uppercase" }}>
-            [ team gam — foto a tutta larghezza ]
-          </span>
+          {/* Photo slot: drop the real team/office shot at public/photos/hero.jpg.
+              Until the file exists the img 404s (hidden) and the striped placeholder shows. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/photos/hero.jpg"
+            alt=""
+            onLoad={() => setHasHeroPhoto(true)}
+            onError={(e) => { e.currentTarget.style.display = "none"; }}
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(100%)", opacity: hasHeroPhoto ? 1 : 0, transition: "opacity .6s ease" }}
+          />
+          {hasHeroPhoto && (
+            /* navy overlay for legibility (handoff README) + brand duotone wash */
+            <div aria-hidden style={{ position: "absolute", inset: 0, background: "linear-gradient(125deg, rgba(27,42,74,.78), rgba(60,200,189,.38))", mixBlendMode: "multiply" }} />
+          )}
+          {!hasHeroPhoto && (
+            <span style={{ position: "relative", fontFamily: MONO, fontSize: 13, letterSpacing: ".18em", color: "rgba(255,255,255,.22)", textTransform: "uppercase" }}>
+              [ team gam — foto a tutta larghezza ]
+            </span>
+          )}
         </div>
       </section>
 
@@ -588,10 +608,7 @@ export default function Site({ projects }: { projects: Project[] }) {
                 transition: "transform .4s ease, border-color .4s ease, box-shadow .4s ease",
               }}
             >
-              <div style={{ position: "relative", minHeight: "clamp(240px,30vw,400px)", display: "flex", alignItems: "flex-end", padding: 24, ...cardBanner }}>
-                <span style={{ position: "absolute", top: 20, left: 20, fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: TEAL, border: "1px solid rgba(60,200,189,.5)", padding: "6px 13px", borderRadius: 999 }}>{featured.sector}</span>
-                <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", color: "rgba(255,255,255,.4)", textTransform: "uppercase" }}>{featured.img}</span>
-              </div>
+              <CaseBanner p={featured} style={{ minHeight: "clamp(240px,30vw,400px)", padding: 24 }} />
               <div style={{ padding: "clamp(28px,3.4vw,52px)", display: "flex", flexDirection: "column", gap: 18 }}>
                 <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(22px,2.6vw,36px)", lineHeight: 1.15, letterSpacing: "-.02em", color: NAVY }}>{featured.title}</h3>
                 <p style={{ margin: 0, fontWeight: 300, fontSize: "clamp(15px,1.4vw,18px)", lineHeight: 1.65, color: GREY }}>{featured.challenge}</p>
@@ -714,10 +731,7 @@ export default function Site({ projects }: { projects: Project[] }) {
                   className="project-card"
                   style={{ flex: "none", width: "min(78vw,460px)", background: "#16233f", border: "1px solid rgba(255,255,255,.08)", borderRadius: 22, overflow: "hidden", cursor: "pointer", transition: "transform .4s ease,border-color .4s ease" }}
                 >
-                  <div style={{ height: "clamp(200px,30vh,300px)", position: "relative", display: "flex", alignItems: "flex-end", padding: 20, ...cardBanner }}>
-                    <span style={{ position: "absolute", top: 20, left: 20, fontFamily: MONO, fontSize: 11, fontWeight: 400, letterSpacing: ".12em", textTransform: "uppercase", color: TEAL, border: "1px solid rgba(60,200,189,.5)", padding: "6px 13px", borderRadius: 999 }}>{p.sector}</span>
-                    <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", color: "rgba(255,255,255,.4)", textTransform: "uppercase" }}>{p.img}</span>
-                  </div>
+                  <CaseBanner p={p} style={{ height: "clamp(200px,30vh,300px)", padding: 20 }} />
                   <div style={{ padding: 30, display: "flex", flexDirection: "column", gap: 22, minHeight: 200 }}>
                     <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(20px,1.8vw,26px)", lineHeight: 1.28, color: "#fff" }}>{p.title}</h3>
                     <span style={{ marginTop: "auto", fontFamily: MONO, fontSize: 13, letterSpacing: ".04em", color: TEAL }}>Leggi il case study →</span>
@@ -849,6 +863,14 @@ export default function Site({ projects }: { projects: Project[] }) {
                   <span style={fieldLabel}>Messaggio</span>
                   <textarea name="messaggio" rows={3} required placeholder="Scrivi qui il tuo messaggio" className="field-input" style={{ ...fieldInput, resize: "vertical" }} />
                 </label>
+                <label style={{ display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer" }}>
+                  <input type="checkbox" name="privacy" required style={{ marginTop: 3, width: 16, height: 16, accentColor: TEAL, flex: "none" }} />
+                  <span style={{ fontWeight: 300, fontSize: 14, lineHeight: 1.55, color: "rgba(255,255,255,.7)" }}>
+                    Ho letto l&rsquo;
+                    <a href="/privacy" target="_blank" rel="noopener" style={{ color: TEAL, textDecoration: "none", borderBottom: `1px solid ${TEAL}` }}>informativa privacy</a>
+                    {" "}e acconsento al trattamento dei miei dati personali per rispondere alla mia richiesta.
+                  </span>
+                </label>
                 {formErr && (
                   <p style={{ margin: 0, fontSize: 14, color: "#ffb4b4" }}>{formErr}</p>
                 )}
@@ -872,17 +894,20 @@ export default function Site({ projects }: { projects: Project[] }) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/gam-logo-white.svg" alt="GAM Group — It's my world" width={67} height={40} style={{ display: "block", height: 40, width: "auto" }} />
         </div>
-        <span>© 2026 GAM Group Srl — Via Callalta 31/E, 31100 Treviso (TV)</span>
+        <span>
+          © 2026 GAM Group Srl — Via Callalta 31/E, 31100 Treviso (TV)
+          {" · "}
+          <a href="/privacy" style={{ color: "rgba(255,255,255,.75)", textDecoration: "none", borderBottom: "1px solid rgba(60,200,189,.6)" }}>Privacy</a>
+        </span>
       </footer>
 
       {/* ---- Case study modal ---- */}
       {activeProject && (
         <div onClick={() => setProjectIndex(null)} style={{ position: "fixed", inset: 0, zIndex: 1200, background: "rgba(16,27,48,.62)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
           <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 24, maxWidth: 720, width: "100%", maxHeight: "88vh", overflow: "auto", boxShadow: "0 40px 100px rgba(16,27,48,.45)" }}>
-            <div style={{ position: "relative", height: "clamp(160px,22vw,220px)", display: "flex", alignItems: "flex-end", padding: 24, ...cardBanner }}>
-              <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: TEAL, border: "1px solid rgba(60,200,189,.5)", padding: "6px 13px", borderRadius: 999 }}>{activeProject.sector}</span>
+            <CaseBanner p={activeProject} style={{ height: "clamp(160px,22vw,220px)", padding: 24 }}>
               <button onClick={() => setProjectIndex(null)} aria-label="Chiudi" className="modal-close" style={{ position: "absolute", top: 18, right: 18, width: 40, height: 40, borderRadius: "50%", border: "none", background: "rgba(255,255,255,.12)", color: "#fff", fontSize: 24, lineHeight: 1, cursor: "pointer", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)", transition: "background .3s ease" }}>×</button>
-            </div>
+            </CaseBanner>
             <div style={{ padding: "clamp(28px,4vw,48px)" }}>
               <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(24px,3vw,38px)", lineHeight: 1.12, letterSpacing: "-.02em", color: NAVY }}>{activeProject.title}</h3>
               <ModalBlock label="La sfida">
@@ -968,6 +993,35 @@ const modalPara: CSSProperties = {
   lineHeight: 1.65,
   color: S2,
 };
+
+/**
+ * Case-study banner: striped placeholder by default; when `p.image` is set it
+ * renders the photo with the unified duotone treatment (grayscale + navy/teal
+ * wash — visual spec §4) so all case photos read as one collection.
+ */
+function CaseBanner({ p, style, children }: { p: Project; style: CSSProperties; children?: React.ReactNode }) {
+  return (
+    <div style={{ position: "relative", display: "flex", alignItems: "flex-end", overflow: "hidden", ...cardBanner, ...style }}>
+      {p.image && (
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={p.image} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(100%)" }} />
+          <div aria-hidden style={{ position: "absolute", inset: 0, background: "linear-gradient(125deg, rgba(27,42,74,.78), rgba(60,200,189,.38))", mixBlendMode: "multiply" }} />
+        </>
+      )}
+      <div style={{ position: "absolute", top: 20, left: 20, display: "flex", flexWrap: "wrap", gap: 8 }}>
+        <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: TEAL, border: "1px solid rgba(60,200,189,.5)", padding: "6px 13px", borderRadius: 999 }}>{p.sector}</span>
+        {p.area && (
+          <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(255,255,255,.75)", border: "1px solid rgba(255,255,255,.35)", padding: "6px 13px", borderRadius: 999 }}>{p.area}</span>
+        )}
+      </div>
+      {!p.image && (
+        <span style={{ position: "relative", fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", color: "rgba(255,255,255,.4)", textTransform: "uppercase" }}>{p.img}</span>
+      )}
+      {children}
+    </div>
+  );
+}
 
 function Field({ label, type, name }: { label: string; type: string; name: string }) {
   return (
