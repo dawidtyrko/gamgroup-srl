@@ -29,7 +29,11 @@ export default function GamMap() {
 
       const map = L.map(elRef.current, {
         zoomControl: true,
-        scrollWheelZoom: false, // keep the page scrolling over the map
+        scrollWheelZoom: false, // keep the page scrolling over the map (desktop)
+        // On touch devices a one-finger drag must scroll the PAGE, not pan the
+        // map — otherwise swipes across the full-width map get captured and the
+        // screen "fights"/jumps. Pinch-zoom (two fingers) still works.
+        dragging: !L.Browser.mobile,
         attributionControl: true,
       }).setView([LAT, LNG], 14);
 
