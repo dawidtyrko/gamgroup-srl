@@ -16,6 +16,7 @@ export type Project = {
   challenge: string;
   description: string;
   benefits: string[];
+  featured?: boolean; // shown in the "Case study in evidenza" block on the homepage
 };
 
 export type ProjectInput = Omit<Project, "id">;
@@ -142,6 +143,7 @@ function normalize(input: ProjectInput, id: string): Project {
     challenge: input.challenge.trim(),
     description: input.description.trim(),
     benefits: input.benefits.map((b) => b.trim()).filter(Boolean),
+    featured: Boolean(input.featured),
   };
 }
 
@@ -212,6 +214,7 @@ export function parseProjectInput(
     challenge: String(body.challenge ?? ""),
     description: String(body.description ?? ""),
     benefits: benefits.map((b) => b.trim()).filter(Boolean),
+    featured: body.featured === true || body.featured === "true",
   };
 
   const missing = (["sector", "title", "challenge", "description"] as const).filter(

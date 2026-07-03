@@ -118,6 +118,7 @@ const cardBanner: CSSProperties = {
 
 export default function Site({ projects }: { projects: Project[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
   const [formSent, setFormSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [formErr, setFormErr] = useState<string | null>(null);
@@ -267,6 +268,7 @@ export default function Site({ projects }: { projects: Project[] }) {
   /* ---- navigation ---- */
   const goto = (id: string) => {
     setMenuOpen(false);
+    setServicesOpen(false);
     setProjectIndex(null);
     if (id === "top") {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -284,6 +286,10 @@ export default function Site({ projects }: { projects: Project[] }) {
   };
 
   const activeProject = projectIndex != null ? projects[projectIndex] : null;
+
+  // Featured case study (Reply-style hero case): first flagged, else the first one.
+  const featuredIdx = Math.max(0, projects.findIndex((p) => p.featured));
+  const featured = projects[featuredIdx] ?? null;
 
   const submitForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -352,18 +358,80 @@ export default function Site({ projects }: { projects: Project[] }) {
             ["servizi", "Servizi", "servizi"],
             ["progetti", "Progetti", "progetti"],
             ["jobboard", "Job Board", "jobboard"],
-          ].map(([key, label, id]) => (
-            <a
-              key={key}
-              data-nav={key}
-              className="nav-link"
-              href={id === "top" ? "#" : `#${id}`}
-              onClick={nav(id)}
-              style={{ fontSize: 15, fontWeight: 500, color: NAVY, textDecoration: "none", cursor: "pointer", transition: "color .3s ease" }}
-            >
-              {label}
-            </a>
-          ))}
+          ].map(([key, label, id]) =>
+            key === "servizi" ? (
+              /* Servizi: link + two-column dropdown (pillars clickable | channels informational) */
+              <div
+                key={key}
+                style={{ position: "relative" }}
+                onMouseEnter={() => setServicesOpen(true)}
+                onMouseLeave={() => setServicesOpen(false)}
+              >
+                <a
+                  data-nav={key}
+                  className="nav-link"
+                  href={`#${id}`}
+                  onClick={nav(id)}
+                  aria-haspopup="true"
+                  aria-expanded={servicesOpen}
+                  style={{ fontSize: 15, fontWeight: 500, color: NAVY, textDecoration: "none", cursor: "pointer", transition: "color .3s ease" }}
+                >
+                  {label}
+                </a>
+                {servicesOpen && (
+                  <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", paddingTop: 18, zIndex: 1001 }}>
+                    <div
+                      style={{
+                        background: "#fff",
+                        borderRadius: 18,
+                        border: "1px solid rgba(27,42,74,.08)",
+                        boxShadow: "0 24px 60px rgba(16,27,48,.18)",
+                        padding: "26px 30px",
+                        display: "grid",
+                        gridTemplateColumns: "auto auto",
+                        gap: 40,
+                        width: "max-content",
+                      }}
+                    >
+                      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        <p style={{ margin: "0 0 12px", fontFamily: MONO, fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: TEAL }}>Pilastri</p>
+                        {services.map((s) => (
+                          <a
+                            key={s.num}
+                            href="#servizi"
+                            onClick={nav("servizi")}
+                            className="dd-pillar"
+                            style={{ display: "flex", alignItems: "baseline", gap: 12, padding: "7px 0", textDecoration: "none", cursor: "pointer" }}
+                          >
+                            <span style={{ fontFamily: MONO, fontSize: 11, color: TEAL }}>{s.num}</span>
+                            <span style={{ fontFamily: GRO, fontWeight: 500, fontSize: 15, color: NAVY, transition: "color .25s ease", whiteSpace: "nowrap" }}>{s.title}</span>
+                          </a>
+                        ))}
+                      </div>
+                      {/* channels: informational only — no links, no hover, no hand cursor */}
+                      <div style={{ borderLeft: "1px solid rgba(27,42,74,.1)", paddingLeft: 40, display: "flex", flexDirection: "column", gap: 2, cursor: "default" }}>
+                        <p style={{ margin: "0 0 12px", fontFamily: MONO, fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: MUT }}>Canali</p>
+                        {channels.map((c) => (
+                          <span key={c.name} style={{ fontFamily: MONO, fontSize: 13, color: GREY, padding: "7px 0", whiteSpace: "nowrap" }}>{c.name}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <a
+                key={key}
+                data-nav={key}
+                className="nav-link"
+                href={id === "top" ? "#" : `#${id}`}
+                onClick={nav(id)}
+                style={{ fontSize: 15, fontWeight: 500, color: NAVY, textDecoration: "none", cursor: "pointer", transition: "color .3s ease" }}
+              >
+                {label}
+              </a>
+            )
+          )}
           <a
             data-nav="contatti"
             href="#contatti"
@@ -487,6 +555,51 @@ export default function Site({ projects }: { projects: Project[] }) {
           </p>
         </div>
       </section>
+
+      {/* ---- Case study in evidenza (Reply-style featured case) ---- */}
+      {featured && (
+        <section style={{ background: "#fff", padding: "0 6vw clamp(90px,12vw,170px)" }}>
+          <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+            <div data-rise style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: "clamp(28px,3.4vw,44px)" }}>
+              <span style={eyebrow()}>Case study in evidenza</span>
+            </div>
+            <div
+              data-rise
+              data-grid-2
+              className="featured-card"
+              onClick={() => setProjectIndex(featuredIdx)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setProjectIndex(featuredIdx);
+                }
+              }}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1.1fr 1fr",
+                border: "1px solid rgba(27,42,74,.1)",
+                borderRadius: 22,
+                overflow: "hidden",
+                cursor: "pointer",
+                background: "#fff",
+                transition: "transform .4s ease, border-color .4s ease, box-shadow .4s ease",
+              }}
+            >
+              <div style={{ position: "relative", minHeight: "clamp(240px,30vw,400px)", display: "flex", alignItems: "flex-end", padding: 24, ...cardBanner }}>
+                <span style={{ position: "absolute", top: 20, left: 20, fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: TEAL, border: "1px solid rgba(60,200,189,.5)", padding: "6px 13px", borderRadius: 999 }}>{featured.sector}</span>
+                <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", color: "rgba(255,255,255,.4)", textTransform: "uppercase" }}>{featured.img}</span>
+              </div>
+              <div style={{ padding: "clamp(28px,3.4vw,52px)", display: "flex", flexDirection: "column", gap: 18 }}>
+                <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(22px,2.6vw,36px)", lineHeight: 1.15, letterSpacing: "-.02em", color: NAVY }}>{featured.title}</h3>
+                <p style={{ margin: 0, fontWeight: 300, fontSize: "clamp(15px,1.4vw,18px)", lineHeight: 1.65, color: GREY }}>{featured.challenge}</p>
+                <span style={{ marginTop: "auto", paddingTop: 10, fontFamily: MONO, fontSize: 13, letterSpacing: ".04em", color: TEAL }}>Leggi il case study →</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ---- Servizi ---- */}
       <section id="servizi" style={{ background: "#F6F7F9", padding: "clamp(90px,12vw,170px) 6vw" }}>

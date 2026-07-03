@@ -168,6 +168,23 @@ button {
   color: #3cc8bd !important;
 }
 
+/* services dropdown: pillar rows highlight on hover */
+.dd-pillar:hover span:last-child {
+  color: #3cc8bd !important;
+}
+
+/* featured case study card */
+.featured-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(60, 200, 189, 0.45) !important;
+  box-shadow: 0 24px 60px rgba(16, 27, 48, 0.1);
+}
+@media (max-width: 960px) {
+  .featured-card {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* tag / sector chips: teal outline on hover-tap, and when their row is hovered */
 .chip {
   transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
