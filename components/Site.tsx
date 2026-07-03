@@ -135,6 +135,26 @@ export default function Site({ projects }: { projects: Project[] }) {
   const pinWrap = useRef<HTMLDivElement>(null);
   const pinTrack = useRef<HTMLDivElement>(null);
 
+  /* ---- reveal on viewport entry (README: IntersectionObserver, one-shot) ---- */
+  useEffect(() => {
+    // Opt-in class: without JS (or before hydration) nothing is hidden.
+    document.documentElement.classList.add("js-reveal");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("gam-risen");
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.15 }
+    );
+    document.querySelectorAll("[data-rise]").forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   /* ---- scroll-driven behaviour (ported from the prototype rAF loop) ---- */
   useEffect(() => {
     let raf = 0;

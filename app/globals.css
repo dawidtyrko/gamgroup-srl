@@ -78,15 +78,26 @@ button {
   }
 }
 
-/* ---- Scroll reveal (progressive enhancement) ---- */
+/* ---- Scroll reveal ----
+   One-shot IntersectionObserver reveal (per the handoff README), NOT
+   animation-timeline: view(). Scroll-driven transforms feed back into the
+   browser's scroll position on mobile (Safari 26 scroll-driven-animation
+   jank + scroll anchoring), which made the page jump while scrolling.
+   `.js-reveal` is set on <html> by Site.tsx — without JS everything stays
+   visible. */
 @media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    [data-rise] {
-      animation: gam-rise both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 26%;
-    }
+  html.js-reveal [data-rise]:not(.gam-risen) {
+    opacity: 0;
+    transform: translateY(34px);
   }
+  html.js-reveal [data-rise].gam-risen {
+    animation: gam-rise 0.9s cubic-bezier(0.16, 0.84, 0.44, 1) both;
+  }
+}
+
+/* reveals/images have fixed geometry — anchoring only causes micro-jumps here */
+html {
+  overflow-anchor: none;
 }
 
 /* ---- Leaflet overrides ---- */
