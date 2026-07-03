@@ -141,14 +141,10 @@ button {
   background: rgba(60, 200, 189, 0.06);
   box-shadow: inset 3px 0 0 #3cc8bd;
 }
-/* channel cells: subtle wash + teal top accent on hover / tap */
+/* channel cells are informational, NOT clickable (spec): no hover, no hand
+   cursor — they must read differently from interactive cards. */
 .chan-cell {
-  transition: background 0.4s ease, box-shadow 0.3s ease !important;
-}
-.chan-cell:hover,
-.chan-cell:active {
-  background: #f6f7f9 !important;
-  box-shadow: inset 0 3px 0 #3cc8bd;
+  cursor: default;
 }
 .project-card:hover {
   transform: translateY(-6px);
@@ -191,6 +187,39 @@ button {
 a,
 button {
   -webkit-tap-highlight-color: rgba(60, 200, 189, 0.18);
+}
+
+/* visible keyboard focus on all interactive elements (a11y) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 2px solid #3cc8bd;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* FAQ accordion */
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary:hover {
+  color: #3cc8bd;
+}
+.faq-item[open] .faq-mark {
+  transform: rotate(45deg);
+}
+
+/* reduced motion: stop decorative CSS animations (marquee, cue, pin pulse) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ---- Responsive (mirrors the prototype data-* breakpoints) ---- */

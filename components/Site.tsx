@@ -10,6 +10,7 @@ import {
 } from "react";
 import dynamic from "next/dynamic";
 import type { Project } from "@/lib/projects";
+import { faqs } from "@/lib/faqs";
 
 // Leaflet touches window/document at import → load client-only.
 const GamMap = dynamic(() => import("@/components/GamMap"), {
@@ -85,7 +86,9 @@ const channels = [
   },
   { name: "SAP", items: ["SAP ECC", "SAP S/4HANA", "Business ByDesign", "SAP B.One"] },
   { name: "IBM i-Series", items: ["SIGIP", "ACG", "STEALTH", "SMEUP", "GALILEO", "GEA"] },
-  { name: "Infor", items: ["BAAN", "LN", "M3", "CloudSuite"] },
+  // NOTE: per new spec the 4th channel is Business Intelligence (was Infor).
+  // Items are placeholders — confirm the exact list with the team.
+  { name: "Business Intelligence", items: ["Power BI", "Dashboard & Reporting", "Analisi dati", "Data Integration"] },
 ];
 
 const stats = [
@@ -96,7 +99,9 @@ const stats = [
 ];
 
 const sectors = ["Retail", "Food", "Automotive", "Fashion", "Aerospace", "… and many more"];
-const clients = ["Maserati", "Miele", "CNH Industrial", "Geox", "Safilo"];
+// Client names/logos may only appear once the release clause is in the contracts
+// (see website spec §7). Until then the marquee shows technology partners.
+const partners = ["Rivelio", "Microsoft Partner", "ProcederAI", "Claude", "AWS"];
 
 const jobs = [
   { title: "Consulente SAP S/4HANA", sede: "Treviso", type: "Tempo indeterminato", tags: ["SAP S/4HANA", "FI/CO o MM/SD", "3+ anni"] },
@@ -114,6 +119,8 @@ const cardBanner: CSSProperties = {
 export default function Site({ projects }: { projects: Project[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formSent, setFormSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [formErr, setFormErr] = useState<string | null>(null);
   const [projectIndex, setProjectIndex] = useState<number | null>(null);
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -130,6 +137,7 @@ export default function Site({ projects }: { projects: Project[] }) {
     let solid: boolean | null = null;
     let curNav: string | null = null;
     let countersDone = false;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const runCounters = () => {
       const sec = statsRef.current;
@@ -137,6 +145,10 @@ export default function Site({ projects }: { projects: Project[] }) {
       sec.querySelectorAll<HTMLElement>("[data-count]").forEach((el) => {
         const target = parseInt(el.getAttribute("data-count") || "0", 10) || 0;
         const suffix = el.getAttribute("data-suffix") || "";
+        if (reduceMotion) {
+          el.textContent = target + suffix;
+          return;
+        }
         const dur = 1700;
         const start = performance.now();
         const step = (now: number) => {
@@ -164,9 +176,9 @@ export default function Site({ projects }: { projects: Project[] }) {
       const vh = window.innerHeight || 700;
       const scrolled = -root.getBoundingClientRect().top;
 
-      // Hero parallax
+      // Hero parallax (skipped for reduced motion)
       const m = heroMediaRef.current;
-      if (m && m.parentElement) {
+      if (m && m.parentElement && !reduceMotion) {
         const r = m.parentElement.getBoundingClientRect();
         const off = (r.top + r.height / 2 - vh / 2) * -0.12;
         m.style.transform = `translateY(${off}px)`;
@@ -273,9 +285,35 @@ export default function Site({ projects }: { projects: Project[] }) {
 
   const activeProject = projectIndex != null ? projects[projectIndex] : null;
 
-  const submitForm = (e: FormEvent) => {
+  const submitForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFormSent(true);
+    const fd = new FormData(e.currentTarget);
+    const payload = {
+      nome: fd.get("nome"),
+      cognome: fd.get("cognome"),
+      email: fd.get("email"),
+      azienda: fd.get("azienda"),
+      messaggio: fd.get("messaggio"),
+    };
+    setSending(true);
+    setFormErr(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setFormErr(data.error || "Invio non riuscito.");
+        return;
+      }
+      setFormSent(true);
+    } catch {
+      setFormErr("Rete non raggiungibile. Riprova.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -583,9 +621,9 @@ export default function Site({ projects }: { projects: Project[] }) {
 
       {/* ---- Clienti (marquee) ---- */}
       <section style={{ background: "#fff", padding: "clamp(70px,9vw,120px) 0", overflow: "hidden" }}>
-        <p data-rise style={{ margin: "0 0 clamp(40px,5vw,64px)", textAlign: "center", ...eyebrow(MUT), padding: "0 6vw" }}>Alcuni dei nostri clienti</p>
+        <p data-rise style={{ margin: "0 0 clamp(40px,5vw,64px)", textAlign: "center", ...eyebrow(MUT), padding: "0 6vw" }}>I nostri partner tecnologici</p>
         <div style={{ display: "flex", width: "max-content", gap: 88, animation: "gam-marq 28s linear infinite", paddingLeft: 88 }}>
-          {[...clients, ...clients].map((c, i) => (
+          {[...partners, ...partners].map((c, i) => (
             <span key={`${c}-${i}`} style={{ fontFamily: GRO, fontWeight: 700, fontSize: "clamp(26px,3.2vw,44px)", letterSpacing: "-.01em", color: "#c2c9d3", whiteSpace: "nowrap" }}>{c}</span>
           ))}
         </div>
@@ -635,6 +673,42 @@ export default function Site({ projects }: { projects: Project[] }) {
       </section>
 
       {/* ---- Contatti ---- */}
+      {/* ---- FAQ ---- */}
+      <section id="faq" style={{ background: "#fff", padding: "clamp(90px,12vw,170px) 6vw" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+          <div data-rise style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: "clamp(40px,5vw,64px)" }}>
+            <span style={eyebrow()}>FAQ</span>
+            <h2 style={h2}>Domande frequenti</h2>
+          </div>
+          <div style={{ borderTop: "1px solid rgba(60,200,189,.32)" }}>
+            {faqs.map((f) => (
+              <details key={f.q} className="faq-item" style={{ borderBottom: "1px solid rgba(60,200,189,.32)" }}>
+                <summary
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 24,
+                    padding: "clamp(22px,2.6vw,32px) 0",
+                    cursor: "pointer",
+                    listStyle: "none",
+                    fontFamily: GRO,
+                    fontWeight: 500,
+                    fontSize: "clamp(18px,2vw,26px)",
+                    letterSpacing: "-.01em",
+                    color: NAVY,
+                  }}
+                >
+                  {f.q}
+                  <span className="faq-mark" aria-hidden style={{ flex: "none", fontFamily: MONO, fontSize: 20, color: TEAL, transition: "transform .3s ease" }}>+</span>
+                </summary>
+                <p style={{ margin: 0, padding: "0 0 clamp(22px,2.6vw,32px)", maxWidth: 760, fontWeight: 300, fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: S2 }}>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section id="contatti" style={{ background: NAVY, padding: "clamp(90px,12vw,170px) 6vw", color: "#fff" }}>
         <div data-grid-2 style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gridTemplateColumns: "1.05fr 1fr", gap: "clamp(44px,7vw,110px)", alignItems: "start" }}>
           <div>
@@ -650,15 +724,21 @@ export default function Site({ projects }: { projects: Project[] }) {
             {!formSent ? (
               <form onSubmit={submitForm} style={{ display: "flex", flexDirection: "column", gap: 30 }}>
                 <div data-form-row style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}>
-                  <Field label="Nome" type="text" />
-                  <Field label="Cognome" type="text" />
+                  <Field label="Nome" type="text" name="nome" />
+                  <Field label="Cognome" type="text" name="cognome" />
                 </div>
-                <Field label="Email" type="email" />
+                <div data-form-row style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}>
+                  <Field label="Email aziendale" type="email" name="email" />
+                  <Field label="Azienda" type="text" name="azienda" />
+                </div>
                 <label style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   <span style={fieldLabel}>Messaggio</span>
-                  <textarea rows={3} placeholder="Scrivi qui il tuo messaggio" className="field-input" style={{ ...fieldInput, resize: "vertical" }} />
+                  <textarea name="messaggio" rows={3} required placeholder="Scrivi qui il tuo messaggio" className="field-input" style={{ ...fieldInput, resize: "vertical" }} />
                 </label>
-                <button type="submit" className="btn-teal" style={{ alignSelf: "flex-start", background: TEAL, color: "#06231f", border: "none", borderRadius: 999, padding: "16px 46px", fontSize: 16, fontWeight: 700, cursor: "pointer", transition: "background .3s ease,transform .3s ease" }}>Invia</button>
+                {formErr && (
+                  <p style={{ margin: 0, fontSize: 14, color: "#ffb4b4" }}>{formErr}</p>
+                )}
+                <button type="submit" disabled={sending} className="btn-teal" style={{ alignSelf: "flex-start", background: TEAL, color: "#06231f", border: "none", borderRadius: 999, padding: "16px 46px", fontSize: 16, fontWeight: 700, cursor: sending ? "wait" : "pointer", opacity: sending ? 0.7 : 1, transition: "background .3s ease,transform .3s ease" }}>{sending ? "Invio…" : "Invia"}</button>
               </form>
             ) : (
               <div style={{ border: "1px solid rgba(60,200,189,.4)", borderRadius: 20, padding: "48px 40px", background: "rgba(60,200,189,.08)" }}>
@@ -775,11 +855,11 @@ const modalPara: CSSProperties = {
   color: S2,
 };
 
-function Field({ label, type }: { label: string; type: string }) {
+function Field({ label, type, name }: { label: string; type: string; name: string }) {
   return (
     <label style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       <span style={fieldLabel}>{label}</span>
-      <input type={type} required className="field-input" style={fieldInput} />
+      <input type={type} name={name} required className="field-input" style={fieldInput} />
     </label>
   );
 }
