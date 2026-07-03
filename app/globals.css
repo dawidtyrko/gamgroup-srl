@@ -267,6 +267,18 @@ summary:focus-visible {
   [data-chan] {
     grid-template-columns: 1fr 1fr !important;
   }
+  /* stats: 2 columns on mobile (per handoff README) */
+  [data-stats-grid] {
+    grid-template-columns: 1fr 1fr !important;
+    row-gap: 34px;
+  }
+  [data-stats-grid] > div:nth-child(2n) {
+    border-right: none !important;
+  }
+  /* hide the hero scroll cue — it collides with the stacked CTA buttons */
+  [data-scroll-cue] {
+    display: none !important;
+  }
   [data-job-row] {
     flex-direction: column !important;
     align-items: flex-start !important;

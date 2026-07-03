@@ -517,7 +517,8 @@ export default function Site({ projects }: { projects: Project[] }) {
             Contattaci
           </button>
         </div>
-        <div style={{ position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+        {/* scroll cue: desktop-only — on small screens it collides with the wrapped CTA buttons */}
+        <div data-scroll-cue style={{ position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
           <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: ".24em", color: MUT, textTransform: "uppercase" }}>Scorri</span>
           <span style={{ display: "block", width: 1, height: 42, background: "linear-gradient(180deg,#c3cbd6,transparent)", animation: "gam-cue 1.8s ease-in-out infinite" }} />
         </div>
@@ -660,7 +661,7 @@ export default function Site({ projects }: { projects: Project[] }) {
       <section ref={statsRef} style={{ background: NAVY, padding: "clamp(90px,12vw,160px) 6vw" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <p data-rise style={{ margin: "0 0 clamp(40px,5vw,72px)", ...eyebrow(), textAlign: "center" }}>I numeri sono il nostro forte</p>
-          <div data-grid-2 style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
+          <div data-stats-grid style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
             {stats.map((s) => (
               <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, padding: 18, borderRight: "1px solid rgba(255,255,255,.12)" }}>
                 <div data-count={s.value} data-suffix="+" style={{ fontFamily: GRO, fontWeight: 700, fontSize: "clamp(50px,7vw,104px)", lineHeight: 1, letterSpacing: "-.04em", color: "#fff" }}>0+</div>
