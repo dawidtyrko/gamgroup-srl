@@ -474,9 +474,9 @@ export default function Site({ projects }: { projects: Project[] }) {
       {/* ---- Hero ---- */}
       <section
         id="top"
+        className="vh-hero"
         style={{
           position: "relative",
-          minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -717,8 +717,11 @@ export default function Site({ projects }: { projects: Project[] }) {
 
       {/* ---- I progetti (pinned horizontal gallery) ---- */}
       <section id="progetti" style={{ background: "#101b30" }}>
-        <div ref={pinWrap} style={{ position: "relative", height: "340vh" }}>
-          <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        {/* heights via .pin-wrap/.pin-screen classes: svh units (stable while the
+            mobile URL bar collapses) — 340vh here reflowed everything below on
+            every bar show/hide, making the page "jump" during scroll */}
+        <div ref={pinWrap} className="pin-wrap" style={{ position: "relative" }}>
+          <div className="pin-screen" style={{ position: "sticky", top: 0, overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
             <div style={{ padding: "0 6vw", marginBottom: "clamp(28px,4vh,52px)", display: "flex", alignItems: "baseline", gap: 16 }}>
               <span style={eyebrow()}>Case studies</span>
               <h2 style={{ ...h2, color: "#fff" }}>I progetti</h2>

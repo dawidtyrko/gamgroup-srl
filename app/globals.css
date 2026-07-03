@@ -111,6 +111,31 @@ button {
   background: #f0f2f6 !important;
 }
 
+/* ---- Viewport-stable heights ----
+   Mobile browsers resize vh when the URL bar collapses; with a 340vh wrapper
+   that reflowed everything below it mid-scroll (page appeared to jump back and
+   forth). svh stays constant during the bar transition. vh is the fallback. */
+.vh-hero {
+  min-height: 100vh;
+}
+.pin-wrap {
+  height: 340vh;
+}
+.pin-screen {
+  height: 100vh;
+}
+@supports (height: 100svh) {
+  .vh-hero {
+    min-height: 100svh;
+  }
+  .pin-wrap {
+    height: 340svh;
+  }
+  .pin-screen {
+    height: 100svh;
+  }
+}
+
 /* ---- Hover / focus states (override inline base styles) ---- */
 .cta-pill:hover {
   background: #3cc8bd !important;
