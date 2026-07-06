@@ -952,7 +952,7 @@ export default function Site({ projects }: { projects: Project[] }) {
           <img src="/gam-logo-white.svg" alt="GAM Group — It's my world" width={67} height={40} style={{ display: "block", height: 40, width: "auto" }} />
         </div>
         <span>
-          © 2026 GAM Group Srl — Via Callalta 31/E, 31100 Treviso (TV)
+          © 2026 GAM Group Srl — Via Callalta 31/E, 31100 Treviso (TV) — P.IVA 03641560267
           {" · "}
           <a href="/privacy" style={{ color: "rgba(255,255,255,.75)", textDecoration: "none", borderBottom: "1px solid rgba(121,183,196,.6)" }}>Privacy</a>
         </span>

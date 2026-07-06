@@ -31,7 +31,7 @@ const p: CSSProperties = {
 
 /*
  * NOTE: bozza di informativa da far validare a un consulente legale prima
- * della pubblicazione definitiva. Inserire la P.IVA dove indicato.
+ * della pubblicazione definitiva.
  */
 export default function PrivacyPage() {
   return (
@@ -54,7 +54,7 @@ export default function PrivacyPage() {
         <p style={p}>
           <strong style={{ fontWeight: 600, color: NAVY }}>GAM Group Srl</strong> — Via Callalta 31/E, 31100 Treviso (TV), Italia
           <br />
-          P.IVA: [DA INSERIRE] · Email: <a href="mailto:info@gamgroup.it" style={{ color: NAVY, borderBottom: `1px solid ${TEAL}`, textDecoration: "none" }}>info@gamgroup.it</a> · Tel: +39 0422 583693
+          P.IVA: 03641560267 · Email: <a href="mailto:info@gamgroup.it" style={{ color: NAVY, borderBottom: `1px solid ${TEAL}`, textDecoration: "none" }}>info@gamgroup.it</a> · Tel: +39 0422 583693
         </p>
 
         <h2 style={h2}>2. Dati trattati e finalità</h2>
