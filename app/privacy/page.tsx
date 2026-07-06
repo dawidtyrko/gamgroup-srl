@@ -7,9 +7,9 @@ export const metadata: Metadata = {
     "Informativa sul trattamento dei dati personali ai sensi del Regolamento (UE) 2016/679 (GDPR).",
 };
 
-const NAVY = "#1B2A4A";
-const TEAL = "#3CC8BD";
-const GREY = "#475569";
+const NAVY = "#1E333B";
+const TEAL = "#35707E";
+const GREY = "#536F83";
 const MONO = "'Space Mono', monospace";
 const GRO = "'Space Grotesk', sans-serif";
 

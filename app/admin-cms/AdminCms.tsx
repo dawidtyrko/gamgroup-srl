@@ -3,8 +3,8 @@
 import { CSSProperties, FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import type { Project } from "@/lib/projects";
 
-const NAVY = "#1B2A4A";
-const TEAL = "#3CC8BD";
+const NAVY = "#1E333B";
+const TEAL = "#35707E";
 const MONO = "'Space Mono', monospace";
 const GRO = "'Space Grotesk', sans-serif";
 
@@ -17,7 +17,7 @@ const labelStyle: CSSProperties = {
 };
 const inputStyle: CSSProperties = {
   background: "#fff",
-  border: "1px solid #d3dae4",
+  border: "1px solid #DDE6E8",
   borderRadius: 12,
   color: NAVY,
   padding: "12px 14px",
@@ -159,14 +159,14 @@ export default function AdminCms() {
     <main
       style={{
         minHeight: "100vh",
-        background: "#F6F7F9",
+        background: "#F1F5F6",
         padding: "clamp(40px,8vw,90px) 6vw",
         fontFamily: "'Manrope', sans-serif",
       }}
     >
       <div style={{ maxWidth: 720, margin: "0 auto" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/gam-logo-blue.svg" alt="GAM Group" width={67} height={40} style={{ display: "block", height: 40, width: "auto", marginBottom: 24 }} />
+        <img src="/gam-logo.svg" alt="GAM Group" width={67} height={40} style={{ display: "block", height: 40, width: "auto", marginBottom: 24 }} />
         <p style={{ ...labelStyle, color: TEAL, margin: "0 0 10px" }}>Admin CMS</p>
         <h1 style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(28px,4vw,46px)", letterSpacing: "-.02em", color: NAVY }}>
           Gestione case study
@@ -261,7 +261,7 @@ export default function AdminCms() {
         </form>
 
         {status.state === "ok" && (
-          <div style={{ marginTop: 24, border: "1px solid rgba(60,200,189,.4)", background: "rgba(60,200,189,.1)", borderRadius: 14, padding: "18px 20px", color: NAVY }}>
+          <div style={{ marginTop: 24, border: "1px solid rgba(77,147,162,.45)", background: "rgba(77,147,162,.1)", borderRadius: 14, padding: "18px 20px", color: NAVY }}>
             ✓ {status.message} La home è stata rivalidata.
           </div>
         )}

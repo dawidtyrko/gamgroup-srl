@@ -23,8 +23,8 @@ body {
   text-rendering: optimizeLegibility;
 }
 ::selection {
-  background: #3cc8bd;
-  color: #06231f;
+  background: #4d93a2;
+  color: #fff;
 }
 input,
 textarea,
@@ -149,19 +149,19 @@ html {
 
 /* ---- Hover / focus states (override inline base styles) ---- */
 .cta-pill:hover {
-  background: #3cc8bd !important;
+  background: #4d93a2 !important;
   transform: translateY(-2px);
 }
 .btn-navy:hover {
-  background: #3cc8bd !important;
+  background: #4d93a2 !important;
   transform: translateY(-2px);
 }
 .btn-ghost:hover {
-  border-color: #3cc8bd !important;
-  color: #3cc8bd !important;
+  border-color: #35707e !important;
+  color: #35707e !important;
 }
 .btn-teal:hover {
-  background: #fff !important;
+  background: #4d93a2 !important;
   transform: translateY(-2px);
 }
 /* editorial list rows: teal wash + left accent bar on hover / tap */
@@ -174,8 +174,8 @@ html {
 .job-row:hover,
 .job-row:active {
   padding-left: 18px !important;
-  background: rgba(60, 200, 189, 0.06);
-  box-shadow: inset 3px 0 0 #3cc8bd;
+  background: rgba(77, 147, 162, 0.07);
+  box-shadow: inset 3px 0 0 #4d93a2;
 }
 /* channel cells are informational, NOT clickable (spec): no hover, no hand
    cursor — they must read differently from interactive cards. */
@@ -184,35 +184,35 @@ html {
 }
 .project-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(60, 200, 189, 0.45) !important;
+  border-color: rgba(121, 183, 196, 0.5) !important;
 }
 .link-teal-white:hover {
   color: #fff !important;
 }
 .map-dir:hover {
-  color: #3cc8bd !important;
+  color: #35707e !important;
 }
 .modal-close:hover {
   background: rgba(255, 255, 255, 0.24) !important;
 }
 .field-input:focus {
-  border-bottom-color: #3cc8bd !important;
+  border-bottom-color: #79b7c4 !important;
 }
 
 /* nav links: teal on hover (scroll-spy sets the active colour inline) */
 .nav-link:hover {
-  color: #3cc8bd !important;
+  color: #35707e !important;
 }
 
 /* services dropdown: pillar rows highlight on hover */
 .dd-pillar:hover span:last-child {
-  color: #3cc8bd !important;
+  color: #35707e !important;
 }
 
 /* featured case study card */
 .featured-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(60, 200, 189, 0.45) !important;
+  border-color: rgba(77, 147, 162, 0.5) !important;
   box-shadow: 0 24px 60px rgba(16, 27, 48, 0.1);
 }
 @media (max-width: 960px) {
@@ -227,19 +227,19 @@ html {
 }
 .chip:hover,
 .chip:active {
-  border-color: rgba(100, 125, 182, 0.7) !important;
-  color: #4c5fa6 !important; /* readable periwinkle (darkened #647DB6) */
-  background: rgba(100, 125, 182, 0.12);
+  border-color: rgba(53, 112, 126, 0.7) !important;
+  color: #35707E !important; /* brand dark teal (visual spec) — readable on white */
+  background: rgba(53, 112, 126, 0.12);
 }
 .svc-row:hover .chip,
 .job-row:hover .chip {
-  border-color: rgba(100, 125, 182, 0.45) !important;
+  border-color: rgba(53, 112, 126, 0.45) !important;
 }
 
 /* subtle teal flash on tap (mobile) */
 a,
 button {
-  -webkit-tap-highlight-color: rgba(60, 200, 189, 0.18);
+  -webkit-tap-highlight-color: rgba(77, 147, 162, 0.2);
 }
 
 /* visible keyboard focus on all interactive elements (a11y) */
@@ -248,7 +248,7 @@ button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 summary:focus-visible {
-  outline: 2px solid #3cc8bd;
+  outline: 2px solid #4d93a2;
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -258,7 +258,7 @@ summary:focus-visible {
   display: none;
 }
 .faq-item summary:hover {
-  color: #3cc8bd;
+  color: #35707e;
 }
 .faq-item[open] .faq-mark {
   transform: rotate(45deg);

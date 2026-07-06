@@ -53,7 +53,7 @@ export default function GamMap() {
       // Custom teal pulsing pin via divIcon (avoids the default-marker 404).
       const icon = L.divIcon({
         className: "",
-        html: '<div style="position:relative;width:28px;height:28px;"><span style="position:absolute;inset:0;border-radius:50%;background:rgba(60,200,189,.4);animation:gam-ping 2s ease-out infinite;"></span><span style="position:absolute;top:8px;left:8px;width:12px;height:12px;border-radius:50%;background:#3CC8BD;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.5);"></span></div>',
+        html: '<div style="position:relative;width:28px;height:28px;"><span style="position:absolute;inset:0;border-radius:50%;background:rgba(77,147,162,.45);animation:gam-ping 2s ease-out infinite;"></span><span style="position:absolute;top:8px;left:8px;width:12px;height:12px;border-radius:50%;background:#4D93A2;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.5);"></span></div>',
         iconSize: [28, 28],
         iconAnchor: [14, 14],
       });
@@ -117,7 +117,7 @@ export default function GamMap() {
             fontSize: 10,
             letterSpacing: ".22em",
             textTransform: "uppercase",
-            color: "#3CC8BD",
+            color: "#35707E",
           }}
         >
           La nostra sede
@@ -159,7 +159,7 @@ export default function GamMap() {
             fontWeight: 600,
             color: "#1B2A4A",
             textDecoration: "none",
-            borderBottom: "1px solid #3CC8BD",
+            borderBottom: "1px solid #4D93A2",
             paddingBottom: 2,
             transition: "color .3s ease",
           }}
