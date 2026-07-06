@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/react";
-import "./globals.css";
+import { en } from "@/lib/i18n/en";
+import "../globals.css";
 import "leaflet/dist/leaflet.css";
 
 export const metadata: Metadata = {
-  title: "GAM Group — Consulenza IT & System Integration dal 2001",
-  description:
-    "GAM Group Srl: evolviamo e ottimizziamo i processi aziendali dei nostri clienti, dalla consulenza ai sistemi. Treviso, dal 2001.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://gamgroup-srl.vercel.app"),
+  title: en.meta.title,
+  description: en.meta.description,
 };
 
 export const viewport: Viewport = {
@@ -19,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="it">
+    <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link

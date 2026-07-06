@@ -206,6 +206,12 @@ html {
   color: #35707e !important;
 }
 
+/* language switcher pill */
+.lang-switch:hover {
+  color: #35707e !important;
+  border-color: rgba(53, 112, 126, 0.5) !important;
+}
+
 /* services dropdown: pillar rows highlight on hover */
 .dd-pillar:hover span:last-child {
   color: #35707e !important;

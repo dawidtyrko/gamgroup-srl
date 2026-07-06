@@ -33,6 +33,7 @@ export async function PUT(req: Request, { params }: Ctx) {
       return NextResponse.json({ error: "Progetto non trovato." }, { status: 404 });
     }
     revalidatePath("/");
+    revalidatePath("/en");
     return NextResponse.json({ ok: true, project });
   } catch (err) {
     console.error("[api/projects/:id] update failed:", err);
@@ -55,6 +56,7 @@ export async function DELETE(req: Request, { params }: Ctx) {
       return NextResponse.json({ error: "Progetto non trovato." }, { status: 404 });
     }
     revalidatePath("/");
+    revalidatePath("/en");
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[api/projects/:id] delete failed:", err);

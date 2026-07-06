@@ -37,6 +37,7 @@ export async function POST(req: Request) {
   try {
     const project = await addProject(parsed.input);
     revalidatePath("/");
+    revalidatePath("/en");
     return NextResponse.json({ ok: true, project });
   } catch (err) {
     console.error("[api/projects] add failed:", err);

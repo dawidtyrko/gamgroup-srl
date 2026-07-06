@@ -16,7 +16,13 @@ const LNG = 12.276944105971117;
  *  - the floating address card sits at `z-index: 1000`.
  * Without both, the address card disappears behind the tiles.
  */
-export default function GamMap() {
+export default function GamMap({
+  label = "La nostra sede",
+  directions = "Ottieni indicazioni →",
+}: {
+  label?: string;
+  directions?: string;
+}) {
   const elRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
 
@@ -120,7 +126,7 @@ export default function GamMap() {
             color: "#35707E",
           }}
         >
-          La nostra sede
+          {label}
         </p>
         <p
           style={{
@@ -164,7 +170,7 @@ export default function GamMap() {
             transition: "color .3s ease",
           }}
         >
-          Ottieni indicazioni →
+          {directions}
         </a>
       </div>
     </div>

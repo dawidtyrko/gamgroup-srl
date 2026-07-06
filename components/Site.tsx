@@ -10,7 +10,7 @@ import {
 } from "react";
 import dynamic from "next/dynamic";
 import type { Project } from "@/lib/projects";
-import { faqs } from "@/lib/faqs";
+import type { Dict, Locale } from "@/lib/i18n/types";
 
 // Leaflet touches window/document at import → load client-only.
 const GamMap = dynamic(() => import("@/components/GamMap"), {
@@ -59,68 +59,19 @@ const h2: CSSProperties = {
   letterSpacing: "-.02em",
 };
 
-/* ---- static content (from the design source of truth) ---- */
-const services = [
-  {
-    num: "01",
-    title: "Consulenza Tecnica ERP",
-    tags: ["JDE", "SAP", "IBM i-Series", "Infor", "Oracle Cloud", "NetSuite", "BI", "Zucchetti", "CyberPlan"],
-  },
-  {
-    num: "02",
-    title: "Consulenza Applicativa, AI & BI",
-    tags: ["Project Management", "Lean Management", "AI", "Business Intelligence", "AI Agents / Copilots"],
-  },
-  {
-    num: "03",
-    title: "Sviluppo & System Integration",
-    tags: ["Application Maintenance", "Sviluppo SW", "Integrazione & Migrazione"],
-  },
-  {
-    num: "04",
-    title: "Assistenza & Manutenzione",
-    tags: ["Attività PdL", "Reti & Infrastruttura", "HD1 & HD2", "Sicurezza", "HW–SW", "Hosting"],
-  },
-];
-
-const channels = [
-  {
-    name: "MS 365",
-    items: ["MS365 Suite", "Power Automate", "Power Apps", "SharePoint", "Dynamics 365", "Power BI", "Copilot 365", "Copilot Studio", "Azure AI", "AI Hub"],
-  },
-  { name: "SAP", items: ["SAP ECC", "SAP S/4HANA", "Business ByDesign", "SAP B.One"] },
-  { name: "IBM i-Series", items: ["SIGIP", "ACG", "STEALTH", "SMEUP", "GALILEO", "GEA"] },
-  // NOTE: per new spec the 4th channel is Business Intelligence (was Infor).
-  // Items are placeholders — confirm the exact list with the team.
-  { name: "Business Intelligence", items: ["Power BI", "Dashboard & Reporting", "Analisi dati", "Data Integration"] },
-];
-
-const stats = [
-  { value: 20, label: "Anni di esperienza" },
-  { value: 50, label: "Esperti qualificati" },
-  { value: 130, label: "Clienti soddisfatti" },
-  { value: 15, label: "Partner" },
-];
-
-const sectors = ["Retail", "Food", "Automotive", "Fashion", "Aerospace", "… and many more"];
-// Client names/logos may only appear once the release clause is in the contracts
-// (see website spec §7). Until then the marquee shows technology partners.
-const partners = ["Rivelio", "Microsoft Partner", "ProcederAI", "Claude", "AWS"];
-
-const jobs = [
-  { title: "Consulente SAP S/4HANA", sede: "Treviso", type: "Tempo indeterminato", tags: ["SAP S/4HANA", "FI/CO o MM/SD", "3+ anni"] },
-  { title: "Service Manager AMS", sede: "Treviso", type: "Tempo indeterminato", tags: ["ITIL", "Gestione team", "AMS"] },
-  { title: "Analista SAP Tecnico-Funzionale", sede: "Treviso", type: "Tempo indeterminato", tags: ["ABAP", "Moduli SAP", "Analisi funzionale"] },
-  { title: "IT Specialist", sede: "Treviso", type: "Tempo indeterminato", tags: ["Sistemistica", "Reti", "Help Desk"] },
-  { title: "Senior IT Consultant", sede: "Treviso", type: "Tempo indeterminato", tags: ["ERP", "Project Management", "5+ anni"] },
-];
-
 const cardBanner: CSSProperties = {
   background:
     "repeating-linear-gradient(135deg,rgba(121,183,196,.12) 0 16px,rgba(255,255,255,0) 16px 32px),linear-gradient(125deg,#22325a,#16233f)",
 };
 
-export default function Site({ projects }: { projects: Project[] }) {
+export default function Site({ projects, dict, locale }: { projects: Project[]; dict: Dict; locale: Locale }) {
+  // content comes from the locale dictionary (lib/i18n)
+  const services = dict.services.items;
+  const channels = dict.channels.items;
+  const stats = dict.stats.items;
+  const sectors = dict.about.sectors;
+  const partners = dict.partners.names;
+  const jobs = dict.jobs.items;
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   // True once /photos/hero.jpg exists and loads — swaps the striped placeholder
@@ -369,12 +320,12 @@ export default function Site({ projects }: { projects: Project[] }) {
       });
       const data = await res.json();
       if (!res.ok) {
-        setFormErr(data.error || "Invio non riuscito.");
+        setFormErr(data.error || dict.contact.netError);
         return;
       }
       setFormSent(true);
     } catch {
-      setFormErr("Rete non raggiungibile. Riprova.");
+      setFormErr(dict.contact.netError);
     } finally {
       setSending(false);
     }
@@ -411,11 +362,11 @@ export default function Site({ projects }: { projects: Project[] }) {
 
         <nav ref={navRef} data-desktop-nav style={{ display: "flex", alignItems: "center", gap: 38 }}>
           {[
-            ["home", "Home", "top"],
-            ["chisiamo", "Chi Siamo", "chisiamo"],
-            ["servizi", "Servizi", "servizi"],
-            ["progetti", "Progetti", "progetti"],
-            ["jobboard", "Job Board", "jobboard"],
+            ["home", dict.nav.home, "top"],
+            ["chisiamo", dict.nav.chisiamo, "chisiamo"],
+            ["servizi", dict.nav.servizi, "servizi"],
+            ["progetti", dict.nav.progetti, "progetti"],
+            ["jobboard", dict.nav.jobboard, "jobboard"],
           ].map(([key, label, id]) =>
             key === "servizi" ? (
               /* Servizi: link + two-column dropdown (pillars clickable | channels informational) */
@@ -452,7 +403,7 @@ export default function Site({ projects }: { projects: Project[] }) {
                       }}
                     >
                       <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                        <p style={{ margin: "0 0 12px", fontFamily: MONO, fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: TEALD }}>Pilastri</p>
+                        <p style={{ margin: "0 0 12px", fontFamily: MONO, fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: TEALD }}>{dict.dropdown.pillars}</p>
                         {services.map((s) => (
                           <a
                             key={s.num}
@@ -468,7 +419,7 @@ export default function Site({ projects }: { projects: Project[] }) {
                       </div>
                       {/* channels: informational only — no links, no hover, no hand cursor */}
                       <div style={{ borderLeft: "1px solid #DDE6E8", paddingLeft: 40, display: "flex", flexDirection: "column", gap: 2, cursor: "default" }}>
-                        <p style={{ margin: "0 0 12px", fontFamily: MONO, fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: MUT }}>Canali</p>
+                        <p style={{ margin: "0 0 12px", fontFamily: MONO, fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: MUT }}>{dict.dropdown.channels}</p>
                         {channels.map((c) => (
                           <span key={c.name} style={{ fontFamily: MONO, fontSize: 13, color: GREY, padding: "7px 0", whiteSpace: "nowrap" }}>{c.name}</span>
                         ))}
@@ -510,7 +461,15 @@ export default function Site({ projects }: { projects: Project[] }) {
               transition: "background .3s ease,transform .3s ease",
             }}
           >
-            Contattaci
+            {dict.nav.contattaci}
+          </a>
+          <a
+            href={dict.langSwitch.href}
+            className="lang-switch"
+            aria-label={locale === "it" ? "English version" : "Versione italiana"}
+            style={{ fontFamily: MONO, fontSize: 12, letterSpacing: ".08em", color: GREY, textDecoration: "none", border: "1px solid #DDE6E8", borderRadius: 999, padding: "8px 13px", transition: "color .3s ease,border-color .3s ease" }}
+          >
+            {dict.langSwitch.label}
           </a>
         </nav>
 
@@ -541,11 +500,11 @@ export default function Site({ projects }: { projects: Project[] }) {
         }}
       >
         <span data-rise style={{ fontFamily: MONO, fontSize: 12, letterSpacing: ".3em", textTransform: "uppercase", color: TEALD }}>
-          Consulenza IT — System Integration — dal 2001
+          {dict.hero.eyebrow}
         </span>
         <h1 style={{ margin: "30px 0 0", fontFamily: GRO, fontWeight: 700, fontSize: "clamp(58px,10vw,164px)", lineHeight: 0.92, letterSpacing: "-.035em", color: INK }}>
           <span data-rise style={{ display: "inline-block" }}>
-            Benvenuti in
+            {dict.hero.title}
           </span>
           <br />
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -557,7 +516,7 @@ export default function Site({ projects }: { projects: Project[] }) {
           />
         </h1>
         <p data-rise style={{ margin: "36px 0 0", maxWidth: 540, fontWeight: 300, fontSize: "clamp(17px,1.7vw,22px)", lineHeight: 1.62, color: GREY }}>
-          Evolviamo e ottimizziamo i processi aziendali dei nostri clienti, dalla consulenza ai sistemi.
+          {dict.hero.subtitle}
         </p>
         <div data-rise style={{ marginTop: 44, display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
           <button
@@ -565,19 +524,19 @@ export default function Site({ projects }: { projects: Project[] }) {
             className="btn-navy"
             style={{ background: TEALD, color: "#fff", border: "none", borderRadius: 999, padding: "16px 34px", fontSize: 16, fontWeight: 600, cursor: "pointer", transition: "background .3s ease,transform .3s ease" }}
           >
-            Scopri i servizi
+            {dict.hero.ctaServices}
           </button>
           <button
             onClick={nav("contatti")}
             className="btn-ghost"
             style={{ background: "transparent", color: INK, border: "1.5px solid #DDE6E8", borderRadius: 999, padding: "16px 34px", fontSize: 16, fontWeight: 600, cursor: "pointer", transition: "border-color .3s ease,color .3s ease" }}
           >
-            Contattaci
+            {dict.hero.ctaContact}
           </button>
         </div>
         {/* scroll cue: desktop-only — on small screens it collides with the wrapped CTA buttons */}
         <div data-scroll-cue style={{ position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: ".24em", color: MUT, textTransform: "uppercase" }}>Scorri</span>
+          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: ".24em", color: MUT, textTransform: "uppercase" }}>{dict.hero.scroll}</span>
           <span style={{ display: "block", width: 1, height: 42, background: "linear-gradient(180deg,#c3cbd6,transparent)", animation: "gam-cue 1.8s ease-in-out infinite" }} />
         </div>
       </section>
@@ -613,7 +572,7 @@ export default function Site({ projects }: { projects: Project[] }) {
           )}
           {!hasHeroPhoto && (
             <span style={{ position: "relative", fontFamily: MONO, fontSize: 13, letterSpacing: ".18em", color: "rgba(255,255,255,.22)", textTransform: "uppercase" }}>
-              [ team gam — foto a tutta larghezza ]
+              {dict.hero.bandPlaceholder}
             </span>
           )}
         </div>
@@ -623,9 +582,9 @@ export default function Site({ projects }: { projects: Project[] }) {
       <section style={{ background: "#fff", padding: "clamp(110px,15vw,220px) 6vw" }}>
         <div style={{ maxWidth: 1080, margin: "0 auto" }}>
           <p data-rise style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(30px,4.6vw,62px)", lineHeight: 1.16, letterSpacing: "-.02em", color: INK }}>
-            <span style={{ color: MUT }}>Portiamo il tuo business</span> al livello successivo.
+            <span style={{ color: MUT }}>{dict.claim.muted}</span>{dict.claim.strong}
             <span style={{ display: "block", marginTop: 18, fontFamily: "'Manrope', sans-serif", fontWeight: 300, fontSize: "clamp(17px,1.6vw,21px)", lineHeight: 1.65, color: GREY, maxWidth: 680 }}>
-              Innovare i sistemi IT riduce i costi, aumenta la flessibilità e migliora la qualità dei servizi.
+              {dict.claim.sub}
             </span>
           </p>
         </div>
@@ -636,7 +595,7 @@ export default function Site({ projects }: { projects: Project[] }) {
         <section style={{ background: "#fff", padding: "0 6vw clamp(90px,12vw,170px)" }}>
           <div style={{ maxWidth: 1180, margin: "0 auto" }}>
             <div data-rise style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: "clamp(28px,3.4vw,44px)" }}>
-              <span style={eyebrow()}>Case study in evidenza</span>
+              <span style={eyebrow()}>{dict.featured.eyebrow}</span>
             </div>
             <div
               data-rise
@@ -666,7 +625,7 @@ export default function Site({ projects }: { projects: Project[] }) {
               <div style={{ padding: "clamp(28px,3.4vw,52px)", display: "flex", flexDirection: "column", gap: 18 }}>
                 <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(22px,2.6vw,36px)", lineHeight: 1.15, letterSpacing: "-.02em", color: INK }}>{featured.title}</h3>
                 <p style={{ margin: 0, fontWeight: 300, fontSize: "clamp(15px,1.4vw,18px)", lineHeight: 1.65, color: GREY }}>{featured.challenge}</p>
-                <span style={{ marginTop: "auto", paddingTop: 10, fontFamily: MONO, fontSize: 13, letterSpacing: ".04em", color: TEALD }}>Leggi il case study →</span>
+                <span style={{ marginTop: "auto", paddingTop: 10, fontFamily: MONO, fontSize: 13, letterSpacing: ".04em", color: TEALD }}>{dict.projectsSec.readMore}</span>
               </div>
             </div>
           </div>
@@ -677,8 +636,8 @@ export default function Site({ projects }: { projects: Project[] }) {
       <section id="servizi" style={{ background: LIGHT, padding: "clamp(90px,12vw,170px) 6vw" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <div data-rise style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: "clamp(40px,5vw,70px)" }}>
-            <span style={eyebrow()}>01 — 04</span>
-            <h2 style={h2}>I nostri servizi</h2>
+            <span style={eyebrow()}>{dict.services.eyebrow}</span>
+            <h2 style={h2}>{dict.services.title}</h2>
           </div>
           <div style={{ borderTop: "1px solid rgba(77,147,162,.35)" }}>
             {services.map((svc) => (
@@ -709,8 +668,8 @@ export default function Site({ projects }: { projects: Project[] }) {
       <section style={{ background: "#fff", padding: "clamp(90px,12vw,170px) 6vw" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <div data-rise style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: "clamp(36px,4vw,56px)" }}>
-            <span style={eyebrow()}>Tecnologie</span>
-            <h2 style={h2}>I nostri canali</h2>
+            <span style={eyebrow()}>{dict.channels.eyebrow}</span>
+            <h2 style={h2}>{dict.channels.title}</h2>
           </div>
           <div data-chan style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", borderTop: "1px solid rgba(77,147,162,.35)", borderLeft: "1px solid rgba(77,147,162,.35)" }}>
             {channels.map((ch) => (
@@ -731,7 +690,7 @@ export default function Site({ projects }: { projects: Project[] }) {
       {/* ---- Numeri ---- */}
       <section ref={statsRef} style={{ background: NAVY, padding: "clamp(90px,12vw,160px) 6vw" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
-          <p data-rise style={{ margin: "0 0 clamp(40px,5vw,72px)", ...eyebrow(TEALLT), textAlign: "center" }}>I numeri sono il nostro forte</p>
+          <p data-rise style={{ margin: "0 0 clamp(40px,5vw,72px)", ...eyebrow(TEALLT), textAlign: "center" }}>{dict.stats.eyebrow}</p>
           <div data-stats-grid style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
             {stats.map((s) => (
               <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, padding: 18, borderRight: "1px solid rgba(255,255,255,.12)" }}>
@@ -747,18 +706,18 @@ export default function Site({ projects }: { projects: Project[] }) {
       <section id="chisiamo" style={{ background: "#fff", padding: "clamp(90px,12vw,170px) 6vw" }}>
         <div data-grid-2 style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(40px,6vw,96px)", alignItems: "start" }}>
           <div data-sticky style={{ position: "sticky", top: 120 }}>
-            <p style={{ margin: "0 0 22px", ...eyebrow() }}>Chi siamo</p>
-            <h2 data-rise style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(34px,4.6vw,68px)", lineHeight: 1.02, letterSpacing: "-.025em", color: INK }}>Il partner di cui ti puoi fidare.</h2>
+            <p style={{ margin: "0 0 22px", ...eyebrow() }}>{dict.about.eyebrow}</p>
+            <h2 data-rise style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(34px,4.6vw,68px)", lineHeight: 1.02, letterSpacing: "-.025em", color: INK }}>{dict.about.title}</h2>
             <button data-rise onClick={nav("contatti")} className="btn-ghost" style={{ marginTop: 38, display: "inline-flex", alignItems: "center", gap: 10, background: "transparent", color: INK, border: "1.5px solid #DDE6E8", borderRadius: 999, padding: "15px 30px", fontSize: 15, fontWeight: 600, cursor: "pointer", transition: "border-color .3s ease,color .3s ease" }}>
-              Parla con noi →
+              {dict.about.cta}
             </button>
           </div>
           <div>
             <p data-rise style={{ margin: 0, fontWeight: 300, fontSize: "clamp(17px,1.7vw,22px)", lineHeight: 1.7, color: S2 }}>
-              GAM Group è un’azienda italiana fondata nel <strong style={{ fontWeight: 700, color: TEALD }}>2001</strong>, con sede a <strong style={{ fontWeight: 700, color: TEALD }}>Treviso</strong>. Da oltre vent’anni affianchiamo le imprese nell’evoluzione e nella gestione dei loro sistemi IT.
+              {dict.about.p.pre}<strong style={{ fontWeight: 700, color: TEALD }}>{dict.about.p.year}</strong>{dict.about.p.mid}<strong style={{ fontWeight: 700, color: TEALD }}>{dict.about.p.city}</strong>{dict.about.p.post}
             </p>
             <div data-rise style={{ marginTop: 40, paddingTop: 34, borderTop: "1px solid rgba(77,147,162,.35)" }}>
-              <p style={{ margin: "0 0 18px", fontFamily: MONO, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: MUT }}>Settori</p>
+              <p style={{ margin: "0 0 18px", fontFamily: MONO, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: MUT }}>{dict.about.sectorsLabel}</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
                 {sectors.map((sec) => (
                   <span key={sec} className="chip" style={{ fontFamily: GRO, fontWeight: 500, fontSize: "clamp(15px,1.4vw,19px)", color: INK, border: "1px solid #DDE6E8", borderRadius: 999, padding: "9px 18px" }}>{sec}</span>
@@ -777,8 +736,8 @@ export default function Site({ projects }: { projects: Project[] }) {
         <div ref={pinWrap} className="pin-wrap" style={{ position: "relative" }}>
           <div className="pin-screen" style={{ position: "sticky", top: 0, overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
             <div style={{ padding: "0 6vw", marginBottom: "clamp(28px,4vh,52px)", display: "flex", alignItems: "baseline", gap: 16 }}>
-              <span style={eyebrow(TEALLT)}>Case studies</span>
-              <h2 style={{ ...h2, color: "#fff" }}>I progetti</h2>
+              <span style={eyebrow(TEALLT)}>{dict.projectsSec.eyebrow}</span>
+              <h2 style={{ ...h2, color: "#fff" }}>{dict.projectsSec.title}</h2>
             </div>
             <div ref={pinTrack} data-track style={{ display: "flex", gap: 28, padding: "0 6vw", willChange: "transform" }}>
               {projects.map((p, i) => (
@@ -791,22 +750,22 @@ export default function Site({ projects }: { projects: Project[] }) {
                   <CaseBanner p={p} style={{ height: "clamp(200px,30vh,300px)", padding: 20 }} />
                   <div style={{ padding: 30, display: "flex", flexDirection: "column", gap: 22, minHeight: 200 }}>
                     <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(20px,1.8vw,26px)", lineHeight: 1.28, color: "#fff" }}>{p.title}</h3>
-                    <span style={{ marginTop: "auto", fontFamily: MONO, fontSize: 13, letterSpacing: ".04em", color: TEALLT }}>Leggi il case study →</span>
+                    <span style={{ marginTop: "auto", fontFamily: MONO, fontSize: 13, letterSpacing: ".04em", color: TEALLT }}>{dict.projectsSec.readMore}</span>
                   </div>
                 </div>
               ))}
               <div style={{ flex: "none", width: "40vw", display: "flex", alignItems: "center", paddingLeft: 10 }}>
-                <span style={{ fontFamily: GRO, fontWeight: 500, fontSize: "clamp(22px,2.4vw,34px)", color: "rgba(255,255,255,.4)", maxWidth: "14ch", lineHeight: 1.15 }}>E molti altri progetti, in ogni settore.</span>
+                <span style={{ fontFamily: GRO, fontWeight: 500, fontSize: "clamp(22px,2.4vw,34px)", color: "rgba(255,255,255,.4)", maxWidth: "14ch", lineHeight: 1.15 }}>{dict.projectsSec.trailing}</span>
               </div>
             </div>
-            <p style={{ padding: "0 6vw", margin: "clamp(28px,4vh,52px) 0 0", fontFamily: MONO, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(255,255,255,.35)" }}>Scorri per esplorare →</p>
+            <p style={{ padding: "0 6vw", margin: "clamp(28px,4vh,52px) 0 0", fontFamily: MONO, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(255,255,255,.35)" }}>{dict.projectsSec.hint}</p>
           </div>
         </div>
       </section>
 
       {/* ---- Clienti (marquee) ---- */}
       <section style={{ background: "#fff", padding: "clamp(70px,9vw,120px) 0", overflow: "hidden" }}>
-        <p data-rise style={{ margin: "0 0 clamp(40px,5vw,64px)", textAlign: "center", ...eyebrow(MUT), padding: "0 6vw" }}>I nostri partner tecnologici</p>
+        <p data-rise style={{ margin: "0 0 clamp(40px,5vw,64px)", textAlign: "center", ...eyebrow(MUT), padding: "0 6vw" }}>{dict.partners.eyebrow}</p>
         <div style={{ display: "flex", width: "max-content", gap: 88, animation: "gam-marq 28s linear infinite", paddingLeft: 88 }}>
           {[...partners, ...partners].map((c, i) => (
             <span key={`${c}-${i}`} style={{ fontFamily: GRO, fontWeight: 700, fontSize: "clamp(26px,3.2vw,44px)", letterSpacing: "-.01em", color: "#c2c9d3", whiteSpace: "nowrap" }}>{c}</span>
@@ -818,11 +777,11 @@ export default function Site({ projects }: { projects: Project[] }) {
       <section id="jobboard" style={{ background: LIGHT, padding: "clamp(90px,12vw,170px) 6vw" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <div data-rise style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: 18 }}>
-            <span style={eyebrow()}>Lavora con noi</span>
-            <h2 style={h2}>Entra in GAM</h2>
+            <span style={eyebrow()}>{dict.jobs.eyebrow}</span>
+            <h2 style={h2}>{dict.jobs.title}</h2>
           </div>
           <p data-rise style={{ margin: "0 0 clamp(40px,5vw,64px)", maxWidth: 560, fontWeight: 300, fontSize: "clamp(17px,1.6vw,21px)", lineHeight: 1.6, color: GREY }}>
-            Unisciti a un team di esperti IT. Le posizioni aperte, in continua crescita.
+            {dict.jobs.lead}
           </p>
           <div style={{ borderTop: "1px solid rgba(77,147,162,.35)" }}>
             {jobs.map((job) => (
@@ -841,17 +800,17 @@ export default function Site({ projects }: { projects: Project[] }) {
                   </div>
                 </div>
                 <a
-                  href={`mailto:recruitment@gamgroup.it?subject=${encodeURIComponent(`Candidatura: ${job.title}`)}`}
+                  href={`mailto:recruitment@gamgroup.it?subject=${encodeURIComponent(`${dict.jobs.mailSubjectPrefix}${job.title}`)}`}
                   className="btn-navy"
                   style={{ flex: "none", display: "inline-flex", alignItems: "center", gap: 9, background: TEALD, color: "#fff", borderRadius: 999, padding: "14px 28px", fontSize: 15, fontWeight: 600, textDecoration: "none", transition: "background .3s ease,transform .3s ease" }}
                 >
-                  Candidati ora →
+                  {dict.jobs.apply}
                 </a>
               </div>
             ))}
           </div>
           <p data-rise style={{ margin: "clamp(36px,4vw,52px) 0 0", fontWeight: 300, fontSize: 16, color: GREY }}>
-            Candidatura spontanea — invia il CV a{" "}
+            {dict.jobs.spontaneousPre}{" "}
             <a href="mailto:recruitment@gamgroup.it" style={{ color: INK, fontWeight: 500, textDecoration: "none", borderBottom: `1px solid ${TEAL}` }}>recruitment@gamgroup.it</a>
           </p>
         </div>
@@ -862,11 +821,11 @@ export default function Site({ projects }: { projects: Project[] }) {
       <section id="faq" style={{ background: "#fff", padding: "clamp(90px,12vw,170px) 6vw" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <div data-rise style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: "clamp(40px,5vw,64px)" }}>
-            <span style={eyebrow()}>FAQ</span>
-            <h2 style={h2}>Domande frequenti</h2>
+            <span style={eyebrow()}>{dict.faq.eyebrow}</span>
+            <h2 style={h2}>{dict.faq.title}</h2>
           </div>
           <div style={{ borderTop: "1px solid rgba(77,147,162,.35)" }}>
-            {faqs.map((f) => (
+            {dict.faq.items.map((f) => (
               <details key={f.q} className="faq-item" style={{ borderBottom: "1px solid rgba(77,147,162,.35)" }}>
                 <summary
                   style={{
@@ -897,10 +856,10 @@ export default function Site({ projects }: { projects: Project[] }) {
       <section id="contatti" style={{ background: NAVY, padding: "clamp(90px,12vw,170px) 6vw", color: "#fff" }}>
         <div data-grid-2 style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gridTemplateColumns: "1.05fr 1fr", gap: "clamp(44px,7vw,110px)", alignItems: "start" }}>
           <div>
-            <p data-rise style={{ margin: "0 0 22px", ...eyebrow(TEALLT) }}>Contatti</p>
-            <h2 data-rise style={{ margin: 0, maxWidth: "15ch", fontFamily: GRO, fontWeight: 700, fontSize: "clamp(34px,4.8vw,66px)", lineHeight: 1.02, letterSpacing: "-.025em", color: "#fff" }}>Scopriamo insieme cosa possiamo fare.</h2>
+            <p data-rise style={{ margin: "0 0 22px", ...eyebrow(TEALLT) }}>{dict.contact.eyebrow}</p>
+            <h2 data-rise style={{ margin: 0, maxWidth: "15ch", fontFamily: GRO, fontWeight: 700, fontSize: "clamp(34px,4.8vw,66px)", lineHeight: 1.02, letterSpacing: "-.025em", color: "#fff" }}>{dict.contact.title}</h2>
             <div data-rise style={{ marginTop: 44, display: "flex", flexDirection: "column", gap: 16, fontWeight: 300, fontSize: 18 }}>
-              <span style={{ color: "rgba(255,255,255,.75)" }}>Via Callalta 31/E – 31100 Treviso</span>
+              <span style={{ color: "rgba(255,255,255,.75)" }}>{dict.contact.address}</span>
               <a href="mailto:info@gamgroup.it" className="link-teal-white" style={{ color: TEALLT, textDecoration: "none", transition: "color .3s ease" }}>info@gamgroup.it</a>
               <a href="tel:+390422583693" className="link-teal-white" style={{ color: TEALLT, textDecoration: "none", transition: "color .3s ease" }}>+39 0422 583693</a>
             </div>
@@ -909,39 +868,39 @@ export default function Site({ projects }: { projects: Project[] }) {
             {!formSent ? (
               <form onSubmit={submitForm} style={{ display: "flex", flexDirection: "column", gap: 30 }}>
                 <div data-form-row style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}>
-                  <Field label="Nome" type="text" name="nome" />
-                  <Field label="Cognome" type="text" name="cognome" />
+                  <Field label={dict.contact.nome} type="text" name="nome" />
+                  <Field label={dict.contact.cognome} type="text" name="cognome" />
                 </div>
                 <div data-form-row style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}>
-                  <Field label="Email aziendale" type="email" name="email" />
-                  <Field label="Azienda" type="text" name="azienda" />
+                  <Field label={dict.contact.email} type="email" name="email" />
+                  <Field label={dict.contact.azienda} type="text" name="azienda" />
                 </div>
                 <label style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  <span style={fieldLabel}>Messaggio</span>
-                  <textarea name="messaggio" rows={3} required placeholder="Scrivi qui il tuo messaggio" className="field-input" style={{ ...fieldInput, resize: "vertical" }} />
+                  <span style={fieldLabel}>{dict.contact.messaggio}</span>
+                  <textarea name="messaggio" rows={3} required placeholder={dict.contact.msgPlaceholder} className="field-input" style={{ ...fieldInput, resize: "vertical" }} />
                 </label>
                 <label style={{ display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer" }}>
                   <input type="checkbox" name="privacy" required style={{ marginTop: 3, width: 16, height: 16, accentColor: TEALLT, flex: "none" }} />
                   <span style={{ fontWeight: 300, fontSize: 14, lineHeight: 1.55, color: "rgba(255,255,255,.7)" }}>
-                    Ho letto l&rsquo;
-                    <a href="/privacy" target="_blank" rel="noopener" style={{ color: TEALLT, textDecoration: "none", borderBottom: `1px solid ${TEALLT}` }}>informativa privacy</a>
-                    {" "}e acconsento al trattamento dei miei dati personali per rispondere alla mia richiesta.
+                    {dict.contact.privacyPre}
+                    <a href="/privacy" target="_blank" rel="noopener" style={{ color: TEALLT, textDecoration: "none", borderBottom: `1px solid ${TEALLT}` }}>{dict.contact.privacyLink}</a>
+                    {dict.contact.privacyPost}
                   </span>
                 </label>
                 {formErr && (
                   <p style={{ margin: 0, fontSize: 14, color: "#ffb4b4" }}>{formErr}</p>
                 )}
-                <button type="submit" disabled={sending} className="btn-teal" style={{ alignSelf: "flex-start", background: TEALD, color: "#fff", border: "none", borderRadius: 999, padding: "16px 46px", fontSize: 16, fontWeight: 700, cursor: sending ? "wait" : "pointer", opacity: sending ? 0.7 : 1, transition: "background .3s ease,transform .3s ease" }}>{sending ? "Invio…" : "Invia"}</button>
+                <button type="submit" disabled={sending} className="btn-teal" style={{ alignSelf: "flex-start", background: TEALD, color: "#fff", border: "none", borderRadius: 999, padding: "16px 46px", fontSize: 16, fontWeight: 700, cursor: sending ? "wait" : "pointer", opacity: sending ? 0.7 : 1, transition: "background .3s ease,transform .3s ease" }}>{sending ? dict.contact.sending : dict.contact.send}</button>
               </form>
             ) : (
               <div style={{ border: "1px solid rgba(121,183,196,.45)", borderRadius: 20, padding: "48px 40px", background: "rgba(121,183,196,.10)" }}>
                 <div style={{ fontSize: 40, lineHeight: 1, color: TEALLT, marginBottom: 18 }}>✓</div>
-                <h3 style={{ margin: "0 0 12px", fontFamily: GRO, fontWeight: 500, fontSize: 26, color: "#fff" }}>Grazie!</h3>
-                <p style={{ margin: 0, fontWeight: 300, fontSize: 17, lineHeight: 1.6, color: "rgba(255,255,255,.8)" }}>Abbiamo ricevuto il tuo messaggio e ti risponderemo al più presto.</p>
+                <h3 style={{ margin: "0 0 12px", fontFamily: GRO, fontWeight: 500, fontSize: 26, color: "#fff" }}>{dict.contact.successTitle}</h3>
+                <p style={{ margin: 0, fontWeight: 300, fontSize: 17, lineHeight: 1.6, color: "rgba(255,255,255,.8)" }}>{dict.contact.successBody}</p>
               </div>
             )}
           </div>
-          <GamMap />
+          <GamMap label={dict.map.label} directions={dict.map.directions} />
         </div>
       </section>
 
@@ -952,9 +911,9 @@ export default function Site({ projects }: { projects: Project[] }) {
           <img src="/gam-logo-white.svg" alt="GAM Group — It's my world" width={67} height={40} style={{ display: "block", height: 40, width: "auto" }} />
         </div>
         <span>
-          © 2026 GAM Group Srl — Via Callalta 31/E, 31100 Treviso (TV) — P.IVA 03641560267
+          {dict.footer.copyright}
           {" · "}
-          <a href="/privacy" style={{ color: "rgba(255,255,255,.75)", textDecoration: "none", borderBottom: "1px solid rgba(121,183,196,.6)" }}>Privacy</a>
+          <a href="/privacy" style={{ color: "rgba(255,255,255,.75)", textDecoration: "none", borderBottom: "1px solid rgba(121,183,196,.6)" }}>{dict.footer.privacy}</a>
         </span>
       </footer>
 
@@ -963,18 +922,18 @@ export default function Site({ projects }: { projects: Project[] }) {
         <div onClick={() => setProjectIndex(null)} style={{ position: "fixed", inset: 0, zIndex: 1200, background: "rgba(16,27,48,.62)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
           <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 24, maxWidth: 720, width: "100%", maxHeight: "88vh", overflow: "auto", boxShadow: "0 40px 100px rgba(16,27,48,.45)" }}>
             <CaseBanner p={activeProject} style={{ height: "clamp(160px,22vw,220px)", padding: 24 }}>
-              <button onClick={() => setProjectIndex(null)} aria-label="Chiudi" className="modal-close" style={{ position: "absolute", top: 18, right: 18, width: 40, height: 40, borderRadius: "50%", border: "none", background: "rgba(255,255,255,.12)", color: "#fff", fontSize: 24, lineHeight: 1, cursor: "pointer", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)", transition: "background .3s ease" }}>×</button>
+              <button onClick={() => setProjectIndex(null)} aria-label={dict.modal.close} className="modal-close" style={{ position: "absolute", top: 18, right: 18, width: 40, height: 40, borderRadius: "50%", border: "none", background: "rgba(255,255,255,.12)", color: "#fff", fontSize: 24, lineHeight: 1, cursor: "pointer", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)", transition: "background .3s ease" }}>×</button>
             </CaseBanner>
             <div style={{ padding: "clamp(28px,4vw,48px)" }}>
               <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(24px,3vw,38px)", lineHeight: 1.12, letterSpacing: "-.02em", color: INK }}>{activeProject.title}</h3>
-              <ModalBlock label="La sfida">
+              <ModalBlock first label={dict.modal.challenge}>
                 <p style={modalPara}>{activeProject.challenge}</p>
               </ModalBlock>
-              <ModalBlock label="Il progetto">
+              <ModalBlock label={dict.modal.project}>
                 <p style={modalPara}>{activeProject.description}</p>
               </ModalBlock>
               <div style={{ marginTop: "clamp(26px,3vw,36px)" }}>
-                <p style={{ margin: "0 0 16px", fontFamily: MONO, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: TEALD }}>Benefici</p>
+                <p style={{ margin: "0 0 16px", fontFamily: MONO, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: TEALD }}>{dict.modal.benefits}</p>
                 <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                   {activeProject.benefits.map((b) => (
                     <li key={b} style={{ display: "flex", gap: 11, alignItems: "flex-start", fontSize: 16, fontWeight: 400, color: INK, lineHeight: 1.4 }}>
@@ -984,7 +943,7 @@ export default function Site({ projects }: { projects: Project[] }) {
                   ))}
                 </ul>
               </div>
-              <button onClick={nav("contatti")} className="btn-navy" style={{ marginTop: "clamp(30px,3.6vw,44px)", background: TEALD, color: "#fff", border: "none", borderRadius: 999, padding: "16px 34px", fontSize: 15, fontWeight: 600, cursor: "pointer", transition: "background .3s ease,transform .3s ease" }}>Parla con noi del tuo progetto →</button>
+              <button onClick={nav("contatti")} className="btn-navy" style={{ marginTop: "clamp(30px,3.6vw,44px)", background: TEALD, color: "#fff", border: "none", borderRadius: 999, padding: "16px 34px", fontSize: 15, fontWeight: 600, cursor: "pointer", transition: "background .3s ease,transform .3s ease" }}>{dict.modal.cta}</button>
             </div>
           </div>
         </div>
@@ -998,16 +957,16 @@ export default function Site({ projects }: { projects: Project[] }) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/gam-logo.svg" alt="GAM Group — It's my world" width={80} height={48} style={{ display: "block", height: 48, width: "auto" }} />
             </div>
-            <button onClick={() => setMenuOpen(false)} aria-label="Chiudi" style={{ background: "none", border: "none", color: INK, fontSize: 38, lineHeight: 1, cursor: "pointer", fontWeight: 300 }}>×</button>
+            <button onClick={() => setMenuOpen(false)} aria-label={dict.modal.close} style={{ background: "none", border: "none", color: INK, fontSize: 38, lineHeight: 1, cursor: "pointer", fontWeight: 300 }}>×</button>
           </div>
           <nav style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 48 }}>
             {[
-              ["Home", "top"],
-              ["Chi Siamo", "chisiamo"],
-              ["Servizi", "servizi"],
-              ["Progetti", "progetti"],
-              ["Job Board", "jobboard"],
-              ["Contattaci", "contatti"],
+              [dict.nav.home, "top"],
+              [dict.nav.chisiamo, "chisiamo"],
+              [dict.nav.servizi, "servizi"],
+              [dict.nav.progetti, "progetti"],
+              [dict.nav.jobboard, "jobboard"],
+              [dict.nav.contattaci, "contatti"],
             ].map(([label, id], i, arr) => (
               <a
                 key={id}
@@ -1018,6 +977,9 @@ export default function Site({ projects }: { projects: Project[] }) {
                 {label}
               </a>
             ))}
+            <a href={dict.langSwitch.href} style={{ fontFamily: MONO, fontSize: 16, letterSpacing: ".08em", color: GREY, textDecoration: "none", padding: "22px 0", borderTop: "1px solid #DDE6E8", marginTop: 10 }}>
+              {dict.langSwitch.menuLabel}
+            </a>
           </nav>
         </div>
       )}
@@ -1089,9 +1051,9 @@ function Field({ label, type, name }: { label: string; type: string; name: strin
   );
 }
 
-function ModalBlock({ label, children }: { label: string; children: React.ReactNode }) {
+function ModalBlock({ label, first, children }: { label: string; first?: boolean; children: React.ReactNode }) {
   return (
-    <div style={{ marginTop: label === "La sfida" ? "clamp(28px,3.4vw,40px)" : "clamp(26px,3vw,36px)" }}>
+    <div style={{ marginTop: first ? "clamp(28px,3.4vw,40px)" : "clamp(26px,3vw,36px)" }}>
       <p style={{ margin: "0 0 12px", fontFamily: MONO, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: TEALD }}>{label}</p>
       {children}
     </div>
