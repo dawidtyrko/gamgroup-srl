@@ -167,6 +167,34 @@ export default function Site({ projects }: { projects: Project[] }) {
     let countersDone = false;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    // Lock viewport-derived heights to PIXELS at mount. Recording analysis
+    // showed the 340×viewport pin wrapper still resizing on iOS when the
+    // browser toolbars collapse (content below shifted by ~3.4× the bar
+    // height mid-scroll). px values are immune to vh/svh unit quirks; they
+    // refresh ONLY on width/orientation change, never on height-only changes
+    // (= toolbar show/hide).
+    let baseVh = window.innerHeight;
+    let baseW = window.innerWidth;
+    const lockHeights = () => {
+      const pw = pinWrap.current;
+      if (pw) {
+        pw.style.height = `${Math.round(baseVh * 3.4)}px`;
+        const screen = pw.firstElementChild as HTMLElement | null;
+        if (screen) screen.style.height = `${baseVh}px`;
+      }
+      const hero = document.getElementById("top");
+      if (hero) hero.style.minHeight = `${baseVh}px`;
+    };
+    lockHeights();
+    const onResize = () => {
+      if (window.innerWidth !== baseW) {
+        baseW = window.innerWidth;
+        baseVh = window.innerHeight;
+        lockHeights();
+      }
+    };
+    window.addEventListener("resize", onResize);
+
     const runCounters = () => {
       const sec = statsRef.current;
       if (!sec) return;
@@ -227,11 +255,12 @@ export default function Site({ projects }: { projects: Project[] }) {
         }
       }
 
-      // Pinned horizontal gallery
+      // Pinned horizontal gallery (baseVh: keeps progress stable while the
+      // mobile toolbar collapses and innerHeight changes mid-scroll)
       const pw = pinWrap.current;
       const pt = pinTrack.current;
       if (pw && pt) {
-        const total = pw.offsetHeight - vh;
+        const total = pw.offsetHeight - baseVh;
         let prog = total > 0 ? -pw.getBoundingClientRect().top / total : 0;
         prog = Math.max(0, Math.min(1, prog));
         const overflow = Math.max(0, pt.scrollWidth - window.innerWidth + window.innerWidth * 0.12);
@@ -289,6 +318,7 @@ export default function Site({ projects }: { projects: Project[] }) {
     return () => {
       cancelAnimationFrame(raf);
       clearTimeout(safety);
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 

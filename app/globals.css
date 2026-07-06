@@ -164,18 +164,20 @@ html {
   background: #4d93a2 !important;
   transform: translateY(-2px);
 }
-/* editorial list rows: teal wash + left accent bar on hover / tap */
+/* editorial list rows: teal wash + left accent bar — pointer devices only.
+   The rows are not clickable; on touch the :active state fired during
+   scroll-drags (visible as a glitchy highlight in the mobile recording). */
 .svc-row,
 .job-row {
   transition: padding-left 0.4s ease, background 0.3s ease, box-shadow 0.3s ease !important;
 }
-.svc-row:hover,
-.svc-row:active,
-.job-row:hover,
-.job-row:active {
-  padding-left: 18px !important;
-  background: rgba(77, 147, 162, 0.07);
-  box-shadow: inset 3px 0 0 #4d93a2;
+@media (hover: hover) {
+  .svc-row:hover,
+  .job-row:hover {
+    padding-left: 18px !important;
+    background: rgba(77, 147, 162, 0.07);
+    box-shadow: inset 3px 0 0 #4d93a2;
+  }
 }
 /* channel cells are informational, NOT clickable (spec): no hover, no hand
    cursor — they must read differently from interactive cards. */
@@ -221,19 +223,21 @@ html {
   }
 }
 
-/* tag / sector chips: teal outline on hover-tap, and when their row is hovered */
+/* tag / sector chips: teal outline on hover — pointer devices only (chips are
+   not clickable; :active on touch fired while scroll-dragging) */
 .chip {
   transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
 }
-.chip:hover,
-.chip:active {
-  border-color: rgba(53, 112, 126, 0.7) !important;
-  color: #35707E !important; /* brand dark teal (visual spec) — readable on white */
-  background: rgba(53, 112, 126, 0.12);
-}
-.svc-row:hover .chip,
-.job-row:hover .chip {
-  border-color: rgba(53, 112, 126, 0.45) !important;
+@media (hover: hover) {
+  .chip:hover {
+    border-color: rgba(53, 112, 126, 0.7) !important;
+    color: #35707e !important; /* brand dark teal (visual spec) — readable on white */
+    background: rgba(53, 112, 126, 0.12);
+  }
+  .svc-row:hover .chip,
+  .job-row:hover .chip {
+    border-color: rgba(53, 112, 126, 0.45) !important;
+  }
 }
 
 /* subtle teal flash on tap (mobile) */
