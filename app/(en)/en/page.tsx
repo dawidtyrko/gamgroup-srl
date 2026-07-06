@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Site from "@/components/Site";
-import { getProjects } from "@/lib/projects";
+import { getProjects, localizeProject } from "@/lib/projects";
 import { en } from "@/lib/i18n/en";
 import { orgLd, faqLd } from "@/lib/structuredData";
 
@@ -15,9 +15,9 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePageEn() {
-  // Case studies still come from KV in Italian — English fields arrive in
-  // phase 2 of the i18n plan (optional `en` sub-object with per-field fallback).
-  const projects = await getProjects();
+  // English fields (project.en) override Italian per-field; anything not yet
+  // translated in /admin-cms falls back to the Italian original.
+  const projects = (await getProjects()).map((p) => localizeProject(p, "en"));
   return (
     <>
       <script

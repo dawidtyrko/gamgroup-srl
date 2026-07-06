@@ -15,7 +15,7 @@ export async function POST(req: Request) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
-      { error: "RESEND_API_KEY non configurata sul server." },
+      { error: "RESEND_API_KEY non configurata sul server.", code: "send_failed" },
       { status: 500 }
     );
   }
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: "Corpo della richiesta non valido." }, { status: 400 });
+    return NextResponse.json({ error: "Corpo della richiesta non valido.", code: "send_failed" }, { status: 400 });
   }
 
   const nome = String(body.nome ?? "").trim();
@@ -35,16 +35,16 @@ export async function POST(req: Request) {
 
   if (!nome || !email || !messaggio) {
     return NextResponse.json(
-      { error: "Compila nome, email e messaggio." },
+      { error: "Compila nome, email e messaggio.", code: "missing_fields" },
       { status: 400 }
     );
   }
   if (!EMAIL_RE.test(email)) {
-    return NextResponse.json({ error: "Email non valida." }, { status: 400 });
+    return NextResponse.json({ error: "Email non valida.", code: "invalid_email" }, { status: 400 });
   }
   if (body.privacy !== true) {
     return NextResponse.json(
-      { error: "Devi accettare l'informativa privacy." },
+      { error: "Devi accettare l'informativa privacy.", code: "privacy_required" },
       { status: 400 }
     );
   }
@@ -73,14 +73,14 @@ export async function POST(req: Request) {
     if (error) {
       console.error("[api/contact] Resend error:", error);
       return NextResponse.json(
-        { error: "Invio non riuscito. Riprova più tardi." },
+        { error: "Invio non riuscito. Riprova più tardi.", code: "send_failed" },
         { status: 502 }
       );
     }
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[api/contact] send failed:", err);
-    return NextResponse.json({ error: "Errore interno." }, { status: 500 });
+    return NextResponse.json({ error: "Errore interno.", code: "send_failed" }, { status: 500 });
   }
 }
 

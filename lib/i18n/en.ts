@@ -161,6 +161,12 @@ export const en: Dict = {
     successTitle: "Thank you!",
     successBody: "We have received your message and will get back to you as soon as possible.",
     netError: "Network unreachable. Please try again.",
+    errors: {
+      missingFields: "Please fill in your name, email and message.",
+      invalidEmail: "Invalid email address.",
+      privacyRequired: "Please accept the privacy policy.",
+      sendFailed: "Sending failed. Please try again later.",
+    },
   },
   map: { label: "Our office", directions: "Get directions →" },
   modal: {

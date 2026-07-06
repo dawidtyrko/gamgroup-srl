@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   title: "Informativa Privacy — GAM Group Srl",
   description:
     "Informativa sul trattamento dei dati personali ai sensi del Regolamento (UE) 2016/679 (GDPR).",
+  alternates: {
+    canonical: "/privacy",
+    languages: { it: "/privacy", en: "/en/privacy", "x-default": "/privacy" },
+  },
 };
 
 const NAVY = "#1E333B";

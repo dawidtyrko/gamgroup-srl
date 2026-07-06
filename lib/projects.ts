@@ -8,6 +8,16 @@ import { randomUUID } from "crypto";
  *   description -> "Il progetto"
  *   benefits    -> "Benefici" (rendered as the 2-col ✓ list)
  */
+/** Optional English translation of a case study (per-field fallback to Italian). */
+export type ProjectEn = {
+  sector?: string;
+  area?: string;
+  title?: string;
+  challenge?: string;
+  description?: string;
+  benefits?: string[];
+};
+
 export type Project = {
   id: string;
   sector: string; // pill label, e.g. "Fashion"
@@ -19,9 +29,27 @@ export type Project = {
   featured?: boolean; // shown in the "Case study in evidenza" block on the homepage
   area?: string; // technical area badge, e.g. "AMS", "EDI", "AS400"
   image?: string; // photo URL (absolute or /photos/...); rendered with the duotone treatment
+  en?: ProjectEn; // English fields — anything missing falls back to Italian
 };
 
 export type ProjectInput = Omit<Project, "id">;
+
+/**
+ * Resolve a project for a locale: English fields override Italian ones
+ * per-field, so half-translated projects still render completely.
+ */
+export function localizeProject(p: Project, locale: "it" | "en"): Project {
+  if (locale !== "en" || !p.en) return p;
+  return {
+    ...p,
+    sector: p.en.sector?.trim() || p.sector,
+    area: p.en.area?.trim() || p.area,
+    title: p.en.title?.trim() || p.title,
+    challenge: p.en.challenge?.trim() || p.challenge,
+    description: p.en.description?.trim() || p.description,
+    benefits: p.en.benefits && p.en.benefits.length > 0 ? p.en.benefits : p.benefits,
+  };
+}
 
 /**
  * Vercel KV data structure
@@ -139,6 +167,22 @@ function requireKv() {
   }
 }
 
+/** Trim an English-translation block; empty block becomes undefined. */
+function normalizeEn(en?: ProjectEn): ProjectEn | undefined {
+  if (!en) return undefined;
+  const out: ProjectEn = {
+    sector: en.sector?.trim() || undefined,
+    area: en.area?.trim() || undefined,
+    title: en.title?.trim() || undefined,
+    challenge: en.challenge?.trim() || undefined,
+    description: en.description?.trim() || undefined,
+    benefits: en.benefits?.map((b) => b.trim()).filter(Boolean),
+  };
+  if (out.benefits && out.benefits.length === 0) out.benefits = undefined;
+  const hasAny = Object.values(out).some((v) => v !== undefined);
+  return hasAny ? out : undefined;
+}
+
 /** Build a clean, trimmed Project from raw input. */
 function normalize(input: ProjectInput, id: string): Project {
   return {
@@ -152,6 +196,7 @@ function normalize(input: ProjectInput, id: string): Project {
     featured: Boolean(input.featured),
     area: input.area?.trim() || undefined,
     image: input.image?.trim() || undefined,
+    en: normalizeEn(input.en),
   };
 }
 
@@ -208,12 +253,24 @@ export async function deleteProject(id: string): Promise<boolean> {
 export function parseProjectInput(
   body: Record<string, unknown>
 ): { input: ProjectInput } | { error: string } {
-  const rawBenefits = body.benefits;
-  const benefits = Array.isArray(rawBenefits)
-    ? rawBenefits.map(String)
-    : typeof rawBenefits === "string"
-      ? rawBenefits.split(/[\n,]/)
-      : [];
+  const parseBenefits = (raw: unknown): string[] =>
+    Array.isArray(raw)
+      ? raw.map(String)
+      : typeof raw === "string"
+        ? raw.split(/[\n,]/)
+        : [];
+  const benefits = parseBenefits(body.benefits);
+
+  // optional English block (per-field fallback happens at render time)
+  const rawEn = (body.en ?? {}) as Record<string, unknown>;
+  const en: ProjectEn = {
+    sector: String(rawEn.sector ?? ""),
+    area: String(rawEn.area ?? ""),
+    title: String(rawEn.title ?? ""),
+    challenge: String(rawEn.challenge ?? ""),
+    description: String(rawEn.description ?? ""),
+    benefits: parseBenefits(rawEn.benefits).map((b) => b.trim()).filter(Boolean),
+  };
 
   const input: ProjectInput = {
     sector: String(body.sector ?? ""),
@@ -225,6 +282,7 @@ export function parseProjectInput(
     featured: body.featured === true || body.featured === "true",
     area: String(body.area ?? ""),
     image: String(body.image ?? ""),
+    en,
   };
 
   const img = input.image?.trim();

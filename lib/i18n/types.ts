@@ -84,6 +84,12 @@ export interface Dict {
     successTitle: string;
     successBody: string;
     netError: string;
+    errors: {
+      missingFields: string;
+      invalidEmail: string;
+      privacyRequired: string;
+      sendFailed: string;
+    };
   };
   map: { label: string; directions: string };
   modal: { challenge: string; project: string; benefits: string; cta: string; close: string };

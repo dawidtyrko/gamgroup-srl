@@ -294,6 +294,7 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
   };
 
   const activeProject = projectIndex != null ? projects[projectIndex] : null;
+  const privacyHref = locale === "en" ? "/en/privacy" : "/privacy";
 
   // Featured case study (Reply-style hero case): first flagged, else the first one.
   const featuredIdx = Math.max(0, projects.findIndex((p) => p.featured));
@@ -320,7 +321,13 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
       });
       const data = await res.json();
       if (!res.ok) {
-        setFormErr(data.error || dict.contact.netError);
+        const codeMap: Record<string, string> = {
+          missing_fields: dict.contact.errors.missingFields,
+          invalid_email: dict.contact.errors.invalidEmail,
+          privacy_required: dict.contact.errors.privacyRequired,
+          send_failed: dict.contact.errors.sendFailed,
+        };
+        setFormErr((data.code && codeMap[data.code]) || data.error || dict.contact.netError);
         return;
       }
       setFormSent(true);
@@ -883,7 +890,7 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
                   <input type="checkbox" name="privacy" required style={{ marginTop: 3, width: 16, height: 16, accentColor: TEALLT, flex: "none" }} />
                   <span style={{ fontWeight: 300, fontSize: 14, lineHeight: 1.55, color: "rgba(255,255,255,.7)" }}>
                     {dict.contact.privacyPre}
-                    <a href="/privacy" target="_blank" rel="noopener" style={{ color: TEALLT, textDecoration: "none", borderBottom: `1px solid ${TEALLT}` }}>{dict.contact.privacyLink}</a>
+                    <a href={privacyHref} target="_blank" rel="noopener" style={{ color: TEALLT, textDecoration: "none", borderBottom: `1px solid ${TEALLT}` }}>{dict.contact.privacyLink}</a>
                     {dict.contact.privacyPost}
                   </span>
                 </label>
@@ -913,7 +920,7 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
         <span>
           {dict.footer.copyright}
           {" · "}
-          <a href="/privacy" style={{ color: "rgba(255,255,255,.75)", textDecoration: "none", borderBottom: "1px solid rgba(121,183,196,.6)" }}>{dict.footer.privacy}</a>
+          <a href={privacyHref} style={{ color: "rgba(255,255,255,.75)", textDecoration: "none", borderBottom: "1px solid rgba(121,183,196,.6)" }}>{dict.footer.privacy}</a>
         </span>
       </footer>
 

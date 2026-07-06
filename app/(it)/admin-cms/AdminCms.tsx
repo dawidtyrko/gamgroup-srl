@@ -42,6 +42,12 @@ const emptyForm = {
   featured: false,
   area: "",
   image: "",
+  enSector: "",
+  enArea: "",
+  enTitle: "",
+  enChallenge: "",
+  enDescription: "",
+  enBenefits: "",
 };
 
 export default function AdminCms() {
@@ -88,7 +94,17 @@ export default function AdminCms() {
       const res = await fetch(isEdit ? `/api/projects/${editingId}` : "/api/projects", {
         method: isEdit ? "PUT" : "POST",
         headers: { "Content-Type": "application/json", "x-admin-password": password },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          en: {
+            sector: form.enSector,
+            area: form.enArea,
+            title: form.enTitle,
+            challenge: form.enChallenge,
+            description: form.enDescription,
+            benefits: form.enBenefits,
+          },
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -120,6 +136,12 @@ export default function AdminCms() {
       featured: Boolean(p.featured),
       area: p.area ?? "",
       image: p.image ?? "",
+      enSector: p.en?.sector ?? "",
+      enArea: p.en?.area ?? "",
+      enTitle: p.en?.title ?? "",
+      enChallenge: p.en?.challenge ?? "",
+      enDescription: p.en?.description ?? "",
+      enBenefits: p.en?.benefits?.join("\n") ?? "",
     });
     setStatus({ state: "idle" });
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -228,6 +250,37 @@ export default function AdminCms() {
             <textarea required value={form.benefits} onChange={set("benefits")} rows={4} style={{ ...inputStyle, resize: "vertical" }} placeholder={"Riduzione dei tempi di fermo\nSLA rispettati con costanza\n..."} />
           </Row>
 
+          <details style={{ border: "1px solid #DDE6E8", borderRadius: 14, padding: "16px 18px", background: "#fff" }}>
+            <summary style={{ cursor: "pointer", fontFamily: GRO, fontWeight: 700, fontSize: 16, color: NAVY }}>
+              English (opzionale) {form.enTitle ? "· EN ✓" : ""}
+            </summary>
+            <p style={{ margin: "10px 0 16px", color: "#6B7686", fontWeight: 300, fontSize: 14 }}>
+              Traduzione mostrata su /en. I campi vuoti usano il testo italiano.
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <Row label="Sector (EN)">
+                  <input type="text" value={form.enSector} onChange={set("enSector")} style={inputStyle} placeholder="e.g. Fashion" />
+                </Row>
+                <Row label="Technical area (EN)">
+                  <input type="text" value={form.enArea} onChange={set("enArea")} style={inputStyle} placeholder="e.g. AMS" />
+                </Row>
+              </div>
+              <Row label="Title (EN)">
+                <input type="text" value={form.enTitle} onChange={set("enTitle")} style={inputStyle} />
+              </Row>
+              <Row label="The challenge (EN)">
+                <textarea value={form.enChallenge} onChange={set("enChallenge")} rows={3} style={{ ...inputStyle, resize: "vertical" }} />
+              </Row>
+              <Row label="The project (EN)">
+                <textarea value={form.enDescription} onChange={set("enDescription")} rows={3} style={{ ...inputStyle, resize: "vertical" }} />
+              </Row>
+              <Row label="Benefits (EN — one per line)">
+                <textarea value={form.enBenefits} onChange={set("enBenefits")} rows={4} style={{ ...inputStyle, resize: "vertical" }} />
+              </Row>
+            </div>
+          </details>
+
           <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
             <input
               type="checkbox"
@@ -281,7 +334,7 @@ export default function AdminCms() {
             {projects.map((p) => (
               <div key={p.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, background: "#fff", border: "1px solid #e5e9f0", borderRadius: 14, padding: "16px 18px" }}>
                 <div style={{ minWidth: 0 }}>
-                  <span style={{ ...labelStyle, color: TEAL }}>{p.sector}{p.featured ? " · ★ in evidenza" : ""}</span>
+                  <span style={{ ...labelStyle, color: TEAL }}>{p.sector}{p.featured ? " · ★ in evidenza" : ""}{p.en?.title ? " · EN ✓" : ""}</span>
                   <p style={{ margin: "6px 0 0", fontFamily: GRO, fontWeight: 500, fontSize: 16, color: NAVY, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.title}</p>
                 </div>
                 <div style={{ display: "flex", gap: 8, flex: "none" }}>

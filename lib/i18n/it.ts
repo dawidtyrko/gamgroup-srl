@@ -164,6 +164,12 @@ export const it: Dict = {
     successTitle: "Grazie!",
     successBody: "Abbiamo ricevuto il tuo messaggio e ti risponderemo al più presto.",
     netError: "Rete non raggiungibile. Riprova.",
+    errors: {
+      missingFields: "Compila nome, email e messaggio.",
+      invalidEmail: "Email non valida.",
+      privacyRequired: "Devi accettare l\u2019informativa privacy.",
+      sendFailed: "Invio non riuscito. Riprova pi\u00f9 tardi.",
+    },
   },
   map: { label: "La nostra sede", directions: "Ottieni indicazioni →" },
   modal: {
