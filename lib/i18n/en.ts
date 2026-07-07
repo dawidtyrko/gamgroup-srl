@@ -75,9 +75,9 @@ export const en: Dict = {
     eyebrow: "Numbers are our strength",
     items: [
       { value: 20, label: "Years of experience" },
-      { value: 50, label: "Qualified experts" },
+      { value: 60, label: "Qualified experts" },
       { value: 130, label: "Satisfied clients" },
-      { value: 15, label: "Partners" },
+      { value: 20, label: "Partners" },
     ],
   },
   about: {

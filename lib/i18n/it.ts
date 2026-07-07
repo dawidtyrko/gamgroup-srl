@@ -76,9 +76,9 @@ export const it: Dict = {
     eyebrow: "I numeri sono il nostro forte",
     items: [
       { value: 20, label: "Anni di esperienza" },
-      { value: 50, label: "Esperti qualificati" },
+      { value: 60, label: "Esperti qualificati" },
       { value: 130, label: "Clienti soddisfatti" },
-      { value: 15, label: "Partner" },
+      { value: 20, label: "Partner" },
     ],
   },
   about: {
@@ -93,7 +93,7 @@ export const it: Dict = {
       post: ". Da oltre vent’anni affianchiamo le imprese nell’evoluzione e nella gestione dei loro sistemi IT.",
     },
     sectorsLabel: "Settori",
-    sectors: ["Retail", "Food", "Automotive", "Fashion", "Aerospace", "… and many more"],
+    sectors: ["Retail", "Food", "Automotive", "Fashion", "Aerospace", "… e molti altri"],
   },
   projectsSec: {
     eyebrow: "Case studies",

@@ -59,6 +59,15 @@ const h2: CSSProperties = {
   letterSpacing: "-.02em",
 };
 
+// Partner logos (brand names are locale-independent; alt = name).
+const partnerLogos = [
+  { name: "Rivelio", src: "/partners/rivelio.png" },
+  { name: "Microsoft Partner", src: "/partners/microsoft.png" },
+  { name: "ProcederAI", src: "/partners/proceder.png" },
+  { name: "Claude", src: "/partners/claude.png" },
+  { name: "AWS", src: "/partners/aws.png" },
+];
+
 const cardBanner: CSSProperties = {
   background:
     "repeating-linear-gradient(135deg,rgba(121,183,196,.12) 0 16px,rgba(255,255,255,0) 16px 32px),linear-gradient(125deg,#22325a,#16233f)",
@@ -70,7 +79,6 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
   const channels = dict.channels.items;
   const stats = dict.stats.items;
   const sectors = dict.about.sectors;
-  const partners = dict.partners.names;
   const jobs = dict.jobs.items;
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
@@ -727,9 +735,10 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
       {/* ---- Clienti (marquee) ---- */}
       <section style={{ background: "#fff", padding: "clamp(70px,9vw,120px) 0", overflow: "hidden" }}>
         <p data-rise style={{ margin: "0 0 clamp(40px,5vw,64px)", textAlign: "center", ...eyebrow(MUT), padding: "0 6vw" }}>{dict.partners.eyebrow}</p>
-        <div style={{ display: "flex", width: "max-content", gap: 88, animation: "gam-marq 28s linear infinite", paddingLeft: 88 }}>
-          {[...partners, ...partners].map((c, i) => (
-            <span key={`${c}-${i}`} style={{ fontFamily: GRO, fontWeight: 700, fontSize: "clamp(26px,3.2vw,44px)", letterSpacing: "-.01em", color: "#c2c9d3", whiteSpace: "nowrap" }}>{c}</span>
+        <div style={{ display: "flex", alignItems: "center", width: "max-content", gap: 88, animation: "gam-marq 28s linear infinite", paddingLeft: 88 }}>
+          {[...partnerLogos, ...partnerLogos].map((pl, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={`${pl.name}-${i}`} src={pl.src} alt={pl.name} className="partner-logo" style={{ display: "block", height: "clamp(34px,4vw,54px)", width: "auto" }} />
           ))}
         </div>
       </section>

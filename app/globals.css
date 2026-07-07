@@ -234,6 +234,13 @@ html {
   }
 }
 
+/* partner logos: one muted treatment (like the old grey wordmarks) so the
+   colourful marks read as a uniform strip — spec: one photo/logo treatment */
+.partner-logo {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
 /* subtle teal flash on tap (mobile) */
 a,
 button {
