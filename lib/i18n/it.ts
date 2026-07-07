@@ -114,14 +114,71 @@ export const it: Dict = {
     title: "Entra in GAM",
     lead: "Unisciti a un team di esperti IT. Le posizioni aperte, in continua crescita.",
     apply: "Candidati ora →",
+    learnMore: "Scopri di più →",
+    roleLabel: "Il ruolo",
+    requirementsLabel: "Requisiti",
     mailSubjectPrefix: "Candidatura: ",
     spontaneousPre: "Candidatura spontanea — invia il CV a",
+    // NOTE: descriptions/requirements for roles 2–5 are placeholders — replace
+    // with the final copy when it arrives.
     items: [
-      { title: "Consulente SAP S/4HANA", sede: "Treviso", type: "Tempo indeterminato", tags: ["SAP S/4HANA", "FI/CO o MM/SD", "3+ anni"] },
-      { title: "Service Manager AMS", sede: "Treviso", type: "Tempo indeterminato", tags: ["ITIL", "Gestione team", "AMS"] },
-      { title: "Analista SAP Tecnico-Funzionale", sede: "Treviso", type: "Tempo indeterminato", tags: ["ABAP", "Moduli SAP", "Analisi funzionale"] },
-      { title: "IT Specialist", sede: "Treviso", type: "Tempo indeterminato", tags: ["Sistemistica", "Reti", "Help Desk"] },
-      { title: "Senior IT Consultant", sede: "Treviso", type: "Tempo indeterminato", tags: ["ERP", "Project Management", "5+ anni"] },
+      {
+        title: "Consulente SAP S/4HANA",
+        sede: "Treviso",
+        type: "Tempo indeterminato",
+        tags: ["SAP S/4HANA", "FI/CO o MM/SD", "3+ anni"],
+        description: [
+          "Siamo alla ricerca di Consulenti SAP con almeno 3 anni di esperienza sui moduli SAP (FI, CO, SD, MM).",
+          "Il candidato ideale ha una forte capacità di analisi e problem-solving e sa lavorare in team per supportare le aziende Clienti in progetti di migrazione a SAP S/4HANA e attività di supporto AMS.",
+        ],
+        requirements: [
+          "Esperienza di almeno 3 anni in ambito SAP S/4HANA sui moduli (FI, CO, SD, MM)",
+          "Inglese fluente (scritto e parlato)",
+          "Capacità analitiche e di problem-solving",
+          "Esperienza in progetti di migrazione a SAP S/4HANA e supporto AMS",
+          "Esperienza nella gestione di progetti SAP o attività di consulenza",
+        ],
+      },
+      {
+        title: "Service Manager AMS",
+        sede: "Treviso",
+        type: "Tempo indeterminato",
+        tags: ["ITIL", "Gestione team", "AMS"],
+        description: [
+          "Cerchiamo un Service Manager per coordinare i servizi AMS e i team di supporto dedicati ai nostri clienti.",
+        ],
+        requirements: ["Certificazione o esperienza ITIL", "Esperienza nella gestione di team", "Background in servizi AMS"],
+      },
+      {
+        title: "Analista SAP Tecnico-Funzionale",
+        sede: "Treviso",
+        type: "Tempo indeterminato",
+        tags: ["ABAP", "Moduli SAP", "Analisi funzionale"],
+        description: [
+          "Cerchiamo un Analista SAP con competenze tecnico-funzionali per attività di sviluppo e analisi sui moduli SAP.",
+        ],
+        requirements: ["Sviluppo ABAP", "Conoscenza dei moduli SAP", "Esperienza di analisi funzionale"],
+      },
+      {
+        title: "IT Specialist",
+        sede: "Treviso",
+        type: "Tempo indeterminato",
+        tags: ["Sistemistica", "Reti", "Help Desk"],
+        description: [
+          "Cerchiamo un IT Specialist per attività sistemistiche, gestione reti e supporto Help Desk presso i nostri clienti.",
+        ],
+        requirements: ["Competenze sistemistiche", "Gestione reti e infrastrutture", "Esperienza in attività di Help Desk"],
+      },
+      {
+        title: "Senior IT Consultant",
+        sede: "Treviso",
+        type: "Tempo indeterminato",
+        tags: ["ERP", "Project Management", "5+ anni"],
+        description: [
+          "Cerchiamo un consulente senior con esperienza su progetti ERP e capacità di gestione progetti complessi.",
+        ],
+        requirements: ["Esperienza ERP di almeno 5 anni", "Project Management", "Attitudine consulenziale e relazione con il cliente"],
+      },
     ],
   },
   faq: {

@@ -61,9 +61,19 @@ export interface Dict {
     title: string;
     lead: string;
     apply: string;
+    learnMore: string; // row hint — details open in the modal
+    roleLabel: string; // modal: description block label
+    requirementsLabel: string; // modal: requirements block label
     mailSubjectPrefix: string;
     spontaneousPre: string; // text before the email link
-    items: { title: string; sede: string; type: string; tags: string[] }[];
+    items: {
+      title: string;
+      sede: string;
+      type: string;
+      tags: string[];
+      description: string[]; // paragraphs shown in the modal
+      requirements: string[]; // bullet list shown in the modal
+    }[];
   };
   faq: { eyebrow: string; title: string; items: { q: string; a: string }[] };
   contact: {

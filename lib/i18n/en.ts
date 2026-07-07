@@ -111,14 +111,71 @@ export const en: Dict = {
     title: "Join GAM",
     lead: "Join a team of IT experts. Open positions, growing all the time.",
     apply: "Apply now →",
+    learnMore: "Learn more →",
+    roleLabel: "The role",
+    requirementsLabel: "Requirements",
     mailSubjectPrefix: "Application: ",
     spontaneousPre: "Spontaneous application — send your CV to",
+    // NOTE: descriptions/requirements for roles 2–5 are placeholders — replace
+    // with the final copy when it arrives.
     items: [
-      { title: "SAP S/4HANA Consultant", sede: "Treviso", type: "Permanent contract", tags: ["SAP S/4HANA", "FI/CO or MM/SD", "3+ years"] },
-      { title: "AMS Service Manager", sede: "Treviso", type: "Permanent contract", tags: ["ITIL", "Team management", "AMS"] },
-      { title: "SAP Technical-Functional Analyst", sede: "Treviso", type: "Permanent contract", tags: ["ABAP", "SAP modules", "Functional analysis"] },
-      { title: "IT Specialist", sede: "Treviso", type: "Permanent contract", tags: ["Systems administration", "Networks", "Help Desk"] },
-      { title: "Senior IT Consultant", sede: "Treviso", type: "Permanent contract", tags: ["ERP", "Project Management", "5+ years"] },
+      {
+        title: "SAP S/4HANA Consultant",
+        sede: "Treviso",
+        type: "Permanent contract",
+        tags: ["SAP S/4HANA", "FI/CO or MM/SD", "3+ years"],
+        description: [
+          "We are looking for SAP Consultants with at least 3 years of experience on SAP modules (FI, CO, SD, MM).",
+          "The ideal candidate has strong analytical and problem-solving skills and works well in a team, supporting client companies in SAP S/4HANA migration projects and AMS support activities.",
+        ],
+        requirements: [
+          "At least 3 years of experience with SAP S/4HANA modules (FI, CO, SD, MM)",
+          "Fluent English (written and spoken)",
+          "Analytical and problem-solving skills",
+          "Experience in SAP S/4HANA migration projects and AMS support",
+          "Experience managing SAP projects or consulting engagements",
+        ],
+      },
+      {
+        title: "AMS Service Manager",
+        sede: "Treviso",
+        type: "Permanent contract",
+        tags: ["ITIL", "Team management", "AMS"],
+        description: [
+          "We are looking for a Service Manager to coordinate AMS services and the support teams dedicated to our clients.",
+        ],
+        requirements: ["ITIL certification or experience", "Team management experience", "AMS services background"],
+      },
+      {
+        title: "SAP Technical-Functional Analyst",
+        sede: "Treviso",
+        type: "Permanent contract",
+        tags: ["ABAP", "SAP modules", "Functional analysis"],
+        description: [
+          "We are looking for an SAP Analyst with technical-functional skills for development and analysis on SAP modules.",
+        ],
+        requirements: ["ABAP development", "Knowledge of SAP modules", "Functional analysis experience"],
+      },
+      {
+        title: "IT Specialist",
+        sede: "Treviso",
+        type: "Permanent contract",
+        tags: ["Systems administration", "Networks", "Help Desk"],
+        description: [
+          "We are looking for an IT Specialist for systems administration, network management and Help Desk support at our clients.",
+        ],
+        requirements: ["Systems administration skills", "Network and infrastructure management", "Help Desk experience"],
+      },
+      {
+        title: "Senior IT Consultant",
+        sede: "Treviso",
+        type: "Permanent contract",
+        tags: ["ERP", "Project Management", "5+ years"],
+        description: [
+          "We are looking for a senior consultant with ERP project experience and the ability to manage complex engagements.",
+        ],
+        requirements: ["5+ years of ERP experience", "Project management", "Consulting mindset and client relationship skills"],
+      },
     ],
   },
   faq: {

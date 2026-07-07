@@ -98,6 +98,7 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
   const [sending, setSending] = useState(false);
   const [formErr, setFormErr] = useState<string | null>(null);
   const [projectIndex, setProjectIndex] = useState<number | null>(null);
+  const [jobIndex, setJobIndex] = useState<number | null>(null);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
@@ -295,6 +296,7 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
     setMenuOpen(false);
     setServicesOpen(false);
     setProjectIndex(null);
+    setJobIndex(null);
     if (id === "top") {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
@@ -311,6 +313,7 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
   };
 
   const activeProject = projectIndex != null ? projects[projectIndex] : null;
+  const activeJob = jobIndex != null ? jobs[jobIndex] : null;
   const privacyHref = locale === "en" ? "/en/privacy" : "/privacy";
 
   const submitForm = async (e: FormEvent<HTMLFormElement>) => {
@@ -774,8 +777,22 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
             {dict.jobs.lead}
           </p>
           <div style={{ borderTop: "1px solid rgba(77,147,162,.35)" }}>
-            {jobs.map((job) => (
-              <div key={job.title} data-job-row className="job-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 32, padding: "clamp(26px,3vw,40px) 0", borderBottom: "1px solid rgba(77,147,162,.35)", transition: "padding-left .4s ease" }}>
+            {jobs.map((job, ji) => (
+              <div
+                key={job.title}
+                data-job-row
+                className="job-row"
+                onClick={() => setJobIndex(ji)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setJobIndex(ji);
+                  }
+                }}
+                style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 32, padding: "clamp(26px,3vw,40px) 0", borderBottom: "1px solid rgba(77,147,162,.35)", transition: "padding-left .4s ease", cursor: "pointer" }}
+              >
                 <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                   <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(22px,2.4vw,32px)", lineHeight: 1.1, letterSpacing: "-.015em", color: INK }}>{job.title}</h3>
                   <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10 }}>
@@ -789,13 +806,9 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
                     ))}
                   </div>
                 </div>
-                <a
-                  href={`mailto:recruitment@gamgroup.it?subject=${encodeURIComponent(`${dict.jobs.mailSubjectPrefix}${job.title}`)}`}
-                  className="btn-navy"
-                  style={{ flex: "none", display: "inline-flex", alignItems: "center", gap: 9, background: TEALD, color: "#fff", borderRadius: 999, padding: "14px 28px", fontSize: 15, fontWeight: 600, textDecoration: "none", transition: "background .3s ease,transform .3s ease" }}
-                >
-                  {dict.jobs.apply}
-                </a>
+                <span style={{ flex: "none", fontFamily: MONO, fontSize: 13, letterSpacing: ".04em", color: TEALD }}>
+                  {dict.jobs.learnMore}
+                </span>
               </div>
             ))}
           </div>
@@ -934,6 +947,48 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
                 </ul>
               </div>
               <button onClick={nav("contatti")} className="btn-navy" style={{ marginTop: "clamp(30px,3.6vw,44px)", background: TEALD, color: "#fff", border: "none", borderRadius: 999, padding: "16px 34px", fontSize: 15, fontWeight: 600, cursor: "pointer", transition: "background .3s ease,transform .3s ease" }}>{dict.modal.cta}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ---- Job modal ---- */}
+      {activeJob && (
+        <div onClick={() => setJobIndex(null)} style={{ position: "fixed", inset: 0, zIndex: 1200, background: "rgba(16,27,48,.62)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 24, maxWidth: 720, width: "100%", maxHeight: "88vh", overflow: "auto", boxShadow: "0 40px 100px rgba(16,27,48,.45)" }}>
+            <div style={{ position: "relative", display: "flex", alignItems: "flex-end", padding: 24, height: "clamp(120px,16vw,160px)", ...cardBanner }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: TEALLT, border: "1px solid rgba(121,183,196,.55)", padding: "6px 13px", borderRadius: 999 }}>{activeJob.sede}</span>
+                <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(255,255,255,.75)", border: "1px solid rgba(255,255,255,.35)", padding: "6px 13px", borderRadius: 999 }}>{activeJob.type}</span>
+              </div>
+              <button onClick={() => setJobIndex(null)} aria-label={dict.modal.close} className="modal-close" style={{ position: "absolute", top: 18, right: 18, width: 40, height: 40, borderRadius: "50%", border: "none", background: "rgba(255,255,255,.12)", color: "#fff", fontSize: 24, lineHeight: 1, cursor: "pointer", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)", transition: "background .3s ease" }}>×</button>
+            </div>
+            <div style={{ padding: "clamp(28px,4vw,48px)" }}>
+              <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(24px,3vw,38px)", lineHeight: 1.12, letterSpacing: "-.02em", color: INK }}>{activeJob.title}</h3>
+              <div style={{ marginTop: "clamp(28px,3.4vw,40px)" }}>
+                <p style={{ margin: "0 0 12px", fontFamily: MONO, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: TEALD }}>{dict.jobs.roleLabel}</p>
+                {activeJob.description.map((par) => (
+                  <p key={par} style={{ ...modalPara, marginBottom: 12 }}>{par}</p>
+                ))}
+              </div>
+              <div style={{ marginTop: "clamp(26px,3vw,36px)" }}>
+                <p style={{ margin: "0 0 16px", fontFamily: MONO, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: TEALD }}>{dict.jobs.requirementsLabel}</p>
+                <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+                  {activeJob.requirements.map((r) => (
+                    <li key={r} style={{ display: "flex", gap: 11, alignItems: "flex-start", fontSize: 16, fontWeight: 400, color: INK, lineHeight: 1.45 }}>
+                      <span style={{ marginTop: 2, color: TEAL, fontSize: 16 }}>✓</span>
+                      <span>{r}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <a
+                href={`mailto:recruitment@gamgroup.it?subject=${encodeURIComponent(`${dict.jobs.mailSubjectPrefix}${activeJob.title}`)}`}
+                className="btn-navy"
+                style={{ marginTop: "clamp(30px,3.6vw,44px)", display: "inline-flex", alignItems: "center", gap: 9, background: TEALD, color: "#fff", border: "none", borderRadius: 999, padding: "16px 34px", fontSize: 15, fontWeight: 600, textDecoration: "none", cursor: "pointer", transition: "background .3s ease,transform .3s ease" }}
+              >
+                {dict.jobs.apply}
+              </a>
             </div>
           </div>
         </div>
