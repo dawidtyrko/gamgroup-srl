@@ -105,6 +105,7 @@ export const en: Dict = {
     eyebrow: "Our technology partners",
     names: ["Rivelio", "Microsoft Partner", "ProcederAI", "Claude", "AWS"],
   },
+  clients: { eyebrow: "Some of our clients" },
   jobs: {
     eyebrow: "Work with us",
     title: "Join GAM",

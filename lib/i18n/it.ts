@@ -108,6 +108,7 @@ export const it: Dict = {
     // contracts (website spec §7). Until then: technology partners.
     names: ["Rivelio", "Microsoft Partner", "ProcederAI", "Claude", "AWS"],
   },
+  clients: { eyebrow: "Alcuni dei nostri clienti" },
   jobs: {
     eyebrow: "Lavora con noi",
     title: "Entra in GAM",

@@ -55,6 +55,7 @@ export interface Dict {
     hint: string;
   };
   partners: { eyebrow: string; names: string[] };
+  clients: { eyebrow: string };
   jobs: {
     eyebrow: string;
     title: string;

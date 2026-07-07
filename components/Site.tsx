@@ -68,6 +68,15 @@ const partnerLogos = [
   { name: "AWS", src: "/partners/aws.png" },
 ];
 
+// Client logos (shown full-colour, per the old site).
+const clientLogos = [
+  { name: "Maserati", src: "/clients/maserati.png" },
+  { name: "Miele", src: "/clients/miele.png" },
+  { name: "CNH Industrial", src: "/clients/cnh.png" },
+  { name: "Geox", src: "/clients/geox.png" },
+  { name: "Safilo", src: "/clients/safilo.png" },
+];
+
 const cardBanner: CSSProperties = {
   background:
     "repeating-linear-gradient(135deg,rgba(121,183,196,.12) 0 16px,rgba(255,255,255,0) 16px 32px),linear-gradient(125deg,#22325a,#16233f)",
@@ -633,6 +642,17 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
             </div>
             <p style={{ padding: "0 6vw", margin: "clamp(28px,4vh,52px) 0 0", fontFamily: MONO, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(255,255,255,.35)" }}>{dict.projectsSec.hint}</p>
           </div>
+        </div>
+      </section>
+
+      {/* ---- Clienti (static logo strip) ---- */}
+      <section style={{ background: "#fff", padding: "clamp(70px,9vw,120px) 6vw" }}>
+        <p data-rise style={{ margin: "0 0 clamp(40px,5vw,64px)", textAlign: "center", ...eyebrow(MUT) }}>{dict.clients.eyebrow}</p>
+        <div data-rise style={{ maxWidth: 1180, margin: "0 auto", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "clamp(36px,6vw,80px)" }}>
+          {clientLogos.map((cl) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={cl.name} src={cl.src} alt={cl.name} style={{ display: "block", maxHeight: "clamp(44px,5vw,72px)", maxWidth: "clamp(120px,15vw,200px)", width: "auto", height: "auto" }} />
+          ))}
         </div>
       </section>
 
