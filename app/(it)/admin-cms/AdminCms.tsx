@@ -39,7 +39,6 @@ const emptyForm = {
   challenge: "",
   description: "",
   benefits: "",
-  featured: false,
   area: "",
   image: "",
   enSector: "",
@@ -133,7 +132,6 @@ export default function AdminCms() {
       challenge: p.challenge,
       description: p.description,
       benefits: p.benefits.join("\n"),
-      featured: Boolean(p.featured),
       area: p.area ?? "",
       image: p.image ?? "",
       enSector: p.en?.sector ?? "",
@@ -281,18 +279,6 @@ export default function AdminCms() {
             </div>
           </details>
 
-          <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
-            <input
-              type="checkbox"
-              checked={form.featured}
-              onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))}
-              style={{ width: 18, height: 18, accentColor: TEAL }}
-            />
-            <span style={{ fontSize: 15, color: NAVY }}>
-              In evidenza in home <span style={{ color: "#6B7686", fontWeight: 300 }}>(se più progetti sono in evidenza, viene mostrato il primo)</span>
-            </span>
-          </label>
-
           <button
             type="submit"
             disabled={status.state === "loading"}
@@ -334,7 +320,7 @@ export default function AdminCms() {
             {projects.map((p) => (
               <div key={p.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, background: "#fff", border: "1px solid #e5e9f0", borderRadius: 14, padding: "16px 18px" }}>
                 <div style={{ minWidth: 0 }}>
-                  <span style={{ ...labelStyle, color: TEAL }}>{p.sector}{p.featured ? " · ★ in evidenza" : ""}{p.en?.title ? " · EN ✓" : ""}</span>
+                  <span style={{ ...labelStyle, color: TEAL }}>{p.sector}{p.en?.title ? " · EN ✓" : ""}</span>
                   <p style={{ margin: "6px 0 0", fontFamily: GRO, fontWeight: 500, fontSize: 16, color: NAVY, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.title}</p>
                 </div>
                 <div style={{ display: "flex", gap: 8, flex: "none" }}>

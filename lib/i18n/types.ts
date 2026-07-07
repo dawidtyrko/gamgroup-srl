@@ -47,7 +47,6 @@ export interface Dict {
     sectorsLabel: string;
     sectors: string[];
   };
-  featured: { eyebrow: string };
   projectsSec: {
     eyebrow: string;
     title: string;

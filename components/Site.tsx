@@ -222,9 +222,9 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
       const order: [string, string][] = [
         ["contatti", "contatti"],
         ["jobboard", "jobboard"],
-        ["progetti", "progetti"],
         ["chisiamo", "chisiamo"],
         ["servizi", "servizi"],
+        ["progetti", "progetti"],
         ["home", "top"],
       ];
       let cur = "home";
@@ -296,10 +296,6 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
   const activeProject = projectIndex != null ? projects[projectIndex] : null;
   const privacyHref = locale === "en" ? "/en/privacy" : "/privacy";
 
-  // Featured case study (Reply-style hero case): first flagged, else the first one.
-  const featuredIdx = Math.max(0, projects.findIndex((p) => p.featured));
-  const featured = projects[featuredIdx] ?? null;
-
   const submitForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
@@ -370,9 +366,9 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
         <nav ref={navRef} data-desktop-nav style={{ display: "flex", alignItems: "center", gap: 38 }}>
           {[
             ["home", dict.nav.home, "top"],
-            ["chisiamo", dict.nav.chisiamo, "chisiamo"],
-            ["servizi", dict.nav.servizi, "servizi"],
             ["progetti", dict.nav.progetti, "progetti"],
+            ["servizi", dict.nav.servizi, "servizi"],
+            ["chisiamo", dict.nav.chisiamo, "chisiamo"],
             ["jobboard", dict.nav.jobboard, "jobboard"],
           ].map(([key, label, id]) =>
             key === "servizi" ? (
@@ -597,47 +593,40 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
         </div>
       </section>
 
-      {/* ---- Case study in evidenza (Reply-style featured case) ---- */}
-      {featured && (
-        <section style={{ background: "#fff", padding: "0 6vw clamp(90px,12vw,170px)" }}>
-          <div style={{ maxWidth: 1180, margin: "0 auto" }}>
-            <div data-rise style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: "clamp(28px,3.4vw,44px)" }}>
-              <span style={eyebrow()}>{dict.featured.eyebrow}</span>
+      {/* ---- I progetti (pinned horizontal gallery) ---- */}
+      <section id="progetti" style={{ background: "#101b30" }}>
+        {/* heights via .pin-wrap/.pin-screen classes: svh units (stable while the
+            mobile URL bar collapses) — 340vh here reflowed everything below on
+            every bar show/hide, making the page "jump" during scroll */}
+        <div ref={pinWrap} className="pin-wrap" style={{ position: "relative" }}>
+          <div className="pin-screen" style={{ position: "sticky", top: 0, overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            <div style={{ padding: "0 6vw", marginBottom: "clamp(28px,4vh,52px)", display: "flex", alignItems: "baseline", gap: 16 }}>
+              <span style={eyebrow(TEALLT)}>{dict.projectsSec.eyebrow}</span>
+              <h2 style={{ ...h2, color: "#fff" }}>{dict.projectsSec.title}</h2>
             </div>
-            <div
-              data-rise
-              data-grid-2
-              className="featured-card"
-              onClick={() => setProjectIndex(featuredIdx)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setProjectIndex(featuredIdx);
-                }
-              }}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1.1fr 1fr",
-                border: "1px solid #DDE6E8",
-                borderRadius: 22,
-                overflow: "hidden",
-                cursor: "pointer",
-                background: "#fff",
-                transition: "transform .4s ease, border-color .4s ease, box-shadow .4s ease",
-              }}
-            >
-              <CaseBanner p={featured} style={{ minHeight: "clamp(240px,30vw,400px)", padding: 24 }} />
-              <div style={{ padding: "clamp(28px,3.4vw,52px)", display: "flex", flexDirection: "column", gap: 18 }}>
-                <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(22px,2.6vw,36px)", lineHeight: 1.15, letterSpacing: "-.02em", color: INK }}>{featured.title}</h3>
-                <p style={{ margin: 0, fontWeight: 300, fontSize: "clamp(15px,1.4vw,18px)", lineHeight: 1.65, color: GREY }}>{featured.challenge}</p>
-                <span style={{ marginTop: "auto", paddingTop: 10, fontFamily: MONO, fontSize: 13, letterSpacing: ".04em", color: TEALD }}>{dict.projectsSec.readMore}</span>
+            <div ref={pinTrack} data-track style={{ display: "flex", gap: 28, padding: "0 6vw", willChange: "transform" }}>
+              {projects.map((p, i) => (
+                <div
+                  key={p.id}
+                  onClick={() => setProjectIndex(i)}
+                  className="project-card"
+                  style={{ flex: "none", width: "min(78vw,460px)", background: "#16233f", border: "1px solid rgba(255,255,255,.08)", borderRadius: 22, overflow: "hidden", cursor: "pointer", transition: "transform .4s ease,border-color .4s ease" }}
+                >
+                  <CaseBanner p={p} style={{ height: "clamp(200px,30vh,300px)", padding: 20 }} />
+                  <div style={{ padding: 30, display: "flex", flexDirection: "column", gap: 22, minHeight: 200 }}>
+                    <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(20px,1.8vw,26px)", lineHeight: 1.28, color: "#fff" }}>{p.title}</h3>
+                    <span style={{ marginTop: "auto", fontFamily: MONO, fontSize: 13, letterSpacing: ".04em", color: TEALLT }}>{dict.projectsSec.readMore}</span>
+                  </div>
+                </div>
+              ))}
+              <div style={{ flex: "none", width: "40vw", display: "flex", alignItems: "center", paddingLeft: 10 }}>
+                <span style={{ fontFamily: GRO, fontWeight: 500, fontSize: "clamp(22px,2.4vw,34px)", color: "rgba(255,255,255,.4)", maxWidth: "14ch", lineHeight: 1.15 }}>{dict.projectsSec.trailing}</span>
               </div>
             </div>
+            <p style={{ padding: "0 6vw", margin: "clamp(28px,4vh,52px) 0 0", fontFamily: MONO, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(255,255,255,.35)" }}>{dict.projectsSec.hint}</p>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* ---- Servizi ---- */}
       <section id="servizi" style={{ background: LIGHT, padding: "clamp(90px,12vw,170px) 6vw" }}>
@@ -731,41 +720,6 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ---- I progetti (pinned horizontal gallery) ---- */}
-      <section id="progetti" style={{ background: "#101b30" }}>
-        {/* heights via .pin-wrap/.pin-screen classes: svh units (stable while the
-            mobile URL bar collapses) — 340vh here reflowed everything below on
-            every bar show/hide, making the page "jump" during scroll */}
-        <div ref={pinWrap} className="pin-wrap" style={{ position: "relative" }}>
-          <div className="pin-screen" style={{ position: "sticky", top: 0, overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <div style={{ padding: "0 6vw", marginBottom: "clamp(28px,4vh,52px)", display: "flex", alignItems: "baseline", gap: 16 }}>
-              <span style={eyebrow(TEALLT)}>{dict.projectsSec.eyebrow}</span>
-              <h2 style={{ ...h2, color: "#fff" }}>{dict.projectsSec.title}</h2>
-            </div>
-            <div ref={pinTrack} data-track style={{ display: "flex", gap: 28, padding: "0 6vw", willChange: "transform" }}>
-              {projects.map((p, i) => (
-                <div
-                  key={p.id}
-                  onClick={() => setProjectIndex(i)}
-                  className="project-card"
-                  style={{ flex: "none", width: "min(78vw,460px)", background: "#16233f", border: "1px solid rgba(255,255,255,.08)", borderRadius: 22, overflow: "hidden", cursor: "pointer", transition: "transform .4s ease,border-color .4s ease" }}
-                >
-                  <CaseBanner p={p} style={{ height: "clamp(200px,30vh,300px)", padding: 20 }} />
-                  <div style={{ padding: 30, display: "flex", flexDirection: "column", gap: 22, minHeight: 200 }}>
-                    <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(20px,1.8vw,26px)", lineHeight: 1.28, color: "#fff" }}>{p.title}</h3>
-                    <span style={{ marginTop: "auto", fontFamily: MONO, fontSize: 13, letterSpacing: ".04em", color: TEALLT }}>{dict.projectsSec.readMore}</span>
-                  </div>
-                </div>
-              ))}
-              <div style={{ flex: "none", width: "40vw", display: "flex", alignItems: "center", paddingLeft: 10 }}>
-                <span style={{ fontFamily: GRO, fontWeight: 500, fontSize: "clamp(22px,2.4vw,34px)", color: "rgba(255,255,255,.4)", maxWidth: "14ch", lineHeight: 1.15 }}>{dict.projectsSec.trailing}</span>
-              </div>
-            </div>
-            <p style={{ padding: "0 6vw", margin: "clamp(28px,4vh,52px) 0 0", fontFamily: MONO, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(255,255,255,.35)" }}>{dict.projectsSec.hint}</p>
           </div>
         </div>
       </section>
@@ -969,9 +923,9 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
           <nav style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 48 }}>
             {[
               [dict.nav.home, "top"],
-              [dict.nav.chisiamo, "chisiamo"],
-              [dict.nav.servizi, "servizi"],
               [dict.nav.progetti, "progetti"],
+              [dict.nav.servizi, "servizi"],
+              [dict.nav.chisiamo, "chisiamo"],
               [dict.nav.jobboard, "jobboard"],
               [dict.nav.contattaci, "contatti"],
             ].map(([label, id], i, arr) => (

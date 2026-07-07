@@ -95,7 +95,6 @@ export const it: Dict = {
     sectorsLabel: "Settori",
     sectors: ["Retail", "Food", "Automotive", "Fashion", "Aerospace", "… and many more"],
   },
-  featured: { eyebrow: "Case study in evidenza" },
   projectsSec: {
     eyebrow: "Case studies",
     title: "I progetti",
