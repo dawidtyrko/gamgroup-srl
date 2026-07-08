@@ -31,7 +31,7 @@ export interface Dict {
   services: {
     eyebrow: string;
     title: string;
-    items: { num: string; title: string; tags: string[] }[];
+    items: { num: string; title: string; tags: string[]; description: string[] }[];
   };
   channels: {
     eyebrow: string;

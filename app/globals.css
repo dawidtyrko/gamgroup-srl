@@ -298,6 +298,9 @@ summary:focus-visible {
     padding-left: 0 !important;
     margin-top: 18px !important;
   }
+  [data-svc-detail] {
+    padding-left: 0 !important;
+  }
   [data-chan] {
     grid-template-columns: 1fr 1fr !important;
   }

@@ -96,6 +96,7 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
   const [formErr, setFormErr] = useState<string | null>(null);
   const [projectIndex, setProjectIndex] = useState<number | null>(null);
   const [jobIndex, setJobIndex] = useState<number | null>(null);
+  const [openService, setOpenService] = useState<number | null>(null);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
@@ -631,26 +632,59 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
             <h2 style={h2}>{dict.services.title}</h2>
           </div>
           <div style={{ borderTop: "1px solid rgba(77,147,162,.35)" }}>
-            {services.map((svc) => (
-              <div
-                key={svc.num}
-                data-svc-row
-                className="svc-row"
-                style={{ display: "grid", gridTemplateColumns: "64px minmax(220px,1fr) 1.2fr", gap: 28, alignItems: "center", padding: "clamp(28px,3.4vw,46px) 0", borderBottom: "1px solid rgba(77,147,162,.35)", transition: "padding-left .4s ease", cursor: "default" }}
-              >
-                <span style={{ fontFamily: MONO, fontSize: 14, color: TEALD }}>{svc.num}</span>
-                <div>
-                  <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(22px,2.4vw,34px)", lineHeight: 1.1, letterSpacing: "-.015em", color: INK }}>{svc.title}</h3>
+            {services.map((svc, si) => {
+              const open = openService === si;
+              return (
+                <div
+                  key={svc.num}
+                  style={{
+                    borderBottom: "1px solid rgba(77,147,162,.35)",
+                    background: open ? "rgba(77,147,162,.05)" : "transparent",
+                    boxShadow: open ? "inset 3px 0 0 #4D93A2" : "none",
+                    transition: "background .3s ease, box-shadow .3s ease",
+                  }}
+                >
+                  <div
+                    data-svc-row
+                    className="svc-row"
+                    onClick={() => setOpenService(open ? null : si)}
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={open}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setOpenService(open ? null : si);
+                      }
+                    }}
+                    style={{ display: "grid", gridTemplateColumns: "64px minmax(220px,1fr) 1.2fr", gap: 28, alignItems: "center", padding: "clamp(28px,3.4vw,46px) 0", transition: "padding-left .4s ease", cursor: "pointer" }}
+                  >
+                    <span style={{ fontFamily: MONO, fontSize: 14, color: TEALD }}>{svc.num}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 16, justifyContent: "space-between" }}>
+                      <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(22px,2.4vw,34px)", lineHeight: 1.1, letterSpacing: "-.015em", color: INK }}>{svc.title}</h3>
+                      <span aria-hidden style={{ flex: "none", fontFamily: MONO, fontSize: 22, lineHeight: 1, color: TEALD, transition: "transform .3s ease", transform: open ? "rotate(45deg)" : "none" }}>+</span>
+                    </div>
+                    <div data-svc-tags style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                      {svc.tags.map((t) => (
+                        <span key={t} className="chip" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".04em", color: "#536F83", border: "1px solid #DDE6E8", borderRadius: 999, padding: "6px 13px" }}>
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  {/* elegant in-place expand: grid-rows 0fr→1fr animates to auto height */}
+                  <div style={{ display: "grid", gridTemplateRows: open ? "1fr" : "0fr", transition: "grid-template-rows .45s cubic-bezier(.16,.84,.44,1)" }}>
+                    <div style={{ overflow: "hidden" }}>
+                      <div data-svc-detail style={{ paddingLeft: 92, paddingBottom: "clamp(28px,3.4vw,46px)", maxWidth: 760 }}>
+                        {svc.description.map((par) => (
+                          <p key={par} style={{ margin: "0 0 12px", fontWeight: 300, fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: S2 }}>{par}</p>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div data-svc-tags style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                  {svc.tags.map((t) => (
-                    <span key={t} className="chip" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".04em", color: "#536F83", border: "1px solid #DDE6E8", borderRadius: 999, padding: "6px 13px" }}>
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

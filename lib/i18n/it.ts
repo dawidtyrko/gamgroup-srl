@@ -40,21 +40,36 @@ export const it: Dict = {
         num: "01",
         title: "Consulenza Tecnica ERP",
         tags: ["JDE", "SAP", "IBM i-Series", "Infor", "Oracle Cloud", "NetSuite", "BI", "Zucchetti", "CyberPlan"],
+        description: [
+          "Oltre 30 anni di esperienza sul campo, dall’implementazione alla personalizzazione, dall’aggiornamento all’AMS, GAM Group gestisce i principali sistemi ERP, tra cui SAP, AS400 (IBM i-Series), JDE, Infor, Oracle Cloud e NetSuite.",
+        ],
       },
       {
         num: "02",
         title: "Consulenza Applicativa, AI & BI",
         tags: ["Project Management", "Lean Management", "AI", "Business Intelligence", "AI Agents / Copilots"],
+        description: [
+          "Gestione strategica dei progetti e adozione di AI e Business Intelligence.",
+          "Roadmap, metodologie Lean per ridurre gli sprechi, dashboard predittive e AI agent che trasformano i dati in decisioni reali e azionabili.",
+        ],
       },
       {
         num: "03",
         title: "Sviluppo & System Integration",
         tags: ["Application Maintenance", "Sviluppo SW", "Integrazione & Migrazione"],
+        description: [
+          "Sviluppo software o applicativi su misura e integrazione di sistemi ERP, CRM e BI in un ecosistema unico.",
+          "Sviluppo, migrazione e manutenzione applicativa in un approccio end-to-end, per interoperabilità e continuità in ogni fase.",
+        ],
       },
       {
         num: "04",
         title: "Assistenza & Manutenzione",
         tags: ["Attività PdL", "Reti & Infrastruttura", "HD1 & HD2", "Sicurezza", "HW–SW", "Hosting"],
+        description: [
+          "Infrastruttura IT a 360°, dall’help desk multilivello alla sicurezza dei dati, fino a hosting e cloud.",
+          "Interventi rapidi e proattivi per un sistema sempre operativo.",
+        ],
       },
     ],
   },

@@ -41,21 +41,36 @@ export const en: Dict = {
         num: "01",
         title: "ERP Technical Consulting",
         tags: ["JDE", "SAP", "IBM i-Series", "Infor", "Oracle Cloud", "NetSuite", "BI", "Zucchetti", "CyberPlan"],
+        description: [
+          "Over 30 years of hands-on experience — from implementation to customisation, from upgrades to AMS. GAM Group manages the leading ERP systems, including SAP, AS400 (IBM i-Series), JDE, Infor, Oracle Cloud and NetSuite.",
+        ],
       },
       {
         num: "02",
         title: "Applied Consulting, AI & BI",
         tags: ["Project Management", "Lean Management", "AI", "Business Intelligence", "AI Agents / Copilots"],
+        description: [
+          "Strategic project management and the adoption of AI and Business Intelligence.",
+          "Roadmaps, Lean methodologies to cut waste, predictive dashboards and AI agents that turn data into real, actionable decisions.",
+        ],
       },
       {
         num: "03",
         title: "Development & System Integration",
         tags: ["Application Maintenance", "Software Development", "Integration & Migration"],
+        description: [
+          "Custom software and application development and the integration of ERP, CRM and BI systems into a single ecosystem.",
+          "Development, migration and application maintenance in an end-to-end approach, for interoperability and continuity at every stage.",
+        ],
       },
       {
         num: "04",
         title: "Support & Maintenance",
         tags: ["Workplace services", "Networks & Infrastructure", "HD1 & HD2", "Security", "HW–SW", "Hosting"],
+        description: [
+          "360° IT infrastructure — from multi-level help desk to data security, through to hosting and cloud.",
+          "Fast, proactive interventions for a system that is always up and running.",
+        ],
       },
     ],
   },
