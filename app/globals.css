@@ -172,12 +172,16 @@ html {
   transition: padding-left 0.4s ease, background 0.3s ease, box-shadow 0.3s ease !important;
 }
 @media (hover: hover) {
-  .svc-row:hover,
+  .svc-row:not(.svc-row--open):hover,
   .job-row:hover {
     padding-left: 18px !important;
     background: rgba(77, 147, 162, 0.07);
     box-shadow: inset 3px 0 0 #4d93a2;
   }
+}
+/* open accordion row: no hover shift/wash — the panel already owns the accent */
+.svc-row--open {
+  padding-left: 0 !important;
 }
 /* channel cells are informational, NOT clickable (spec): no hover, no hand
    cursor — they must read differently from interactive cards. */

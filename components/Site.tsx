@@ -77,6 +77,15 @@ const clientLogos = [
   { name: "Safilo", src: "/clients/safilo.png" },
 ];
 
+// Service imagery shown in the expanded accordion panel (locale-independent).
+// Indexed by service position (matches dict.services.items order).
+const serviceImages: string[][] = [
+  ["/services/erp-epm.avif", "/services/erp-sap.avif", "/services/erp-sap-2.avif", "/services/erp-ibm-iseries.avif"],
+  ["/services/ai-lean-1.avif", "/services/ai-lean-2.avif", "/services/ai-bi.avif", "/services/ai-bi-2.avif", "/services/ai-microsoft.avif", "/services/ai-microsoft-2.avif"],
+  ["/services/dev-software.avif", "/services/dev-software-2.avif", "/services/dev-integration.avif", "/services/dev-integration-2.avif"],
+  ["/services/support-ams.avif", "/services/support-ict.avif"],
+];
+
 const cardBanner: CSSProperties = {
   background:
     "repeating-linear-gradient(135deg,rgba(121,183,196,.12) 0 16px,rgba(255,255,255,0) 16px 32px),linear-gradient(125deg,#22325a,#16233f)",
@@ -646,7 +655,7 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
                 >
                   <div
                     data-svc-row
-                    className="svc-row"
+                    className={open ? "svc-row svc-row--open" : "svc-row"}
                     onClick={() => setOpenService(open ? null : si)}
                     role="button"
                     tabIndex={0}
@@ -675,10 +684,26 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
                   {/* elegant in-place expand: grid-rows 0fr→1fr animates to auto height */}
                   <div style={{ display: "grid", gridTemplateRows: open ? "1fr" : "0fr", transition: "grid-template-rows .45s cubic-bezier(.16,.84,.44,1)" }}>
                     <div style={{ overflow: "hidden" }}>
-                      <div data-svc-detail style={{ paddingLeft: 92, paddingBottom: "clamp(28px,3.4vw,46px)", maxWidth: 760 }}>
-                        {svc.description.map((par) => (
-                          <p key={par} style={{ margin: "0 0 12px", fontWeight: 300, fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: S2 }}>{par}</p>
-                        ))}
+                      <div data-svc-detail style={{ paddingLeft: 92, paddingBottom: "clamp(28px,3.4vw,46px)" }}>
+                        <div style={{ maxWidth: 760 }}>
+                          {svc.description.map((par) => (
+                            <p key={par} style={{ margin: "0 0 12px", fontWeight: 300, fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: S2 }}>{par}</p>
+                          ))}
+                        </div>
+                        {serviceImages[si] && (
+                          <div style={{ marginTop: "clamp(20px,2.4vw,32px)", display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 16 }}>
+                            {serviceImages[si].map((src) => (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                key={src}
+                                src={src}
+                                alt=""
+                                loading="lazy"
+                                style={{ display: "block", width: "100%", height: "auto", borderRadius: 12, border: "1px solid #DDE6E8", background: "#fff" }}
+                              />
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
