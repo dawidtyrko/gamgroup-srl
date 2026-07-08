@@ -650,6 +650,10 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                     borderBottom: "1px solid rgba(77,147,162,.35)",
                     background: open ? "rgba(77,147,162,.05)" : "transparent",
                     boxShadow: open ? "inset 3px 0 0 #4D93A2" : "none",
+                    // when open, inset the content so nothing sits under the
+                    // accent bar / touches the side frames
+                    paddingLeft: open ? "clamp(16px,3vw,26px)" : 0,
+                    paddingRight: open ? "clamp(16px,3vw,26px)" : 0,
                     transition: "background .3s ease, box-shadow .3s ease",
                   }}
                 >
@@ -691,10 +695,10 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                           ))}
                         </div>
                         {serviceImages[si] && (
-                          <div style={{ marginTop: "clamp(20px,2.4vw,32px)", display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(min(340px,100%),1fr))", gap: 18 }}>
+                          <div className="svc-images" style={{ marginTop: "clamp(20px,2.4vw,32px)", display: "grid", gap: 18 }}>
                             {serviceImages[si].map((src) => (
                               // uniform card, image shown whole (contain) so the infographic text stays legible
-                              <div key={src} style={{ aspectRatio: "3 / 2", background: "#fff", border: "1px solid #DDE6E8", borderRadius: 14, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", padding: 14 }}>
+                              <div key={src} style={{ minWidth: 0, aspectRatio: "3 / 2", background: "#fff", border: "1px solid #DDE6E8", borderRadius: 14, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", padding: 14 }}>
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                   src={src}

@@ -214,6 +214,18 @@ html {
   border-bottom-color: #79b7c4 !important;
 }
 
+/* service accordion image grid: explicit columns (no min()/auto-fill-px which
+   could let a large image blow out the track on iOS Safari). 1 col on mobile,
+   2 from 760px. Cards carry min-width:0 inline so images always shrink to fit. */
+.svc-images {
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) {
+  .svc-images {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 /* nav links: teal on hover (scroll-spy sets the active colour inline) */
 .nav-link:hover {
   color: #35707e !important;
