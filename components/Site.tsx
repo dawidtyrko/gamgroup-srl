@@ -10,6 +10,7 @@ import {
 } from "react";
 import dynamic from "next/dynamic";
 import type { Project } from "@/lib/projects";
+import type { JobContent } from "@/lib/jobs";
 import type { Dict, Locale } from "@/lib/i18n/types";
 
 // Leaflet touches window/document at import → load client-only.
@@ -91,13 +92,12 @@ const cardBanner: CSSProperties = {
     "repeating-linear-gradient(135deg,rgba(121,183,196,.12) 0 16px,rgba(255,255,255,0) 16px 32px),linear-gradient(125deg,#22325a,#16233f)",
 };
 
-export default function Site({ projects, dict, locale }: { projects: Project[]; dict: Dict; locale: Locale }) {
-  // content comes from the locale dictionary (lib/i18n)
+export default function Site({ projects, jobs, dict, locale }: { projects: Project[]; jobs: JobContent[]; dict: Dict; locale: Locale }) {
+  // content comes from the locale dictionary (lib/i18n); projects + jobs from KV
   const services = dict.services.items;
   const channels = dict.channels.items;
   const stats = dict.stats.items;
   const sectors = dict.about.sectors;
-  const jobs = dict.jobs.items;
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [formSent, setFormSent] = useState(false);
@@ -691,7 +691,7 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
                           ))}
                         </div>
                         {serviceImages[si] && (
-                          <div style={{ marginTop: "clamp(20px,2.4vw,32px)", display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(340px,1fr))", gap: 18 }}>
+                          <div style={{ marginTop: "clamp(20px,2.4vw,32px)", display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(min(340px,100%),1fr))", gap: 18 }}>
                             {serviceImages[si].map((src) => (
                               // uniform card, image shown whole (contain) so the infographic text stays legible
                               <div key={src} style={{ aspectRatio: "3 / 2", background: "#fff", border: "1px solid #DDE6E8", borderRadius: 14, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", padding: 14 }}>
@@ -996,17 +996,19 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
                   <p key={par} style={{ ...modalPara, marginBottom: 12 }}>{par}</p>
                 ))}
               </div>
-              <div style={{ marginTop: "clamp(26px,3vw,36px)" }}>
-                <p style={{ margin: "0 0 16px", fontFamily: MONO, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: TEALD }}>{dict.jobs.requirementsLabel}</p>
-                <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
-                  {activeJob.requirements.map((r) => (
-                    <li key={r} style={{ display: "flex", gap: 11, alignItems: "flex-start", fontSize: 16, fontWeight: 400, color: INK, lineHeight: 1.45 }}>
-                      <span style={{ marginTop: 2, color: TEAL, fontSize: 16 }}>✓</span>
-                      <span>{r}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {activeJob.requirementGroups.map((g) => (
+                <div key={g.label} style={{ marginTop: "clamp(26px,3vw,36px)" }}>
+                  <p style={{ margin: "0 0 16px", fontFamily: MONO, fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: TEALD }}>{g.label}</p>
+                  <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+                    {g.items.map((r) => (
+                      <li key={r} style={{ display: "flex", gap: 11, alignItems: "flex-start", fontSize: 16, fontWeight: 400, color: INK, lineHeight: 1.45 }}>
+                        <span style={{ marginTop: 2, color: TEAL, fontSize: 16 }}>✓</span>
+                        <span>{r}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
               <a
                 href={`mailto:recruitment@gamgroup.it?subject=${encodeURIComponent(`${dict.jobs.mailSubjectPrefix}${activeJob.title}`)}`}
                 className="btn-navy"

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Site from "@/components/Site";
 import { getProjects } from "@/lib/projects";
+import { getJobs, localizeJob } from "@/lib/jobs";
 import { it } from "@/lib/i18n/it";
 import { orgLd, faqLd } from "@/lib/structuredData";
 
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const projects = await getProjects();
+  const jobs = (await getJobs()).map((j) => localizeJob(j, "it"));
   return (
     <>
       <script
@@ -31,7 +33,7 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd(it)) }}
       />
-      <Site projects={projects} dict={it} locale="it" />
+      <Site projects={projects} jobs={jobs} dict={it} locale="it" />
     </>
   );
 }

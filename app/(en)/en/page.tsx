@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Site from "@/components/Site";
 import { getProjects, localizeProject } from "@/lib/projects";
+import { getJobs, localizeJob } from "@/lib/jobs";
 import { en } from "@/lib/i18n/en";
 import { orgLd, faqLd } from "@/lib/structuredData";
 
@@ -18,6 +19,7 @@ export default async function HomePageEn() {
   // English fields (project.en) override Italian per-field; anything not yet
   // translated in /admin-cms falls back to the Italian original.
   const projects = (await getProjects()).map((p) => localizeProject(p, "en"));
+  const jobs = (await getJobs()).map((j) => localizeJob(j, "en"));
   return (
     <>
       <script
@@ -28,7 +30,7 @@ export default async function HomePageEn() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd(en)) }}
       />
-      <Site projects={projects} dict={en} locale="en" />
+      <Site projects={projects} jobs={jobs} dict={en} locale="en" />
     </>
   );
 }
