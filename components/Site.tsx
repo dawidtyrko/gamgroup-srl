@@ -91,9 +91,6 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
   const jobs = dict.jobs.items;
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
-  // True once /photos/hero.jpg exists and loads — swaps the striped placeholder
-  // for the real photo without any code change (just drop the file in).
-  const [hasHeroPhoto, setHasHeroPhoto] = useState(false);
   const [formSent, setFormSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [formErr, setFormErr] = useState<string | null>(null);
@@ -103,7 +100,6 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
   const rootRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const navRef = useRef<HTMLElement>(null);
-  const heroMediaRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLElement>(null);
   const pinWrap = useRef<HTMLDivElement>(null);
   const pinTrack = useRef<HTMLDivElement>(null);
@@ -200,14 +196,6 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
       if (!root) return;
       const vh = window.innerHeight || 700;
       const scrolled = -root.getBoundingClientRect().top;
-
-      // Hero parallax (skipped for reduced motion)
-      const m = heroMediaRef.current;
-      if (m && m.parentElement && !reduceMotion) {
-        const r = m.parentElement.getBoundingClientRect();
-        const off = (r.top + r.height / 2 - vh / 2) * -0.12;
-        m.style.transform = `translateY(${off}px)`;
-      }
 
       // Frosted header past 60px
       const h = headerRef.current;
@@ -564,41 +552,17 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
         </div>
       </section>
 
-      {/* ---- Hero image band ---- */}
-      <section style={{ position: "relative", height: "clamp(360px,52vw,640px)", overflow: "hidden", background: "#101b30" }}>
-        <div
-          ref={heroMediaRef}
-          style={{
-            position: "absolute",
-            inset: "-12% 0",
-            background:
-              "repeating-linear-gradient(135deg,rgba(121,183,196,.10) 0 18px,rgba(255,255,255,0) 18px 36px),linear-gradient(120deg,#1d3056,#16233f 60%,#101b30)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            willChange: "transform",
-          }}
-        >
-          {/* Photo slot: drop the real team/office shot at public/photos/hero.jpg.
-              Until the file exists the img 404s (hidden) and the striped placeholder shows. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/photos/hero.jpg"
-            alt=""
-            onLoad={() => setHasHeroPhoto(true)}
-            onError={(e) => { e.currentTarget.style.display = "none"; }}
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(100%)", opacity: hasHeroPhoto ? 1 : 0, transition: "opacity .6s ease" }}
-          />
-          {hasHeroPhoto && (
-            /* navy overlay for legibility (handoff README) + brand duotone wash */
-            <div aria-hidden style={{ position: "absolute", inset: 0, background: "linear-gradient(125deg, rgba(27,42,74,.78), rgba(77,147,162,.45))", mixBlendMode: "multiply" }} />
-          )}
-          {!hasHeroPhoto && (
-            <span style={{ position: "relative", fontFamily: MONO, fontSize: 13, letterSpacing: ".18em", color: "rgba(255,255,255,.22)", textTransform: "uppercase" }}>
-              {dict.hero.bandPlaceholder}
-            </span>
-          )}
-        </div>
+      {/* ---- Bridge graphic (business ↔ IT, powered by AI) — the signature
+             element (visual spec §6). Animated SVG (SMIL + CSS) served as an
+             <img>: the browser keeps the pulses/glow running. ---- */}
+      <section style={{ background: "#F1F5F6", padding: "clamp(56px,8vw,110px) 6vw", overflow: "hidden" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          data-rise
+          src="/gam-ponte.svg"
+          alt={dict.bridge.alt}
+          style={{ display: "block", width: "100%", maxWidth: 960, height: "auto", margin: "0 auto" }}
+        />
       </section>
 
       {/* ---- Claim ---- */}

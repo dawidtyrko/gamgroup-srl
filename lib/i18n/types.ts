@@ -26,6 +26,7 @@ export interface Dict {
     scroll: string;
     bandPlaceholder: string;
   };
+  bridge: { alt: string };
   claim: { muted: string; strong: string; sub: string };
   services: {
     eyebrow: string;

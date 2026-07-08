@@ -27,6 +27,7 @@ export const en: Dict = {
     scroll: "Scroll",
     bandPlaceholder: "[ gam team — full-width photo ]",
   },
+  bridge: { alt: "The bridge between business and IT: GAM at the centre, powered by AI" },
   claim: {
     muted: "We take your business",
     strong: " to the next level.",
