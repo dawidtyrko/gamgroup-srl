@@ -80,8 +80,8 @@ const clientLogos = [
 // Service imagery shown in the expanded accordion panel (locale-independent).
 // Indexed by service position (matches dict.services.items order).
 const serviceImages: string[][] = [
-  ["/services/erp-epm.avif", "/services/erp-sap.avif", "/services/erp-sap-2.avif", "/services/erp-ibm-iseries.avif"],
-  ["/services/ai-lean-1.avif", "/services/ai-lean-2.avif", "/services/ai-bi.avif", "/services/ai-bi-2.avif", "/services/ai-microsoft.avif", "/services/ai-microsoft-2.avif"],
+  ["/services/erp-epm.avif", "/services/erp-sap.avif", "/services/erp-ibm-iseries.avif"],
+  ["/services/ai-lean-1.avif", "/services/ai-lean-2.avif", "/services/ai-bi-2.avif", "/services/ai-microsoft-2.avif"],
   ["/services/dev-software.avif", "/services/dev-software-2.avif", "/services/dev-integration.avif", "/services/dev-integration-2.avif"],
   ["/services/support-ams.avif", "/services/support-ict.avif"],
 ];
@@ -691,16 +691,18 @@ export default function Site({ projects, dict, locale }: { projects: Project[]; 
                           ))}
                         </div>
                         {serviceImages[si] && (
-                          <div style={{ marginTop: "clamp(20px,2.4vw,32px)", display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 16 }}>
+                          <div style={{ marginTop: "clamp(20px,2.4vw,32px)", display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(340px,1fr))", gap: 18 }}>
                             {serviceImages[si].map((src) => (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img
-                                key={src}
-                                src={src}
-                                alt=""
-                                loading="lazy"
-                                style={{ display: "block", width: "100%", height: "auto", borderRadius: 12, border: "1px solid #DDE6E8", background: "#fff" }}
-                              />
+                              // uniform card, image shown whole (contain) so the infographic text stays legible
+                              <div key={src} style={{ aspectRatio: "3 / 2", background: "#fff", border: "1px solid #DDE6E8", borderRadius: 14, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", padding: 14 }}>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={src}
+                                  alt=""
+                                  loading="lazy"
+                                  style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", objectFit: "contain", display: "block" }}
+                                />
+                              </div>
                             ))}
                           </div>
                         )}
