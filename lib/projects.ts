@@ -67,6 +67,7 @@ export const DEFAULT_PROJECTS: Project[] = [
     id: "seed-fashion-helpdesk",
     sector: "Fashion",
     area: "HD1 & HD2",
+    image: "/photos/fashion.jpg",
     img: "[ fashion retail ]",
     title: "Help Desk e Supporto Sistemistico per l’Efficienza Operativa",
     challenge:
@@ -84,6 +85,7 @@ export const DEFAULT_PROJECTS: Project[] = [
     id: "seed-automotive-as400",
     sector: "Automotive",
     area: "AS400",
+    image: "/photos/automotive.jpg",
     img: "[ linea automotive ]",
     title: "Innovazione e Supporto Continuo nell’Area AS400",
     challenge:
@@ -101,6 +103,7 @@ export const DEFAULT_PROJECTS: Project[] = [
     id: "seed-manufacturing-edi",
     sector: "Manufacturing",
     area: "EDI",
+    image: "/photos/manufacturing.jpg",
     img: "[ stabilimento ]",
     title: "Soluzioni EDI e Budgeting per un’Operatività Globale",
     challenge:
@@ -118,6 +121,7 @@ export const DEFAULT_PROJECTS: Project[] = [
     id: "seed-pharma-ams",
     sector: "Farmaceutico",
     area: "AMS",
+    image: "/photos/farmaceutico.jpg",
     img: "[ laboratorio ]",
     title: "Supporto AMS Affidabile per la Crescita Continua",
     challenge:
