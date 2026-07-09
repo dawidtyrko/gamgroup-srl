@@ -148,15 +148,31 @@ function kvConfigured(): boolean {
  * unreachable, so the site always renders. Lazily seeds an empty store so the
  * very first deploy shows the four reference case studies.
  */
+const SEED_LOCK = "gam:projects:seedlock";
+
+/**
+ * Seed defaults into an empty store — race-safe. An NX lock ensures only the
+ * first concurrent caller writes, so two simultaneous requests hitting an empty
+ * KV can no longer each rpush the defaults (which produced duplicate entries).
+ */
+async function ensureSeeded(): Promise<void> {
+  if ((await kv.llen(PROJECTS_KEY)) > 0) return;
+  const lock = await kv.set(SEED_LOCK, "1", { nx: true, ex: 30 });
+  if (!lock) return; // another request is seeding right now
+  if ((await kv.llen(PROJECTS_KEY)) === 0) {
+    await kv.rpush(PROJECTS_KEY, ...DEFAULT_PROJECTS);
+  }
+}
+
 export async function getProjects(): Promise<Project[]> {
   if (!kvConfigured()) return DEFAULT_PROJECTS;
   try {
-    const items = await kv.lrange<Project>(PROJECTS_KEY, 0, -1);
+    let items = await kv.lrange<Project>(PROJECTS_KEY, 0, -1);
     if (!items || items.length === 0) {
-      await kv.rpush(PROJECTS_KEY, ...DEFAULT_PROJECTS);
-      return DEFAULT_PROJECTS;
+      await ensureSeeded();
+      items = await kv.lrange<Project>(PROJECTS_KEY, 0, -1);
     }
-    return items;
+    return items && items.length ? items : DEFAULT_PROJECTS;
   } catch (err) {
     console.error("[projects] KV read failed, serving defaults:", err);
     return DEFAULT_PROJECTS;
@@ -216,11 +232,8 @@ async function writeAll(projects: Project[]): Promise<void> {
 export async function addProject(input: ProjectInput): Promise<Project> {
   requireKv();
   const project = normalize(input, randomUUID());
-
-  // Seed defaults if the list is still empty, so admin additions append after them.
-  const len = await kv.llen(PROJECTS_KEY);
-  if (!len) await kv.rpush(PROJECTS_KEY, ...DEFAULT_PROJECTS);
-
+  // Seed defaults first (race-safe) so admin additions append after them.
+  await ensureSeeded();
   await kv.rpush(PROJECTS_KEY, project);
   return project;
 }

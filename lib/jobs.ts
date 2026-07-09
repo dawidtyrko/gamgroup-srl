@@ -281,15 +281,27 @@ export function localizeJob(job: Job, locale: Locale): JobContent {
   };
 }
 
+const SEED_LOCK = "gam:jobs:seedlock";
+
+/** Race-safe seed of the defaults into an empty store (NX lock — see projects). */
+async function ensureSeeded(): Promise<void> {
+  if ((await kv.llen(JOBS_KEY)) > 0) return;
+  const lock = await kv.set(SEED_LOCK, "1", { nx: true, ex: 30 });
+  if (!lock) return;
+  if ((await kv.llen(JOBS_KEY)) === 0) {
+    await kv.rpush(JOBS_KEY, ...DEFAULT_JOBS);
+  }
+}
+
 export async function getJobs(): Promise<Job[]> {
   if (!kvConfigured()) return DEFAULT_JOBS;
   try {
-    const items = await kv.lrange<Job>(JOBS_KEY, 0, -1);
+    let items = await kv.lrange<Job>(JOBS_KEY, 0, -1);
     if (!items || items.length === 0) {
-      await kv.rpush(JOBS_KEY, ...DEFAULT_JOBS);
-      return DEFAULT_JOBS;
+      await ensureSeeded();
+      items = await kv.lrange<Job>(JOBS_KEY, 0, -1);
     }
-    return items;
+    return items && items.length ? items : DEFAULT_JOBS;
   } catch (err) {
     console.error("[jobs] KV read failed, serving defaults:", err);
     return DEFAULT_JOBS;
@@ -306,8 +318,7 @@ async function writeAll(jobs: Job[]): Promise<void> {
 export async function addJob(input: JobInput): Promise<Job> {
   requireKv();
   const job: Job = { id: randomUUID(), ...input };
-  const len = await kv.llen(JOBS_KEY);
-  if (!len) await kv.rpush(JOBS_KEY, ...DEFAULT_JOBS);
+  await ensureSeeded();
   await kv.rpush(JOBS_KEY, job);
   return job;
 }
