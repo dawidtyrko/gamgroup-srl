@@ -179,6 +179,22 @@ function ProjectsPanel({ password }: { password: string }) {
     }
   };
 
+  const resetDefaults = async () => {
+    if (!password) { setStatus({ state: "error", message: "Inserisci la password." }); return; }
+    if (!window.confirm("Ripristinare i 4 progetti predefiniti? Sostituirà l'elenco attuale.")) return;
+    setStatus({ state: "loading" });
+    try {
+      const res = await fetch("/api/projects/reset", { method: "POST", headers: { "x-admin-password": password } });
+      const data = await res.json();
+      if (!res.ok) { setStatus({ state: "error", message: data.error || "Errore." }); return; }
+      resetForm();
+      setStatus({ state: "ok", message: `Ripristinati ${data.count} progetti predefiniti.` });
+      await refreshList();
+    } catch {
+      setStatus({ state: "error", message: "Rete non raggiungibile." });
+    }
+  };
+
   const isEdit = editingId != null;
 
   return (
@@ -220,7 +236,12 @@ function ProjectsPanel({ password }: { password: string }) {
 
       <StatusBox status={status} />
 
-      <ListSection title="Progetti pubblicati" count={projects.length} empty="Nessun progetto.">
+      <ListSection
+        title="Progetti pubblicati"
+        count={projects.length}
+        empty="Nessun progetto."
+        action={<button type="button" onClick={resetDefaults} style={btnSmall(TEAL)}>Ripristina predefiniti</button>}
+      >
         {projects.map((p) => (
           <ListRow
             key={p.id}
@@ -329,6 +350,22 @@ function JobsPanel({ password }: { password: string }) {
     }
   };
 
+  const resetDefaults = async () => {
+    if (!password) { setStatus({ state: "error", message: "Inserisci la password." }); return; }
+    if (!window.confirm("Ripristinare le offerte predefinite? Sostituirà l'elenco attuale.")) return;
+    setStatus({ state: "loading" });
+    try {
+      const res = await fetch("/api/jobs/reset", { method: "POST", headers: { "x-admin-password": password } });
+      const data = await res.json();
+      if (!res.ok) { setStatus({ state: "error", message: data.error || "Errore." }); return; }
+      resetForm();
+      setStatus({ state: "ok", message: `Ripristinate ${data.count} offerte predefinite.` });
+      await refreshList();
+    } catch {
+      setStatus({ state: "error", message: "Rete non raggiungibile." });
+    }
+  };
+
   const isEdit = editingId != null;
 
   return (
@@ -371,7 +408,12 @@ function JobsPanel({ password }: { password: string }) {
 
       <StatusBox status={status} />
 
-      <ListSection title="Offerte pubblicate" count={jobs.length} empty="Nessuna offerta.">
+      <ListSection
+        title="Offerte pubblicate"
+        count={jobs.length}
+        empty="Nessuna offerta."
+        action={<button type="button" onClick={resetDefaults} style={btnSmall(TEAL)}>Ripristina predefiniti</button>}
+      >
         {jobs.map((j) => (
           <ListRow
             key={j.id}
@@ -419,12 +461,13 @@ function StatusBox({ status }: { status: Status }) {
   return null;
 }
 
-function ListSection({ title, count, empty, children }: { title: string; count: number; empty: string; children: React.ReactNode }) {
+function ListSection({ title, count, empty, action, children }: { title: string; count: number; empty: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
     <div style={{ marginTop: 56 }}>
       <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 18 }}>
         <h2 style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: 22, color: NAVY }}>{title}</h2>
         <span style={labelStyle}>{count}</span>
+        {action && <span style={{ marginLeft: "auto" }}>{action}</span>}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         {children}

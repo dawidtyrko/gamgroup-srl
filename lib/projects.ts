@@ -253,6 +253,13 @@ export async function updateProject(
   return updated;
 }
 
+/** Replace the whole list with the 4 built-in defaults (atomic — no race). */
+export async function resetProjects(): Promise<Project[]> {
+  requireKv();
+  await writeAll(DEFAULT_PROJECTS);
+  return DEFAULT_PROJECTS;
+}
+
 /** Delete a case study by id. Returns false if the id is unknown. */
 export async function deleteProject(id: string): Promise<boolean> {
   requireKv();

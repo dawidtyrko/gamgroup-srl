@@ -334,6 +334,13 @@ export async function updateJob(id: string, input: JobInput): Promise<Job | null
   return updated;
 }
 
+/** Replace the whole list with the built-in default openings (atomic). */
+export async function resetJobs(): Promise<Job[]> {
+  requireKv();
+  await writeAll(DEFAULT_JOBS);
+  return DEFAULT_JOBS;
+}
+
 export async function deleteJob(id: string): Promise<boolean> {
   requireKv();
   const items = (await kv.lrange<Job>(JOBS_KEY, 0, -1)) ?? [];
