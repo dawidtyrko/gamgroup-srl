@@ -393,9 +393,6 @@ summary:focus-visible {
     padding-left: 0 !important;
     margin-top: 18px !important;
   }
-  [data-svc-detail] {
-    padding-left: 0 !important;
-  }
   /* collapsed-row mini diagram: desktop only — on mobile the tags already
      wrap to a full-width second line and rows must stay compact */
   [data-svc-mini] {

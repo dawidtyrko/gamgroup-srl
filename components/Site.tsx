@@ -694,21 +694,22 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                   {/* elegant in-place expand: grid-rows 0fr→1fr animates to auto height */}
                   <div style={{ display: "grid", gridTemplateRows: open ? "1fr" : "0fr", transition: "grid-template-rows .45s cubic-bezier(.16,.84,.44,1)" }}>
                     <div style={{ overflow: "hidden" }}>
-                      <div data-svc-detail style={{ paddingLeft: 92, paddingBottom: "clamp(28px,3.4vw,46px)" }}>
-                        <div style={{ maxWidth: 760 }}>
+                      <div data-svc-detail style={{ paddingBottom: "clamp(28px,3.4vw,46px)" }}>
+                        {/* content column centered in the panel */}
+                        <div style={{ maxWidth: 760, margin: "0 auto" }}>
                           {svc.description.map((par) => (
                             <p key={par} style={{ margin: "0 0 12px", fontWeight: 300, fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: S2 }}>{par}</p>
                           ))}
+                          {Graphic && (
+                            // full-size animated diagram (Vittoria's HTML handoff,
+                            // inlined) — transparent, so it sits directly in the
+                            // panel and scales cleanly on mobile. 620px matches the
+                            // .graphic max-width in her handoff files.
+                            <div style={{ margin: "clamp(20px,2.4vw,32px) auto 0", maxWidth: 620 }}>
+                              <Graphic idSuffix="-panel" />
+                            </div>
+                          )}
                         </div>
-                        {Graphic && (
-                          // full-size animated diagram (Vittoria's HTML handoff,
-                          // inlined) — transparent, so it sits directly in the
-                          // panel and scales cleanly on mobile. 620px matches the
-                          // .graphic max-width in her handoff files.
-                          <div style={{ marginTop: "clamp(20px,2.4vw,32px)", maxWidth: 620 }}>
-                            <Graphic idSuffix="-panel" />
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>
