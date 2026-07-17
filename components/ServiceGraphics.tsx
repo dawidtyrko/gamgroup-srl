@@ -1,14 +1,17 @@
 /**
  * Animated service diagrams — Vittoria's "clean" (label-free) handoff graphics,
  * inlined as SVG so they animate and stay a few KB (originals in
- * design-reference/gam-0X-*.html). Shown in the collapsed accordion row as a
- * placeholder; the labelled PNG version appears in the expanded detail.
+ * design-reference/gam-0X-*.html). Shown small in the collapsed accordion row
+ * and full-size in the expanded detail, so each is mounted twice — idSuffix
+ * keeps the internal SVG ids (motion paths, markers) unique per instance.
  * Shared styles live in globals.css under the svcg- prefix.
  * Index matches the services order.
  */
 
+type GraphicProps = { idSuffix?: string };
+
 /** 01 · Consulenza Tecnica ERP — ERP core with lifecycle ring + system chips */
-function ErpGraphic() {
+function ErpGraphic({ idSuffix = "" }: GraphicProps) {
   return (
     <svg
       className="svcg"
@@ -18,9 +21,9 @@ function ErpGraphic() {
       aria-label="Il sistema ERP al centro, gestito lungo tutto il suo ciclo di vita, con i gestionali collegati"
     >
       <ellipse className="svcg-ring" cx="300" cy="170" rx="150" ry="118" />
-      <path className="svcg-arc" d="M300,52 A150,118 0 0 1 450,170" markerEnd="url(#svcg-ah)" />
+      <path className="svcg-arc" d="M300,52 A150,118 0 0 1 450,170" markerEnd={`url(#svcg-ah${idSuffix})`} />
       <defs>
-        <marker id="svcg-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <marker id={`svcg-ah${idSuffix}`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
           <path d="M0,1 L9,5 L0,9" fill="none" stroke="#BFD9DE" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
         </marker>
       </defs>
@@ -56,7 +59,7 @@ function ErpGraphic() {
 }
 
 /** 02 · Consulenza Applicativa, AI & BI — data in, AI core, dashboard out */
-function AiBiGraphic() {
+function AiBiGraphic({ idSuffix = "" }: GraphicProps) {
   return (
     <svg
       className="svcg"
@@ -65,9 +68,9 @@ function AiBiGraphic() {
       role="img"
       aria-label="I dati entrano, l'AI li elabora, esce una dashboard con andamento in crescita"
     >
-      <path className="svcg-link" id="svcg-s1" d="M110,86 C170,86 190,170 224,170" />
-      <path className="svcg-link" id="svcg-s2" d="M96,170 C160,170 196,170 224,170" />
-      <path className="svcg-link" id="svcg-s3" d="M110,254 C170,254 190,170 224,170" />
+      <path className="svcg-link" id={`svcg-s1${idSuffix}`} d="M110,86 C170,86 190,170 224,170" />
+      <path className="svcg-link" id={`svcg-s2${idSuffix}`} d="M96,170 C160,170 196,170 224,170" />
+      <path className="svcg-link" id={`svcg-s3${idSuffix}`} d="M110,254 C170,254 190,170 224,170" />
       <g className="svcg-chip-l">
         <rect x="34" y="70" width="76" height="32" rx="9" />
         <rect x="20" y="154" width="76" height="32" rx="9" />
@@ -79,7 +82,7 @@ function AiBiGraphic() {
         <path d="M52,248 h18 M52,254 h30 M52,260 h24" />
       </g>
 
-      <path className="svcg-link-on" id="svcg-s4" d="M316,170 C348,170 352,170 380,170" />
+      <path className="svcg-link-on" id={`svcg-s4${idSuffix}`} d="M316,170 C348,170 352,170 380,170" />
 
       <rect x="380" y="72" width="196" height="196" rx="16" fill="#fff" stroke="#DDE6E8" strokeWidth="1.8" />
       <path d="M380,104 H576" stroke="#DDE6E8" strokeWidth="1.5" />
@@ -106,22 +109,22 @@ function AiBiGraphic() {
 
       <circle className="svcg-dot" r="4">
         <animateMotion dur="2.4s" begin="-0.1s" repeatCount="indefinite">
-          <mpath href="#svcg-s1" xlinkHref="#svcg-s1" />
+          <mpath href={`#svcg-s1${idSuffix}`} xlinkHref={`#svcg-s1${idSuffix}`} />
         </animateMotion>
       </circle>
       <circle className="svcg-dot" r="4">
         <animateMotion dur="2.4s" begin="-0.9s" repeatCount="indefinite">
-          <mpath href="#svcg-s2" xlinkHref="#svcg-s2" />
+          <mpath href={`#svcg-s2${idSuffix}`} xlinkHref={`#svcg-s2${idSuffix}`} />
         </animateMotion>
       </circle>
       <circle className="svcg-dot" r="4">
         <animateMotion dur="2.4s" begin="-1.7s" repeatCount="indefinite">
-          <mpath href="#svcg-s3" xlinkHref="#svcg-s3" />
+          <mpath href={`#svcg-s3${idSuffix}`} xlinkHref={`#svcg-s3${idSuffix}`} />
         </animateMotion>
       </circle>
       <circle className="svcg-dot" r="4">
         <animateMotion dur="2.4s" begin="-0.5s" repeatCount="indefinite">
-          <mpath href="#svcg-s4" xlinkHref="#svcg-s4" />
+          <mpath href={`#svcg-s4${idSuffix}`} xlinkHref={`#svcg-s4${idSuffix}`} />
         </animateMotion>
       </circle>
     </svg>
@@ -129,7 +132,7 @@ function AiBiGraphic() {
 }
 
 /** 03 · Sviluppo & System Integration — scattered systems into one connected grid */
-function IntegrationGraphic() {
+function IntegrationGraphic({ idSuffix = "" }: GraphicProps) {
   return (
     <svg
       className="svcg"
@@ -138,9 +141,9 @@ function IntegrationGraphic() {
       role="img"
       aria-label="Sistemi separati che diventano un ecosistema unico e connesso"
     >
-      <path className="svcg-link" id="svcg-t1" d="M118,84 C176,84 196,170 226,170" />
-      <path className="svcg-link" id="svcg-t2" d="M104,170 C170,170 200,170 226,170" />
-      <path className="svcg-link" id="svcg-t3" d="M118,256 C176,256 196,170 226,170" />
+      <path className="svcg-link" id={`svcg-t1${idSuffix}`} d="M118,84 C176,84 196,170 226,170" />
+      <path className="svcg-link" id={`svcg-t2${idSuffix}`} d="M104,170 C170,170 200,170 226,170" />
+      <path className="svcg-link" id={`svcg-t3${idSuffix}`} d="M118,256 C176,256 196,170 226,170" />
       <g className="svcg-chip-l">
         <rect x="40" y="62" width="78" height="44" rx="10" transform="rotate(-8 79 84)" />
         <rect x="26" y="148" width="78" height="44" rx="10" transform="rotate(5 65 170)" />
@@ -152,7 +155,7 @@ function IntegrationGraphic() {
         <path d="M62,252 h30 M62,262 h18" transform="rotate(-5 79 256)" />
       </g>
 
-      <path className="svcg-link-on" id="svcg-t4" d="M314,170 C344,170 350,170 378,170" />
+      <path className="svcg-link-on" id={`svcg-t4${idSuffix}`} d="M314,170 C344,170 350,170 378,170" />
 
       <rect x="378" y="82" width="192" height="176" rx="16" fill="#fff" stroke="#4D93A2" strokeWidth="1.8" />
       <g stroke="#BFD9DE" strokeWidth="1.8" fill="none">
@@ -176,22 +179,22 @@ function IntegrationGraphic() {
 
       <circle className="svcg-dot" r="4">
         <animateMotion dur="2.3s" begin="-0.2s" repeatCount="indefinite">
-          <mpath href="#svcg-t1" xlinkHref="#svcg-t1" />
+          <mpath href={`#svcg-t1${idSuffix}`} xlinkHref={`#svcg-t1${idSuffix}`} />
         </animateMotion>
       </circle>
       <circle className="svcg-dot" r="4">
         <animateMotion dur="2.3s" begin="-1s" repeatCount="indefinite">
-          <mpath href="#svcg-t2" xlinkHref="#svcg-t2" />
+          <mpath href={`#svcg-t2${idSuffix}`} xlinkHref={`#svcg-t2${idSuffix}`} />
         </animateMotion>
       </circle>
       <circle className="svcg-dot" r="4">
         <animateMotion dur="2.3s" begin="-1.8s" repeatCount="indefinite">
-          <mpath href="#svcg-t3" xlinkHref="#svcg-t3" />
+          <mpath href={`#svcg-t3${idSuffix}`} xlinkHref={`#svcg-t3${idSuffix}`} />
         </animateMotion>
       </circle>
       <circle className="svcg-dot" r="4">
         <animateMotion dur="2.3s" begin="-0.6s" repeatCount="indefinite">
-          <mpath href="#svcg-t4" xlinkHref="#svcg-t4" />
+          <mpath href={`#svcg-t4${idSuffix}`} xlinkHref={`#svcg-t4${idSuffix}`} />
         </animateMotion>
       </circle>
     </svg>
@@ -199,7 +202,7 @@ function IntegrationGraphic() {
 }
 
 /** 04 · Assistenza & Manutenzione — shield with patrolling dots on an orbit */
-function AssistenzaGraphic() {
+function AssistenzaGraphic({ idSuffix = "" }: GraphicProps) {
   return (
     <svg
       className="svcg"
@@ -208,7 +211,7 @@ function AssistenzaGraphic() {
       role="img"
       aria-label="L'infrastruttura protetta e monitorata da un presidio continuo"
     >
-      <ellipse className="svcg-ring" id="svcg-orbit" cx="300" cy="170" rx="152" ry="120" />
+      <ellipse className="svcg-ring" id={`svcg-orbit${idSuffix}`} cx="300" cy="170" rx="152" ry="120" />
       <ellipse className="svcg-ring" cx="300" cy="170" rx="108" ry="84" strokeDasharray="3 8" stroke="#BFD9DE" strokeWidth="1.6" />
 
       <g className="svcg-chip">
@@ -234,21 +237,21 @@ function AssistenzaGraphic() {
 
       <circle className="svcg-dot" r="5.5">
         <animateMotion dur="5.4s" repeatCount="indefinite">
-          <mpath href="#svcg-orbit" xlinkHref="#svcg-orbit" />
+          <mpath href={`#svcg-orbit${idSuffix}`} xlinkHref={`#svcg-orbit${idSuffix}`} />
         </animateMotion>
       </circle>
       <circle className="svcg-dot" r="4" opacity=".45">
         <animateMotion dur="5.4s" begin="-2.7s" repeatCount="indefinite">
-          <mpath href="#svcg-orbit" xlinkHref="#svcg-orbit" />
+          <mpath href={`#svcg-orbit${idSuffix}`} xlinkHref={`#svcg-orbit${idSuffix}`} />
         </animateMotion>
       </circle>
     </svg>
   );
 }
 
-export const serviceGraphics: (JSX.Element | null)[] = [
-  <ErpGraphic key="erp" />,
-  <AiBiGraphic key="ai-bi" />,
-  <IntegrationGraphic key="integration" />,
-  <AssistenzaGraphic key="assistenza" />,
+export const serviceGraphics: ((props: GraphicProps) => JSX.Element)[] = [
+  ErpGraphic,
+  AiBiGraphic,
+  IntegrationGraphic,
+  AssistenzaGraphic,
 ];

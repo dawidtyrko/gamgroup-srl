@@ -81,13 +81,9 @@ const clientLogos = [
 
 // Service imagery shown in the expanded accordion panel (locale-independent).
 // Indexed by service position (matches dict.services.items order).
-// one labelled infographic per service (Vittoria's handoff set 2)
-const serviceImages: string[][] = [
-  ["/services/gam-servizio-01-erp.png"],
-  ["/services/gam-servizio-02-ai-bi.png"],
-  ["/services/gam-servizio-03-sviluppo-integration.png"],
-  ["/services/gam-servizio-04-assistenza.png"],
-];
+// careers popup banners: each job gets its own image from the pool (by list
+// position) — rendered with the unified duotone wash like the case banners
+const jobImages = ["/photos/automotive.jpg", "/photos/fashion.jpg", "/photos/manufacturing.jpg", "/photos/farmaceutico.jpg"];
 
 const cardBanner: CSSProperties = {
   background:
@@ -645,6 +641,7 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
           <div style={{ borderTop: "1px solid rgba(77,147,162,.35)" }}>
             {services.map((svc, si) => {
               const open = openService === si;
+              const Graphic = serviceGraphics[si];
               return (
                 <div
                   key={svc.num}
@@ -685,11 +682,11 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                           {t}
                         </span>
                       ))}
-                      {serviceGraphics[si] && (
-                        // clean animated diagram as the collapsed-state placeholder;
-                        // fades out when open (the labelled version takes over below)
+                      {Graphic && (
+                        // animated diagram as the collapsed-state placeholder;
+                        // fades out when open (the full-size one takes over below)
                         <span data-svc-mini aria-hidden style={{ marginLeft: "auto", flex: "none", width: "clamp(120px,13vw,170px)", opacity: open ? 0 : 1, transition: "opacity .35s ease" }}>
-                          {serviceGraphics[si]}
+                          <Graphic idSuffix="-mini" />
                         </span>
                       )}
                     </div>
@@ -703,20 +700,13 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                             <p key={par} style={{ margin: "0 0 12px", fontWeight: 300, fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: S2 }}>{par}</p>
                           ))}
                         </div>
-                        {serviceImages[si] && (
-                          <div className="svc-images" style={{ marginTop: "clamp(20px,2.4vw,32px)", display: "grid", gap: 18 }}>
-                            {serviceImages[si].map((src) => (
-                              // uniform card, image shown whole (contain) so the infographic text stays legible
-                              <div key={src} style={{ minWidth: 0, aspectRatio: "3 / 2", background: "#fff", border: "1px solid #DDE6E8", borderRadius: 14, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", padding: 14 }}>
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                  src={src}
-                                  alt=""
-                                  loading="lazy"
-                                  style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", objectFit: "contain", display: "block" }}
-                                />
-                              </div>
-                            ))}
+                        {Graphic && (
+                          // full-size animated diagram (Vittoria's HTML handoff,
+                          // inlined) — transparent, so it sits directly in the
+                          // panel and scales cleanly on mobile. 620px matches the
+                          // .graphic max-width in her handoff files.
+                          <div style={{ marginTop: "clamp(20px,2.4vw,32px)", maxWidth: 620 }}>
+                            <Graphic idSuffix="-panel" />
                           </div>
                         )}
                       </div>
@@ -753,8 +743,13 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
       </section>
 
       {/* ---- Numeri ---- */}
-      <section ref={statsRef} style={{ background: NAVY, padding: "clamp(90px,12vw,160px) 6vw" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+      <section ref={statsRef} style={{ position: "relative", overflow: "hidden", background: NAVY, padding: "clamp(90px,12vw,160px) 6vw" }}>
+        {/* barely-visible duotone backdrop behind the counters (Vittoria: darker,
+            shadowed, blue) — the vignette keeps the numbers as the focal point */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img aria-hidden alt="" src="/photos/manufacturing.jpg" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(100%) brightness(.55)", opacity: 0.16 }} />
+        <div aria-hidden style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 90% 80% at 50% 45%, rgba(27,42,74,.2) 0%, rgba(22,33,58,.75) 68%, rgba(16,25,46,.95) 100%)" }} />
+        <div style={{ position: "relative", maxWidth: 1180, margin: "0 auto" }}>
           <p data-rise style={{ margin: "0 0 clamp(40px,5vw,72px)", ...eyebrow(TEALLT), textAlign: "center" }}>{dict.stats.eyebrow}</p>
           <div data-stats-grid style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
             {stats.map((s) => (
@@ -994,8 +989,11 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
       {activeJob && (
         <div onClick={() => setJobIndex(null)} style={{ position: "fixed", inset: 0, zIndex: 1200, background: "rgba(16,27,48,.62)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
           <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 24, maxWidth: 720, width: "100%", maxHeight: "88vh", overflow: "auto", boxShadow: "0 40px 100px rgba(16,27,48,.45)" }}>
-            <div style={{ position: "relative", display: "flex", alignItems: "flex-end", padding: 24, height: "clamp(120px,16vw,160px)", ...cardBanner }}>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            <div style={{ position: "relative", overflow: "hidden", display: "flex", alignItems: "flex-end", padding: 24, height: "clamp(120px,16vw,160px)", ...cardBanner }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={jobImages[jobIndex! % jobImages.length]} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(100%)" }} />
+              <div aria-hidden style={{ position: "absolute", inset: 0, background: "linear-gradient(125deg, rgba(27,42,74,.78), rgba(77,147,162,.45))", mixBlendMode: "multiply" }} />
+              <div style={{ position: "relative", display: "flex", flexWrap: "wrap", gap: 8 }}>
                 <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: TEALLT, border: "1px solid rgba(121,183,196,.55)", padding: "6px 13px", borderRadius: 999 }}>{activeJob.sede}</span>
                 <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(255,255,255,.75)", border: "1px solid rgba(255,255,255,.35)", padding: "6px 13px", borderRadius: 999 }}>{activeJob.type}</span>
               </div>
@@ -1100,8 +1098,8 @@ const modalPara: CSSProperties = {
 
 /**
  * Case-study banner: striped placeholder by default; when `p.image` is set it
- * renders the photo with the unified duotone treatment (grayscale + navy/teal
- * wash — visual spec §4) so all case photos read as one collection.
+ * renders the photo in its original colours (Vittoria 2026-07-17 — no duotone
+ * here). A soft top scrim keeps the sector/area chips readable on any photo.
  */
 function CaseBanner({ p, style, children }: { p: Project; style: CSSProperties; children?: React.ReactNode }) {
   return (
@@ -1109,8 +1107,8 @@ function CaseBanner({ p, style, children }: { p: Project; style: CSSProperties; 
       {p.image && (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={p.image} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(100%)" }} />
-          <div aria-hidden style={{ position: "absolute", inset: 0, background: "linear-gradient(125deg, rgba(27,42,74,.78), rgba(77,147,162,.45))", mixBlendMode: "multiply" }} />
+          <img src={p.image} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+          <div aria-hidden style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(16,27,48,.42) 0%, rgba(16,27,48,0) 45%)" }} />
         </>
       )}
       <div style={{ position: "absolute", top: 20, left: 20, display: "flex", flexWrap: "wrap", gap: 8 }}>

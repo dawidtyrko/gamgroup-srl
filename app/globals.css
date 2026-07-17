@@ -214,15 +214,6 @@ html {
   border-bottom-color: #79b7c4 !important;
 }
 
-/* service accordion image grid: one labelled infographic per service — single
-   full-width card capped near the text column width. Explicit column (no
-   min()/auto-fill-px which could let a large image blow out the track on iOS
-   Safari). Cards carry min-width:0 inline so images always shrink to fit. */
-.svc-images {
-  grid-template-columns: 1fr;
-  max-width: 760px;
-}
-
 /* animated service diagrams (Vittoria's clean handoff graphics, inlined as SVG
    in ServiceGraphics.tsx) — shown in the collapsed accordion rows */
 .svcg {
