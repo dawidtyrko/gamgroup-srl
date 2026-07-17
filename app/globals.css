@@ -214,15 +214,94 @@ html {
   border-bottom-color: #79b7c4 !important;
 }
 
-/* service accordion image grid: explicit columns (no min()/auto-fill-px which
-   could let a large image blow out the track on iOS Safari). 1 col on mobile,
-   2 from 760px. Cards carry min-width:0 inline so images always shrink to fit. */
+/* service accordion image grid: one labelled infographic per service — single
+   full-width card capped near the text column width. Explicit column (no
+   min()/auto-fill-px which could let a large image blow out the track on iOS
+   Safari). Cards carry min-width:0 inline so images always shrink to fit. */
 .svc-images {
   grid-template-columns: 1fr;
+  max-width: 760px;
 }
-@media (min-width: 760px) {
-  .svc-images {
-    grid-template-columns: 1fr 1fr;
+
+/* animated service diagrams (Vittoria's clean handoff graphics, inlined as SVG
+   in ServiceGraphics.tsx) — shown in the collapsed accordion rows */
+.svcg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.svcg-core {
+  fill: #4d93a2;
+}
+.svcg-halo {
+  fill: none;
+  stroke: #4d93a2;
+  opacity: 0.32;
+  animation: svcg-halo 3.2s ease-out infinite;
+}
+@keyframes svcg-halo {
+  from {
+    transform: scale(0.76);
+    opacity: 0.42;
+  }
+  to {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+.svcg-g {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.svcg-link {
+  fill: none;
+  stroke: #dde6e8;
+  stroke-width: 1.8;
+}
+.svcg-link-on {
+  fill: none;
+  stroke: #bfd9de;
+  stroke-width: 2;
+}
+.svcg-dot {
+  fill: #4d93a2;
+}
+.svcg-chip {
+  fill: #fff;
+  stroke: #4d93a2;
+  stroke-width: 1.6;
+}
+.svcg-chip-l {
+  fill: #fff;
+  stroke: #c6d2d8;
+  stroke-width: 1.6;
+}
+.svcg-ring {
+  fill: none;
+  stroke: #dde6e8;
+  stroke-width: 1.8;
+}
+.svcg-arc {
+  fill: none;
+  stroke: #bfd9de;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.svcg-bar {
+  fill: #4d93a2;
+}
+.svcg-bar-l {
+  fill: #bfd9de;
+}
+/* SMIL dots aren't CSS animations, so the global reduced-motion rule above
+   doesn't stop them — hide them (and the halo) explicitly */
+@media (prefers-reduced-motion: reduce) {
+  .svcg-dot,
+  .svcg-halo {
+    display: none;
   }
 }
 
@@ -325,6 +404,11 @@ summary:focus-visible {
   }
   [data-svc-detail] {
     padding-left: 0 !important;
+  }
+  /* collapsed-row mini diagram: desktop only — on mobile the tags already
+     wrap to a full-width second line and rows must stay compact */
+  [data-svc-mini] {
+    display: none !important;
   }
   [data-chan] {
     grid-template-columns: 1fr 1fr !important;

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GAM · Consulenza Applicativa, AI & BI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:32px;
+     font-family:'Poppins',system-ui,sans-serif}
+.graphic{width:100%;max-width:620px}
+.graphic svg{width:100%;height:auto;display:block}
+.core{fill:#4D93A2}
+.halo{fill:none;stroke:#4D93A2;opacity:.32;animation:halo 3.2s ease-out infinite}
+@keyframes halo{0%{transform:scale(.76);opacity:.42}100%{transform:scale(1.45);opacity:0}}
+.g{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.gf{fill:#fff}
+.link{fill:none;stroke:#DDE6E8;stroke-width:1.8}
+.link-on{fill:none;stroke:#BFD9DE;stroke-width:2}
+.dot{fill:#4D93A2}
+.chip{fill:#fff;stroke:#4D93A2;stroke-width:1.6}
+.chip-l{fill:#fff;stroke:#C6D2D8;stroke-width:1.6}
+.ring{fill:none;stroke:#DDE6E8;stroke-width:1.8}
+.arc{fill:none;stroke:#BFD9DE;stroke-width:2;stroke-linecap:round}
+.mono{font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;fill:#8CA0AE}
+.lbl{font-size:13px;font-weight:500;fill:#1E333B}
+.tealtxt{fill:#35707E}
+.bar{fill:#4D93A2}
+.bar-l{fill:#BFD9DE}
+@media(prefers-reduced-motion:reduce){.dot,.halo,.spin{display:none;animation:none}}
+</style>
+</head>
+<body>
+  <div class="graphic">
+    <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="I dati entrano, l'AI li elabora, esce una dashboard con andamento in crescita">
+      <path class="link" id="s1" d="M110,86 C170,86 190,170 224,170"/>
+      <path class="link" id="s2" d="M96,170 C160,170 196,170 224,170"/>
+      <path class="link" id="s3" d="M110,254 C170,254 190,170 224,170"/>
+      <g class="chip-l">
+        <rect x="34" y="70" width="76" height="32" rx="9"/>
+        <rect x="20" y="154" width="76" height="32" rx="9"/>
+        <rect x="34" y="238" width="76" height="32" rx="9"/>
+      </g>
+      <g stroke="#C6D2D8" stroke-width="1.6" fill="none" stroke-linecap="round">
+        <path d="M52,80 h18 M52,86 h30 M52,92 h24"/>
+        <path d="M38,164 h18 M38,170 h30 M38,176 h24"/>
+        <path d="M52,248 h18 M52,254 h30 M52,260 h24"/>
+      </g>
+
+      <path class="link-on" id="s4" d="M316,170 C348,170 352,170 380,170"/>
+
+      <rect x="380" y="72" width="196" height="196" rx="16" fill="#fff" stroke="#DDE6E8" stroke-width="1.8"/>
+      <path d="M380,104 H576" stroke="#DDE6E8" stroke-width="1.5"/>
+      <circle cx="398" cy="88" r="3.5" fill="#BFD9DE"/>
+      <circle cx="410" cy="88" r="3.5" fill="#DDE6E8"/>
+      <rect x="404" y="204" width="22" height="40" rx="5" class="bar-l"/>
+      <rect x="434" y="184" width="22" height="60" rx="5" class="bar-l"/>
+      <rect x="464" y="158" width="22" height="86" rx="5" class="bar"/>
+      <rect x="494" y="138" width="22" height="106" rx="5" class="bar"/>
+      <rect x="524" y="114" width="22" height="130" rx="5" class="bar"/>
+      <path d="M415,196 L445,176 L475,150 L505,130 L535,106" fill="none" stroke="#35707E"
+            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="535" cy="106" r="5" fill="#35707E"/>
+
+      <circle class="halo" cx="270" cy="170" r="46" style="transform-origin:270px 170px"/>
+      <circle class="core" cx="270" cy="170" r="46"/>
+      <g class="g">
+        <circle cx="270" cy="170" r="5.5" fill="none"/>
+        <circle cx="252" cy="152" r="3.5" fill="#fff" stroke="none"/>
+        <circle cx="288" cy="152" r="3.5" fill="#fff" stroke="none"/>
+        <circle cx="252" cy="188" r="3.5" fill="#fff" stroke="none"/>
+        <circle cx="288" cy="188" r="3.5" fill="#fff" stroke="none"/>
+        <path d="M255,155 L266,166 M285,155 L274,166 M255,185 L266,174 M285,185 L274,174"/>
+      </g>
+
+      <circle class="dot" r="4"><animateMotion dur="2.4s" begin="-0.1s" repeatCount="indefinite"><mpath href="#s1"/></animateMotion></circle>
+      <circle class="dot" r="4"><animateMotion dur="2.4s" begin="-0.9s" repeatCount="indefinite"><mpath href="#s2"/></animateMotion></circle>
+      <circle class="dot" r="4"><animateMotion dur="2.4s" begin="-1.7s" repeatCount="indefinite"><mpath href="#s3"/></animateMotion></circle>
+      <circle class="dot" r="4"><animateMotion dur="2.4s" begin="-0.5s" repeatCount="indefinite"><mpath href="#s4"/></animateMotion></circle>
+    </svg>
+  </div>
+</body>
+</html>

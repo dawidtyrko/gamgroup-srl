@@ -12,6 +12,7 @@ import dynamic from "next/dynamic";
 import type { Project } from "@/lib/projects";
 import type { JobContent } from "@/lib/jobs";
 import type { Dict, Locale } from "@/lib/i18n/types";
+import { serviceGraphics } from "@/components/ServiceGraphics";
 
 // Leaflet touches window/document at import → load client-only.
 const GamMap = dynamic(() => import("@/components/GamMap"), {
@@ -80,11 +81,12 @@ const clientLogos = [
 
 // Service imagery shown in the expanded accordion panel (locale-independent).
 // Indexed by service position (matches dict.services.items order).
+// one labelled infographic per service (Vittoria's handoff set 2)
 const serviceImages: string[][] = [
-  ["/services/erp-epm.avif", "/services/erp-sap.avif", "/services/erp-ibm-iseries.avif"],
-  ["/services/ai-lean-1.avif", "/services/ai-lean-2.avif", "/services/ai-bi-2.avif", "/services/ai-microsoft-2.avif"],
-  ["/services/dev-software.avif", "/services/dev-software-2.avif", "/services/dev-integration.avif", "/services/dev-integration-2.avif"],
-  ["/services/support-ams.avif", "/services/support-ict.avif"],
+  ["/services/gam-servizio-01-erp.png"],
+  ["/services/gam-servizio-02-ai-bi.png"],
+  ["/services/gam-servizio-03-sviluppo-integration.png"],
+  ["/services/gam-servizio-04-assistenza.png"],
 ];
 
 const cardBanner: CSSProperties = {
@@ -677,12 +679,19 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                       <h3 style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(22px,2.4vw,34px)", lineHeight: 1.1, letterSpacing: "-.015em", color: INK }}>{svc.title}</h3>
                       <span aria-hidden style={{ flex: "none", fontFamily: MONO, fontSize: 22, lineHeight: 1, color: TEALD, transition: "transform .3s ease", transform: open ? "rotate(45deg)" : "none" }}>+</span>
                     </div>
-                    <div data-svc-tags style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    <div data-svc-tags style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
                       {svc.tags.map((t) => (
                         <span key={t} className="chip" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".04em", color: "#536F83", border: "1px solid #DDE6E8", borderRadius: 999, padding: "6px 13px" }}>
                           {t}
                         </span>
                       ))}
+                      {serviceGraphics[si] && (
+                        // clean animated diagram as the collapsed-state placeholder;
+                        // fades out when open (the labelled version takes over below)
+                        <span data-svc-mini aria-hidden style={{ marginLeft: "auto", flex: "none", width: "clamp(120px,13vw,170px)", opacity: open ? 0 : 1, transition: "opacity .35s ease" }}>
+                          {serviceGraphics[si]}
+                        </span>
+                      )}
                     </div>
                   </div>
                   {/* elegant in-place expand: grid-rows 0fr→1fr animates to auto height */}
