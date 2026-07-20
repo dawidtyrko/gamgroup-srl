@@ -13,6 +13,8 @@ import type { Project } from "@/lib/projects";
 import type { JobContent } from "@/lib/jobs";
 import type { Dict, Locale } from "@/lib/i18n/types";
 import { serviceGraphics } from "@/components/ServiceGraphics";
+import { serviceDetailGraphics } from "@/components/serviceDetailGraphics";
+import JobBanner from "@/components/JobBanner";
 
 // Leaflet touches window/document at import → load client-only.
 const GamMap = dynamic(() => import("@/components/GamMap"), {
@@ -81,10 +83,6 @@ const clientLogos = [
 
 // Service imagery shown in the expanded accordion panel (locale-independent).
 // Indexed by service position (matches dict.services.items order).
-// careers popup banners: each job gets its own image from the pool (by list
-// position) — rendered with the unified duotone wash like the case banners
-const jobImages = ["/photos/automotive.jpg", "/photos/fashion.jpg", "/photos/manufacturing.jpg", "/photos/farmaceutico.jpg"];
-
 const cardBanner: CSSProperties = {
   background:
     "repeating-linear-gradient(135deg,rgba(121,183,196,.12) 0 16px,rgba(255,255,255,0) 16px 32px),linear-gradient(125deg,#22325a,#16233f)",
@@ -178,12 +176,13 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
           el.textContent = target + suffix;
           return;
         }
+        const from = target > 1 ? 1 : 0; // count up from 1 (Vittoria)
         const dur = 1700;
         const start = performance.now();
         const step = (now: number) => {
           const p = Math.min(1, (now - start) / dur);
           const eased = 1 - Math.pow(1 - p, 3);
-          el.textContent = Math.round(target * eased) + suffix;
+          el.textContent = Math.round(from + (target - from) * eased) + suffix;
           if (p < 1) requestAnimationFrame(step);
         };
         requestAnimationFrame(step);
@@ -272,8 +271,16 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
       raf = requestAnimationFrame(tick);
     };
 
+    // Fallback only: if the counters somehow weren't triggered by the scroll
+    // handler but the section is already on screen, run them. Gated on
+    // visibility so it never fires the animation while the section is still
+    // far below the fold (which would waste it off-screen before the user
+    // scrolls down — the reason the count wasn't visible).
     const safety = setTimeout(() => {
-      if (!countersDone) {
+      const sec = statsRef.current;
+      if (countersDone || !sec) return;
+      const r = sec.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) {
         countersDone = true;
         runCounters();
       }
@@ -700,14 +707,15 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                           {svc.description.map((par) => (
                             <p key={par} style={{ margin: "0 0 12px", fontWeight: 300, fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: S2 }}>{par}</p>
                           ))}
-                          {Graphic && (
-                            // full-size animated diagram (Vittoria's HTML handoff,
-                            // inlined) — transparent, so it sits directly in the
-                            // panel and scales cleanly on mobile. 620px matches the
-                            // .graphic max-width in her handoff files.
-                            <div style={{ margin: "clamp(20px,2.4vw,32px) auto 0", maxWidth: 620 }}>
-                              <Graphic idSuffix="-panel" />
-                            </div>
+                          {serviceDetailGraphics[si] && (
+                            // full-size detailed diagram (Vittoria's richer HTML
+                            // handoff, injected verbatim) — the small collapsed-row
+                            // graphic above uses ServiceGraphics.tsx instead.
+                            <div
+                              className="svc-detail-graphic"
+                              style={{ marginTop: "clamp(20px,2.4vw,32px)" }}
+                              dangerouslySetInnerHTML={{ __html: serviceDetailGraphics[si] }}
+                            />
                           )}
                         </div>
                       </div>
@@ -755,7 +763,7 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
           <div data-stats-grid style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
             {stats.map((s) => (
               <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, padding: 18, borderRight: "1px solid rgba(255,255,255,.12)" }}>
-                <div data-count={s.value} data-suffix="+" style={{ fontFamily: GRO, fontWeight: 700, fontSize: "clamp(50px,7vw,104px)", lineHeight: 1, letterSpacing: "-.04em", color: "#fff" }}>0+</div>
+                <div data-count={s.value} data-suffix="+" style={{ fontFamily: GRO, fontWeight: 700, fontSize: "clamp(50px,7vw,104px)", lineHeight: 1, letterSpacing: "-.04em", color: "#fff" }}>1+</div>
                 <div style={{ fontWeight: 300, fontSize: "clamp(14px,1.3vw,18px)", color: "rgba(255,255,255,.6)", textAlign: "center" }}>{s.label}</div>
               </div>
             ))}
@@ -991,9 +999,7 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
         <div onClick={() => setJobIndex(null)} style={{ position: "fixed", inset: 0, zIndex: 1200, background: "rgba(16,27,48,.62)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
           <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 24, maxWidth: 720, width: "100%", maxHeight: "88vh", overflow: "auto", boxShadow: "0 40px 100px rgba(16,27,48,.45)" }}>
             <div style={{ position: "relative", overflow: "hidden", display: "flex", alignItems: "flex-end", padding: 24, height: "clamp(120px,16vw,160px)", ...cardBanner }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={jobImages[jobIndex! % jobImages.length]} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(100%)" }} />
-              <div aria-hidden style={{ position: "absolute", inset: 0, background: "linear-gradient(125deg, rgba(27,42,74,.78), rgba(77,147,162,.45))", mixBlendMode: "multiply" }} />
+              <JobBanner index={jobIndex!} />
               <div style={{ position: "relative", display: "flex", flexWrap: "wrap", gap: 8 }}>
                 <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: TEALLT, border: "1px solid rgba(121,183,196,.55)", padding: "6px 13px", borderRadius: 999 }}>{activeJob.sede}</span>
                 <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(255,255,255,.75)", border: "1px solid rgba(255,255,255,.35)", padding: "6px 13px", borderRadius: 999 }}>{activeJob.type}</span>

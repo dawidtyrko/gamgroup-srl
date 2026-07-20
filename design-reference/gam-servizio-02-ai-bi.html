@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>GAM · Consulenza Applicativa, AI & BI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;font-family:'Poppins',system-ui,sans-serif;
+     display:flex;align-items:center;justify-content:center;min-height:100vh;padding:28px}
+.graphic{width:100%;max-width:1040px}
+.graphic svg{width:100%;height:auto;display:block}
+.stage-l{font-size:17px;font-weight:600;fill:#1E333B;letter-spacing:-.01em}
+.stage-s{font-size:13px;font-weight:400;fill:#7A8B9B}
+.kicker{font-size:12px;font-weight:600;fill:#9DAEBB;letter-spacing:3px}
+.chip-t{font-size:14px;font-weight:500;fill:#35707E}
+.num{font-size:12px;font-weight:700;fill:#fff}
+.g{fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.gt{fill:none;stroke:#35707E;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.flow{fill:none;stroke:#DDE6E8;stroke-width:2}
+.flow-d{fill:none;stroke:#BFD9DE;stroke-width:2;stroke-dasharray:2 7;stroke-linecap:round}
+.dot{fill:#4D93A2}
+.halo{fill:none;stroke:#4D93A2;opacity:.3;animation:halo 3.4s ease-out infinite}
+@keyframes halo{0%{transform:scale(.8);opacity:.4}100%{transform:scale(1.4);opacity:0}}
+.rise{animation:rise 2.6s ease-in-out infinite alternate;transform-origin:bottom}
+@keyframes rise{from{transform:scaleY(.86)}to{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){.dot,.halo{display:none}.rise{animation:none}}
+</style>
+</head>
+<body>
+  <div class="graphic">
+    <svg viewBox="0 0 1040 620" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="Dai dati sparsi ai modelli AI, alla dashboard, fino alle decisioni">
+      
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+      <path d="M0,1.5 L8,5 L0,8.5" fill="none" stroke="#BFD9DE" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+      <text class="kicker" x="520" y="36" text-anchor="middle">DAL DATO ALLA DECISIONE</text>
+
+      <path class="flow-d" id="f1" d="M196,220 H302" marker-end="url(#ar)"/>
+      <path class="flow-d" id="f2" d="M436,220 H542" marker-end="url(#ar)"/>
+      <path class="flow-d" id="f3" d="M676,220 H782" marker-end="url(#ar)"/>
+
+      <rect x="46" y="140" width="150" height="160" rx="18" fill="#fff" stroke="#DDE6E8" stroke-width="2"/>
+      <g stroke="#C6D2D8" stroke-width="2" fill="none" stroke-linecap="round">
+        <path d="M84,178 h74 M84,196 h50 M84,214 h74 M84,232 h40 M84,250 h62"/>
+      </g>
+      <circle cx="72" cy="178" r="4" fill="#DDE6E8"/><circle cx="72" cy="196" r="4" fill="#DDE6E8"/>
+      <circle cx="72" cy="214" r="4" fill="#DDE6E8"/><circle cx="72" cy="232" r="4" fill="#DDE6E8"/>
+      <circle cx="72" cy="250" r="4" fill="#DDE6E8"/>
+      <text class="stage-l" x="121" y="348" text-anchor="middle">Dati sparsi</text>
+      <text class="stage-s" x="121" y="372" text-anchor="middle">ERP, gestionali, fogli,</text>
+      <text class="stage-s" x="121" y="392" text-anchor="middle">fonti diverse</text>
+
+      <rect class="halo" x="302" y="140" width="134" height="160" rx="18" fill="none" style="transform-origin:369px 220px"/>
+      <rect x="302" y="140" width="134" height="160" rx="18" fill="#4D93A2"/>
+      <g class="g">
+        <circle cx="369" cy="220" r="7" fill="none"/>
+        <circle cx="343" cy="192" r="4.5" fill="#fff" stroke="none"/>
+        <circle cx="395" cy="192" r="4.5" fill="#fff" stroke="none"/>
+        <circle cx="343" cy="248" r="4.5" fill="#fff" stroke="none"/>
+        <circle cx="395" cy="248" r="4.5" fill="#fff" stroke="none"/>
+        <path d="M347,196 L364,214 M391,196 L374,214 M347,244 L364,226 M391,244 L374,226"/>
+      </g>
+      <text class="stage-l" x="369" y="348" text-anchor="middle">Modelli e AI</text>
+      <text class="stage-s" x="369" y="372" text-anchor="middle">Analisi predittiva,</text>
+      <text class="stage-s" x="369" y="392" text-anchor="middle">agenti e copilot</text>
+
+      <rect x="542" y="140" width="134" height="160" rx="18" fill="#fff" stroke="#4D93A2" stroke-width="2"/>
+      <path d="M542,170 H676" stroke="#DDE6E8" stroke-width="1.6"/>
+      <circle cx="558" cy="155" r="3.4" fill="#BFD9DE"/><circle cx="569" cy="155" r="3.4" fill="#DDE6E8"/>
+      <g style="transform-origin:0 282px">
+        <rect class="rise" x="562" y="248" width="17" height="34" rx="4" fill="#BFD9DE" style="transform-origin:570px 282px;animation-delay:0s"/>
+        <rect class="rise" x="586" y="230" width="17" height="52" rx="4" fill="#BFD9DE" style="transform-origin:594px 282px;animation-delay:.2s"/>
+        <rect class="rise" x="610" y="206" width="17" height="76" rx="4" fill="#4D93A2" style="transform-origin:618px 282px;animation-delay:.4s"/>
+        <rect class="rise" x="634" y="186" width="17" height="96" rx="4" fill="#4D93A2" style="transform-origin:642px 282px;animation-delay:.6s"/>
+      </g>
+      <path d="M570,240 L594,222 L618,198 L642,180" fill="none" stroke="#35707E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="642" cy="180" r="4.5" fill="#35707E"/>
+      <text class="stage-l" x="609" y="348" text-anchor="middle">Dashboard</text>
+      <text class="stage-s" x="609" y="372" text-anchor="middle">KPI in tempo reale,</text>
+      <text class="stage-s" x="609" y="392" text-anchor="middle">tutto in un posto</text>
+
+      <rect x="782" y="140" width="150" height="160" rx="18" fill="#fff" stroke="#DDE6E8" stroke-width="2"/>
+      <g class="gt">
+        <path d="M834,252 L834,206"/>
+        <path d="M816,224 L834,206 L852,224"/>
+        <circle cx="857" cy="186" r="4" fill="#35707E" stroke="none"/>
+        <path d="M812,268 h44"/>
+      </g>
+      <path d="M857,186 m-20,0 a20,20 0 0 1 20,-20" fill="none" stroke="#BFD9DE" stroke-width="2" stroke-linecap="round"/>
+      <text class="stage-l" x="857" y="348" text-anchor="middle">Decisioni</text>
+      <text class="stage-s" x="857" y="372" text-anchor="middle">Azioni misurabili,</text>
+      <text class="stage-s" x="857" y="392" text-anchor="middle">non intuizioni</text>
+
+      <circle class="dot" r="4.5"><animateMotion dur="2.2s" begin="-0.1s" repeatCount="indefinite"><mpath href="#f1"/></animateMotion></circle>
+      <circle class="dot" r="4.5"><animateMotion dur="2.2s" begin="-0.8s" repeatCount="indefinite"><mpath href="#f2"/></animateMotion></circle>
+      <circle class="dot" r="4.5"><animateMotion dur="2.2s" begin="-1.5s" repeatCount="indefinite"><mpath href="#f3"/></animateMotion></circle>
+
+      <text class="kicker" x="520" y="502" text-anchor="middle">COSA METTIAMO IN CAMPO</text>
+      <g fill="#fff" stroke="#BFD9DE" stroke-width="1.5">
+        <rect x="150" y="526" width="168" height="34" rx="17"/>
+        <rect x="330" y="526" width="160" height="34" rx="17"/>
+        <rect x="502" y="526" width="196" height="34" rx="17"/>
+        <rect x="710" y="526" width="180" height="34" rx="17"/>
+      </g>
+      <g class="chip-t" text-anchor="middle" dominant-baseline="central">
+        <text x="234" y="544">Project Management</text>
+        <text x="410" y="544">Lean Management</text>
+        <text x="600" y="544">Business Intelligence</text>
+        <text x="800" y="544">AI Agents / Copilot</text>
+      </g>
+    </svg>
+  </div>
+</body>
+</html>

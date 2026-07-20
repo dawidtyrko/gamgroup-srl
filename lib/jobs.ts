@@ -293,6 +293,13 @@ async function ensureSeeded(): Promise<void> {
   }
 }
 
+/** Collapse any duplicate entries by id (first wins), preserving order. Guards
+ * the UI against a store that got seeded twice by a concurrent-request race. */
+function dedupeById(items: Job[]): Job[] {
+  const seen = new Set<string>();
+  return items.filter((j) => (seen.has(j.id) ? false : (seen.add(j.id), true)));
+}
+
 export async function getJobs(): Promise<Job[]> {
   if (!kvConfigured()) return DEFAULT_JOBS;
   try {
@@ -301,7 +308,7 @@ export async function getJobs(): Promise<Job[]> {
       await ensureSeeded();
       items = await kv.lrange<Job>(JOBS_KEY, 0, -1);
     }
-    return items && items.length ? items : DEFAULT_JOBS;
+    return items && items.length ? dedupeById(items) : DEFAULT_JOBS;
   } catch (err) {
     console.error("[jobs] KV read failed, serving defaults:", err);
     return DEFAULT_JOBS;

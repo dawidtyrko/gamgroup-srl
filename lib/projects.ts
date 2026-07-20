@@ -164,6 +164,13 @@ async function ensureSeeded(): Promise<void> {
   }
 }
 
+/** Collapse any duplicate entries by id (first wins), preserving order. Guards
+ * the UI against a store that got seeded twice by a concurrent-request race. */
+function dedupeById(items: Project[]): Project[] {
+  const seen = new Set<string>();
+  return items.filter((p) => (seen.has(p.id) ? false : (seen.add(p.id), true)));
+}
+
 export async function getProjects(): Promise<Project[]> {
   if (!kvConfigured()) return DEFAULT_PROJECTS;
   try {
@@ -172,7 +179,7 @@ export async function getProjects(): Promise<Project[]> {
       await ensureSeeded();
       items = await kv.lrange<Project>(PROJECTS_KEY, 0, -1);
     }
-    return items && items.length ? items : DEFAULT_PROJECTS;
+    return items && items.length ? dedupeById(items) : DEFAULT_PROJECTS;
   } catch (err) {
     console.error("[projects] KV read failed, serving defaults:", err);
     return DEFAULT_PROJECTS;

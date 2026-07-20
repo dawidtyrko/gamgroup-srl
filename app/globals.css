@@ -296,6 +296,114 @@ html {
   }
 }
 
+/* detailed labelled service diagrams (Vittoria's richer handoff graphics,
+   injected as raw SVG from serviceDetailGraphics.ts) — shown full-size in the
+   expanded accordion panel. Classes are scoped under the wrapper so the generic
+   names (.g, .dot, .halo…) can't leak into the rest of the site. */
+.svc-detail-graphic {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.svc-detail-graphic svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.svc-detail-graphic .stage-l {
+  font-size: 17px;
+  font-weight: 600;
+  fill: #1e333b;
+  letter-spacing: -0.01em;
+}
+.svc-detail-graphic .stage-s {
+  font-size: 13px;
+  font-weight: 400;
+  fill: #7a8b9b;
+}
+.svc-detail-graphic .kicker {
+  font-size: 12px;
+  font-weight: 600;
+  fill: #9daebb;
+  letter-spacing: 3px;
+}
+.svc-detail-graphic .chip-t {
+  font-size: 14px;
+  font-weight: 500;
+  fill: #35707e;
+}
+.svc-detail-graphic .num {
+  font-size: 12px;
+  font-weight: 700;
+  fill: #fff;
+}
+.svc-detail-graphic .g {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.svc-detail-graphic .gt {
+  fill: none;
+  stroke: #35707e;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.svc-detail-graphic .flow {
+  fill: none;
+  stroke: #dde6e8;
+  stroke-width: 2;
+}
+.svc-detail-graphic .flow-d {
+  fill: none;
+  stroke: #bfd9de;
+  stroke-width: 2;
+  stroke-dasharray: 2 7;
+  stroke-linecap: round;
+}
+.svc-detail-graphic .dot {
+  fill: #4d93a2;
+}
+.svc-detail-graphic .halo {
+  fill: none;
+  stroke: #4d93a2;
+  opacity: 0.3;
+  animation: svcd-halo 3.4s ease-out infinite;
+}
+@keyframes svcd-halo {
+  from {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+.svc-detail-graphic .rise {
+  animation: svcd-rise 2.6s ease-in-out infinite alternate;
+  transform-origin: bottom;
+}
+@keyframes svcd-rise {
+  from {
+    transform: scaleY(0.86);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .svc-detail-graphic .dot,
+  .svc-detail-graphic .halo {
+    display: none;
+  }
+  .svc-detail-graphic .rise {
+    animation: none;
+  }
+}
+
 /* nav links: teal on hover (scroll-spy sets the active colour inline) */
 .nav-link:hover {
   color: #35707e !important;
