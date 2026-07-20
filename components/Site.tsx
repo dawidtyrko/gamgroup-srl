@@ -145,7 +145,7 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
     let raf = 0;
     let solid: boolean | null = null;
     let curNav: string | null = null;
-    let countersDone = false;
+    let countersActive = false; // true while the stats section is in the trigger band
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // Lock viewport-derived heights to PIXELS at mount. Recording analysis
@@ -263,11 +263,16 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
         setActiveNav(cur);
       }
 
-      // Counters once, on entry
-      if (!countersDone && statsRef.current) {
-        if (statsRef.current.getBoundingClientRect().top < vh * 0.78) {
-          countersDone = true;
+      // Counters: replay every time the section scrolls into the trigger band,
+      // reset when it fully leaves so the next entry animates from 1 again.
+      if (statsRef.current) {
+        const r = statsRef.current.getBoundingClientRect();
+        const inBand = r.top < vh * 0.78 && r.bottom > vh * 0.15;
+        if (inBand && !countersActive) {
+          countersActive = true;
           runCounters();
+        } else if (!inBand && countersActive) {
+          countersActive = false;
         }
       }
     };
@@ -281,25 +286,9 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
       raf = requestAnimationFrame(tick);
     };
 
-    // Fallback only: if the counters somehow weren't triggered by the scroll
-    // handler but the section is already on screen, run them. Gated on
-    // visibility so it never fires the animation while the section is still
-    // far below the fold (which would waste it off-screen before the user
-    // scrolls down — the reason the count wasn't visible).
-    const safety = setTimeout(() => {
-      const sec = statsRef.current;
-      if (countersDone || !sec) return;
-      const r = sec.getBoundingClientRect();
-      if (r.top < window.innerHeight && r.bottom > 0) {
-        countersDone = true;
-        runCounters();
-      }
-    }, 3200);
-
     tick();
     return () => {
       cancelAnimationFrame(raf);
-      clearTimeout(safety);
       window.removeEventListener("resize", onResize);
     };
   }, []);
