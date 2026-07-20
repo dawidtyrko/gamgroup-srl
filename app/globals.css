@@ -404,6 +404,65 @@ html {
   }
 }
 
+/* hero background slideshow (HeroBackground.tsx): stacked frames crossfade with
+   a slow Ken-Burns zoom; the veil keeps the dark headline readable */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+.hero-bg-frame {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  will-change: opacity, transform;
+  animation-name: hero-kenburns;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+/* each frame is visible for one 1/7 slice with a ~3% crossfade either side,
+   and drifts from scale 1.05 -> 1.12 while on screen */
+@keyframes hero-kenburns {
+  0% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  3% {
+    opacity: 1;
+  }
+  14.28% {
+    opacity: 1;
+  }
+  17.28% {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+}
+.hero-bg-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 50% 45%, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.8) 60%, rgba(255, 255, 255, 0.9) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.82));
+}
+@media (prefers-reduced-motion: reduce) {
+  /* freeze on the first frame, no zoom/crossfade */
+  .hero-bg-frame {
+    animation: none;
+  }
+  .hero-bg-frame:first-of-type {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* nav links: teal on hover (scroll-spy sets the active colour inline) */
 .nav-link:hover {
   color: #35707e !important;

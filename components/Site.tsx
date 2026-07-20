@@ -15,6 +15,7 @@ import type { Dict, Locale } from "@/lib/i18n/types";
 import { serviceGraphics } from "@/components/ServiceGraphics";
 import { serviceDetailGraphics } from "@/components/serviceDetailGraphics";
 import JobBanner from "@/components/JobBanner";
+import HeroBackground from "@/components/HeroBackground";
 
 // HR photo per default opening (by seed id); admin-added jobs fall back to the
 // branded abstract banner in JobBanner.
@@ -524,10 +525,11 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
           background: "#fff",
         }}
       >
-        <span data-rise style={{ fontFamily: MONO, fontSize: 12, letterSpacing: ".3em", textTransform: "uppercase", color: TEALD }}>
+        <HeroBackground />
+        <span data-rise style={{ position: "relative", zIndex: 1, fontFamily: MONO, fontSize: 12, letterSpacing: ".3em", textTransform: "uppercase", color: TEALD }}>
           {dict.hero.eyebrow}
         </span>
-        <h1 style={{ margin: "30px 0 0", fontFamily: GRO, fontWeight: 700, fontSize: "clamp(58px,10vw,164px)", lineHeight: 0.92, letterSpacing: "-.035em", color: INK }}>
+        <h1 style={{ position: "relative", zIndex: 1, margin: "30px 0 0", fontFamily: GRO, fontWeight: 700, fontSize: "clamp(58px,10vw,164px)", lineHeight: 0.92, letterSpacing: "-.035em", color: INK }}>
           <span data-rise style={{ display: "inline-block" }}>
             {dict.hero.title}
           </span>
@@ -540,10 +542,10 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
             style={{ display: "inline-block", verticalAlign: "top", height: "clamp(46px,8vw,140px)", width: "auto", marginTop: "clamp(10px,1.4vw,22px)" }}
           />
         </h1>
-        <p data-rise style={{ margin: "36px 0 0", maxWidth: 540, fontWeight: 300, fontSize: "clamp(17px,1.7vw,22px)", lineHeight: 1.62, color: GREY }}>
+        <p data-rise style={{ position: "relative", zIndex: 1, margin: "36px 0 0", maxWidth: 540, fontWeight: 300, fontSize: "clamp(17px,1.7vw,22px)", lineHeight: 1.62, color: GREY }}>
           {dict.hero.subtitle}
         </p>
-        <div data-rise style={{ marginTop: 44, display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
+        <div data-rise style={{ position: "relative", zIndex: 1, marginTop: 44, display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
           <button
             onClick={nav("servizi")}
             className="btn-navy"
@@ -560,7 +562,7 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
           </button>
         </div>
         {/* scroll cue: desktop-only — on small screens it collides with the wrapped CTA buttons */}
-        <div data-scroll-cue style={{ position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+        <div data-scroll-cue style={{ position: "absolute", zIndex: 1, bottom: 16, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
           <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: ".24em", color: MUT, textTransform: "uppercase" }}>{dict.hero.scroll}</span>
           <span style={{ display: "block", width: 1, height: 42, background: "linear-gradient(180deg,#c3cbd6,transparent)", animation: "gam-cue 1.8s ease-in-out infinite" }} />
         </div>
