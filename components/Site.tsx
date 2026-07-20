@@ -526,7 +526,9 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
         }}
       >
         <HeroBackground />
-        <span data-rise style={{ position: "relative", zIndex: 1, fontFamily: MONO, fontSize: 12, letterSpacing: ".3em", textTransform: "uppercase", color: TEALD, textShadow: "0 1px 14px rgba(255,255,255,.95)" }}>
+        {/* hero-only: darker than the brand TEALD + tight white halo so the mono
+            line reads over both bright windows and dark furniture in the photos */}
+        <span data-rise style={{ position: "relative", zIndex: 1, fontFamily: MONO, fontSize: 12, letterSpacing: ".3em", textTransform: "uppercase", color: "#123c45", textShadow: "0 0 3px rgba(255,255,255,.98), 0 1px 12px rgba(255,255,255,.95)" }}>
           {dict.hero.eyebrow}
         </span>
         <h1 style={{ position: "relative", zIndex: 1, margin: "30px 0 0", fontFamily: GRO, fontWeight: 700, fontSize: "clamp(58px,10vw,164px)", lineHeight: 0.92, letterSpacing: "-.035em", color: INK, textShadow: "0 2px 28px rgba(255,255,255,.75)" }}>
@@ -542,7 +544,9 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
             style={{ display: "inline-block", verticalAlign: "top", height: "clamp(46px,8vw,140px)", width: "auto", marginTop: "clamp(10px,1.4vw,22px)" }}
           />
         </h1>
-        <p data-rise style={{ position: "relative", zIndex: 1, margin: "36px 0 0", maxWidth: 540, fontWeight: 300, fontSize: "clamp(17px,1.7vw,22px)", lineHeight: 1.62, color: GREY, textShadow: "0 1px 16px rgba(255,255,255,.9)" }}>
+        {/* hero-only: darker than the section GREY + weight 400 + white halo, so
+            the subtitle stays legible where it crosses busy/bright photo areas */}
+        <p data-rise style={{ position: "relative", zIndex: 1, margin: "36px 0 0", maxWidth: 540, fontWeight: 400, fontSize: "clamp(17px,1.7vw,22px)", lineHeight: 1.62, color: "#22333c", textShadow: "0 0 3px rgba(255,255,255,.95), 0 1px 14px rgba(255,255,255,.92)" }}>
           {dict.hero.subtitle}
         </p>
         <div data-rise style={{ position: "relative", zIndex: 1, marginTop: 44, display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
