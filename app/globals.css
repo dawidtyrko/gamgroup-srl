@@ -448,9 +448,15 @@ html {
 .hero-bg-veil {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(120% 90% at 50% 45%, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.8) 60%, rgba(255, 255, 255, 0.9) 100%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.82));
+  /* light single-layer wash: a bit more white behind the centred text, images
+     stay clearly visible toward the edges. Headline legibility is reinforced by
+     a soft white halo on the text itself (see the hero h1/p text-shadow). */
+  background: radial-gradient(
+    105% 82% at 50% 47%,
+    rgba(255, 255, 255, 0.44) 0%,
+    rgba(255, 255, 255, 0.22) 60%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
 }
 @media (prefers-reduced-motion: reduce) {
   /* freeze on the first frame, no zoom/crossfade */
