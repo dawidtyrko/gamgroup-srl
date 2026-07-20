@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const projects = await getProjects();
-  const jobs = (await getJobs()).map((j) => localizeJob(j, "it"));
+  const jobs = (await getJobs()).map((j) => ({ id: j.id, ...localizeJob(j, "it") }));
   return (
     <>
       <script

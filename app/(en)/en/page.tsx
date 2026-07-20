@@ -19,7 +19,7 @@ export default async function HomePageEn() {
   // English fields (project.en) override Italian per-field; anything not yet
   // translated in /admin-cms falls back to the Italian original.
   const projects = (await getProjects()).map((p) => localizeProject(p, "en"));
-  const jobs = (await getJobs()).map((j) => localizeJob(j, "en"));
+  const jobs = (await getJobs()).map((j) => ({ id: j.id, ...localizeJob(j, "en") }));
   return (
     <>
       <script

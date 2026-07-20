@@ -52,7 +52,27 @@ function Motif({ variant }: { variant: number }) {
   }
 }
 
-export default function JobBanner({ index }: { index: number }) {
+export default function JobBanner({ index, src }: { index: number; src?: string }) {
+  // real HR photo when we have one for this role; a scrim keeps the white
+  // location/contract chips (bottom) and close button (top-right) legible
+  if (src) {
+    return (
+      <>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(180deg, rgba(16,27,48,.38) 0%, rgba(16,27,48,0) 32%, rgba(16,27,48,0) 52%, rgba(16,27,48,.74) 100%)",
+          }}
+        />
+      </>
+    );
+  }
+
   const variant = index % 4;
   // nudge the teal glow to a different corner per variant
   const glow = [

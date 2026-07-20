@@ -10,11 +10,21 @@ import {
 } from "react";
 import dynamic from "next/dynamic";
 import type { Project } from "@/lib/projects";
-import type { JobContent } from "@/lib/jobs";
+import type { JobView } from "@/lib/jobs";
 import type { Dict, Locale } from "@/lib/i18n/types";
 import { serviceGraphics } from "@/components/ServiceGraphics";
 import { serviceDetailGraphics } from "@/components/serviceDetailGraphics";
 import JobBanner from "@/components/JobBanner";
+
+// HR photo per default opening (by seed id); admin-added jobs fall back to the
+// branded abstract banner in JobBanner.
+const jobPhotos: Record<string, string> = {
+  "seed-sap-s4hana": "/hr/sap-consultant.jpg",
+  "seed-service-manager-ams": "/hr/service-manager.jpg",
+  "seed-sap-analyst": "/hr/sap-analyst.jpg",
+  "seed-it-specialist": "/hr/it-specialist.jpg",
+  "seed-senior-it-consultant": "/hr/senior-consultant.jpg",
+};
 
 // Leaflet touches window/document at import → load client-only.
 const GamMap = dynamic(() => import("@/components/GamMap"), {
@@ -88,7 +98,7 @@ const cardBanner: CSSProperties = {
     "repeating-linear-gradient(135deg,rgba(121,183,196,.12) 0 16px,rgba(255,255,255,0) 16px 32px),linear-gradient(125deg,#22325a,#16233f)",
 };
 
-export default function Site({ projects, jobs, dict, locale }: { projects: Project[]; jobs: JobContent[]; dict: Dict; locale: Locale }) {
+export default function Site({ projects, jobs, dict, locale }: { projects: Project[]; jobs: JobView[]; dict: Dict; locale: Locale }) {
   // content comes from the locale dictionary (lib/i18n); projects + jobs from KV
   const services = dict.services.items;
   const channels = dict.channels.items;
@@ -999,7 +1009,7 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
         <div onClick={() => setJobIndex(null)} style={{ position: "fixed", inset: 0, zIndex: 1200, background: "rgba(16,27,48,.62)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
           <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 24, maxWidth: 720, width: "100%", maxHeight: "88vh", overflow: "auto", boxShadow: "0 40px 100px rgba(16,27,48,.45)" }}>
             <div style={{ position: "relative", overflow: "hidden", display: "flex", alignItems: "flex-end", padding: 24, height: "clamp(120px,16vw,160px)", ...cardBanner }}>
-              <JobBanner index={jobIndex!} />
+              <JobBanner index={jobIndex!} src={jobPhotos[activeJob.id]} />
               <div style={{ position: "relative", display: "flex", flexWrap: "wrap", gap: 8 }}>
                 <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: TEALLT, border: "1px solid rgba(121,183,196,.55)", padding: "6px 13px", borderRadius: 999 }}>{activeJob.sede}</span>
                 <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(255,255,255,.75)", border: "1px solid rgba(255,255,255,.35)", padding: "6px 13px", borderRadius: 999 }}>{activeJob.type}</span>

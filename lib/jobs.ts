@@ -25,6 +25,9 @@ export type Job = {
   en?: Partial<JobContent>;
 };
 
+/** Localized content plus the stable id — the shape the UI renders. */
+export type JobView = JobContent & { id: string };
+
 export type JobInput = Omit<Job, "id">;
 
 export const JOBS_KEY = "gam:jobs";
