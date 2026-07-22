@@ -203,9 +203,13 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
     const setActiveNav = (key: string) => {
       const nav = navRef.current;
       if (!nav) return;
+      // over the dark hero the header is transparent (solid !== true): use light
+      // links; once it frosts white on scroll, switch back to dark links.
+      const atTop = solid !== true;
       nav.querySelectorAll<HTMLElement>("[data-nav]").forEach((a) => {
         if (a.getAttribute("data-nav") === "contatti") return;
-        a.style.color = a.getAttribute("data-nav") === key ? TEALD : INK;
+        const active = a.getAttribute("data-nav") === key;
+        a.style.color = active ? (atTop ? TEALLT : TEALD) : atTop ? "rgba(255,255,255,.92)" : INK;
       });
     };
 
@@ -227,6 +231,19 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
             isSolid ? "saturate(180%) blur(16px)" : "none";
           h.style.boxShadow = isSolid ? "0 1px 0 rgba(27,42,74,.08)" : "none";
           h.style.padding = isSolid ? "16px 6vw" : "26px 6vw";
+          // recolor nav links for the new header background (light over the dark
+          // hero, dark over the frosted-white header)
+          setActiveNav(curNav ?? "home");
+          const logo = h.querySelector<HTMLImageElement>("[data-logo]");
+          if (logo) logo.src = isSolid ? "/gam-logo.svg" : "/gam-logo-white.svg";
+          const lang = h.querySelector<HTMLElement>("[data-lang]");
+          if (lang) {
+            lang.style.color = isSolid ? GREY : "rgba(255,255,255,.92)";
+            lang.style.borderColor = isSolid ? "#DDE6E8" : "rgba(255,255,255,.5)";
+          }
+          h.querySelectorAll<HTMLElement>("[data-burger-bar]").forEach((s) => {
+            s.style.background = isSolid ? INK : "#fff";
+          });
         }
       }
 
@@ -382,8 +399,10 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
           aria-label="GAM Group — Home"
           style={{ display: "flex", alignItems: "center", textDecoration: "none", lineHeight: 1, cursor: "pointer" }}
         >
+          {/* white over the dark hero at the top; JS swaps to the teal logo once
+              the header frosts white on scroll (see the header solid toggle) */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/gam-logo.svg" alt="GAM Group — It's my world" width={77} height={46} style={{ display: "block", height: 46, width: "auto" }} />
+          <img data-logo src="/gam-logo-white.svg" alt="GAM Group — It's my world" width={77} height={46} style={{ display: "block", height: 46, width: "auto" }} />
         </a>
 
         <nav ref={navRef} data-desktop-nav style={{ display: "flex", alignItems: "center", gap: 38 }}>
@@ -409,7 +428,7 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                   onClick={nav(id)}
                   aria-haspopup="true"
                   aria-expanded={servicesOpen}
-                  style={{ fontSize: 15, fontWeight: 500, color: INK, textDecoration: "none", cursor: "pointer", transition: "color .3s ease" }}
+                  style={{ fontSize: 15, fontWeight: 500, color: "rgba(255,255,255,.92)", textDecoration: "none", cursor: "pointer", transition: "color .3s ease" }}
                 >
                   {label}
                 </a>
@@ -461,7 +480,7 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                 className="nav-link"
                 href={id === "top" ? "#" : `#${id}`}
                 onClick={nav(id)}
-                style={{ fontSize: 15, fontWeight: 500, color: INK, textDecoration: "none", cursor: "pointer", transition: "color .3s ease" }}
+                style={{ fontSize: 15, fontWeight: 500, color: "rgba(255,255,255,.92)", textDecoration: "none", cursor: "pointer", transition: "color .3s ease" }}
               >
                 {label}
               </a>
@@ -490,10 +509,11 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
             {dict.nav.contattaci}
           </a>
           <a
+            data-lang
             href={dict.langSwitch.href}
             className="lang-switch"
             aria-label={locale === "it" ? "English version" : "Versione italiana"}
-            style={{ fontFamily: MONO, fontSize: 12, letterSpacing: ".08em", color: GREY, textDecoration: "none", border: "1px solid #DDE6E8", borderRadius: 999, padding: "8px 13px", transition: "color .3s ease,border-color .3s ease" }}
+            style={{ fontFamily: MONO, fontSize: 12, letterSpacing: ".08em", color: "rgba(255,255,255,.92)", textDecoration: "none", border: "1px solid rgba(255,255,255,.5)", borderRadius: 999, padding: "8px 13px", transition: "color .3s ease,border-color .3s ease" }}
           >
             {dict.langSwitch.label}
           </a>
@@ -505,8 +525,8 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
           aria-label="Menu"
           style={{ display: "none", flexDirection: "column", gap: 5, background: "none", border: "none", cursor: "pointer", padding: 8 }}
         >
-          <span style={{ display: "block", width: 26, height: 2, background: INK, borderRadius: 2 }} />
-          <span style={{ display: "block", width: 26, height: 2, background: INK, borderRadius: 2 }} />
+          <span data-burger-bar style={{ display: "block", width: 26, height: 2, background: "#fff", borderRadius: 2 }} />
+          <span data-burger-bar style={{ display: "block", width: 26, height: 2, background: "#fff", borderRadius: 2 }} />
         </button>
       </header>
 
@@ -526,12 +546,12 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
         }}
       >
         <HeroBackground />
-        {/* hero-only: darker than the brand TEALD + tight white halo so the mono
-            line reads over both bright windows and dark furniture in the photos */}
-        <span data-rise style={{ position: "relative", zIndex: 1, fontFamily: MONO, fontSize: 12, letterSpacing: ".3em", textTransform: "uppercase", color: "#123c45", textShadow: "0 0 3px rgba(255,255,255,.98), 0 1px 12px rgba(255,255,255,.95)" }}>
+        {/* hero over a dark image scrim: light text (the reliable pattern). The
+            soft dark text-shadow adds separation where a frame is brighter. */}
+        <span data-rise style={{ position: "relative", zIndex: 1, fontFamily: MONO, fontSize: 12, letterSpacing: ".3em", textTransform: "uppercase", color: TEALLT, textShadow: "0 1px 18px rgba(6,12,26,.5)" }}>
           {dict.hero.eyebrow}
         </span>
-        <h1 style={{ position: "relative", zIndex: 1, margin: "30px 0 0", fontFamily: GRO, fontWeight: 700, fontSize: "clamp(58px,10vw,164px)", lineHeight: 0.92, letterSpacing: "-.035em", color: INK, textShadow: "0 2px 28px rgba(255,255,255,.75)" }}>
+        <h1 style={{ position: "relative", zIndex: 1, margin: "30px 0 0", fontFamily: GRO, fontWeight: 700, fontSize: "clamp(58px,10vw,164px)", lineHeight: 0.92, letterSpacing: "-.035em", color: "#fff", textShadow: "0 2px 30px rgba(6,12,26,.45)" }}>
           <span data-rise style={{ display: "inline-block" }}>
             {dict.hero.title}
           </span>
@@ -539,14 +559,12 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             data-rise
-            src="/gam-wordmark.svg"
+            src="/gam-wordmark-white.svg"
             alt="GAM"
             style={{ display: "inline-block", verticalAlign: "top", height: "clamp(46px,8vw,140px)", width: "auto", marginTop: "clamp(10px,1.4vw,22px)" }}
           />
         </h1>
-        {/* hero-only: darker than the section GREY + weight 400 + white halo, so
-            the subtitle stays legible where it crosses busy/bright photo areas */}
-        <p data-rise style={{ position: "relative", zIndex: 1, margin: "36px 0 0", maxWidth: 540, fontWeight: 400, fontSize: "clamp(17px,1.7vw,22px)", lineHeight: 1.62, color: "#22333c", textShadow: "0 0 3px rgba(255,255,255,.95), 0 1px 14px rgba(255,255,255,.92)" }}>
+        <p data-rise style={{ position: "relative", zIndex: 1, margin: "36px 0 0", maxWidth: 540, fontWeight: 400, fontSize: "clamp(17px,1.7vw,22px)", lineHeight: 1.62, color: "rgba(255,255,255,.92)", textShadow: "0 1px 20px rgba(6,12,26,.55)" }}>
           {dict.hero.subtitle}
         </p>
         <div data-rise style={{ position: "relative", zIndex: 1, marginTop: 44, display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
@@ -559,16 +577,16 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
           </button>
           <button
             onClick={nav("contatti")}
-            className="btn-ghost"
-            style={{ background: "transparent", color: INK, border: "1.5px solid #DDE6E8", borderRadius: 999, padding: "16px 34px", fontSize: 16, fontWeight: 600, cursor: "pointer", transition: "border-color .3s ease,color .3s ease" }}
+            className="btn-ghost-light"
+            style={{ background: "rgba(255,255,255,.06)", color: "#fff", border: "1.5px solid rgba(255,255,255,.55)", borderRadius: 999, padding: "16px 34px", fontSize: 16, fontWeight: 600, cursor: "pointer", transition: "border-color .3s ease,background .3s ease" }}
           >
             {dict.hero.ctaContact}
           </button>
         </div>
         {/* scroll cue: desktop-only — on small screens it collides with the wrapped CTA buttons */}
         <div data-scroll-cue style={{ position: "absolute", zIndex: 1, bottom: 16, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: ".24em", color: MUT, textTransform: "uppercase" }}>{dict.hero.scroll}</span>
-          <span style={{ display: "block", width: 1, height: 42, background: "linear-gradient(180deg,#c3cbd6,transparent)", animation: "gam-cue 1.8s ease-in-out infinite" }} />
+          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: ".24em", color: "rgba(255,255,255,.72)", textTransform: "uppercase" }}>{dict.hero.scroll}</span>
+          <span style={{ display: "block", width: 1, height: 42, background: "linear-gradient(180deg,rgba(255,255,255,.7),transparent)", animation: "gam-cue 1.8s ease-in-out infinite" }} />
         </div>
       </section>
 

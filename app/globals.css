@@ -169,6 +169,11 @@ html {
   border-color: #35707e !important;
   color: #35707e !important;
 }
+/* light ghost button on the dark hero scrim */
+.btn-ghost-light:hover {
+  border-color: #fff !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+}
 .btn-teal:hover {
   background: #4d93a2 !important;
   transform: translateY(-2px);
@@ -448,15 +453,13 @@ html {
 .hero-bg-veil {
   position: absolute;
   inset: 0;
-  /* light single-layer wash: a bit more white behind the centred text, images
-     stay clearly visible toward the edges. Headline legibility is reinforced by
-     a soft white halo on the text itself (see the hero h1/p text-shadow). */
-  background: radial-gradient(
-    105% 82% at 50% 47%,
-    rgba(255, 255, 255, 0.44) 0%,
-    rgba(255, 255, 255, 0.22) 60%,
-    rgba(255, 255, 255, 0.12) 100%
-  );
+  /* dark scrim so white hero text reads cleanly over any frame (the pro,
+     reliable pattern — replaces the old light veil + dark text). A reliably
+     dark band at the very top keeps the white nav + logo legible on every
+     frame (bright or dark); a radial darkens the centre behind the headline. */
+  background:
+    radial-gradient(85% 62% at 50% 52%, rgba(9, 15, 32, 0.58) 0%, rgba(9, 15, 32, 0.34) 62%, rgba(9, 15, 32, 0.2) 100%),
+    linear-gradient(180deg, rgba(9, 15, 32, 0.5) 0%, rgba(9, 15, 32, 0.34) 14%, rgba(9, 15, 32, 0.3) 30%, rgba(9, 15, 32, 0.44) 66%, rgba(9, 15, 32, 0.5) 100%);
 }
 @media (prefers-reduced-motion: reduce) {
   /* freeze on the first frame, no zoom/crossfade */
