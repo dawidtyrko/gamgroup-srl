@@ -804,6 +804,11 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
 
       {/* ---- Clienti (marquee) ---- */}
       <section style={{ background: "#fff", padding: "clamp(70px,9vw,120px) 0", overflow: "hidden" }}>
+        {/* subtle hairline separating the partners strip from the white About
+            section above it (no colour change between the two otherwise) */}
+        <div aria-hidden style={{ maxWidth: 1180, margin: "0 auto clamp(48px,6vw,80px)", padding: "0 6vw" }}>
+          <div style={{ borderTop: "1px solid #DDE6E8" }} />
+        </div>
         <p data-rise style={{ margin: "0 0 clamp(40px,5vw,64px)", textAlign: "center", ...eyebrow(MUT), padding: "0 6vw" }}>{dict.partners.eyebrow}</p>
         <div style={{ display: "flex", alignItems: "center", width: "max-content", gap: 88, animation: "gam-marq 28s linear infinite", paddingLeft: 88 }}>
           {[...partnerLogos, ...partnerLogos].map((pl, i) => (
