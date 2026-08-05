@@ -18,10 +18,10 @@ export const en: Dict = {
   },
   dropdown: { pillars: "Pillars", channels: "Channels" },
   hero: {
-    eyebrow: "IT Consulting — System Integration — since 2001",
+    eyebrow: "IT Consulting • System Integration • Artificial Intelligence • since 2001",
     title: "Welcome to",
     subtitle:
-      "We evolve and optimise our clients' business processes, from consulting to systems.",
+      "We evolve and optimise companies' business processes. From consulting to systems, with AI as an integral part of every project.",
     ctaServices: "Explore our services",
     ctaContact: "Contact us",
     scroll: "Scroll",
@@ -31,7 +31,7 @@ export const en: Dict = {
   claim: {
     muted: "We take your business",
     strong: " to the next level.",
-    sub: "Innovating IT systems cuts costs, increases flexibility and improves service quality.",
+    sub: "We know the systems that run your company inside out, and we integrate artificial intelligence to make them even more efficient — going well beyond pilot projects. We deliver solutions at scale, monitoring and measuring concrete results, and ensuring a return on the investment in our projects.",
   },
   services: {
     eyebrow: "01 — 04",
@@ -43,6 +43,7 @@ export const en: Dict = {
         tags: ["JDE", "SAP", "IBM i-Series", "Infor", "Oracle Cloud", "NetSuite", "BI", "Zucchetti", "CyberPlan"],
         description: [
           "Over 30 years of hands-on experience — from implementation to customisation, from upgrades to AMS. GAM Group manages the leading ERP systems, including SAP, AS400 (IBM i-Series), JDE, Infor, Oracle Cloud and NetSuite.",
+          "Our team of experts knows the systems and the needs of your business. On that foundation we integrate automations and AI agents to take manual work off orders, master data and reporting.",
         ],
       },
       {
@@ -50,8 +51,8 @@ export const en: Dict = {
         title: "Applied Consulting, AI & BI",
         tags: ["Project Management", "Lean Management", "AI", "Business Intelligence", "AI Agents / Copilots"],
         description: [
-          "Strategic project management and the adoption of AI and Business Intelligence.",
-          "Roadmaps, Lean methodologies to cut waste, predictive dashboards and AI agents that turn data into real, actionable decisions.",
+          "Business data is often scattered across different management software, spreadsheets and various tools. We organise it in a structured way and make it easy to interpret, enabling more effective decision-making.",
+          "Predictive dashboards, AI agents and copilots built on each company's own processes, ensuring the optimisation of the underlying process and the savings of the solutions designed.",
         ],
       },
       {
@@ -60,7 +61,7 @@ export const en: Dict = {
         tags: ["Application Maintenance", "Software Development", "Integration & Migration"],
         description: [
           "Custom software and application development and the integration of ERP, CRM and BI systems into a single ecosystem.",
-          "Development, migration and application maintenance in an end-to-end approach, for interoperability and continuity at every stage.",
+          "A single point of contact with an end-to-end approach, from analysis to maintenance. The result is a single ecosystem, with clean, accessible data — the condition for AI to truly work.",
         ],
       },
       {
@@ -68,8 +69,8 @@ export const en: Dict = {
         title: "Support & Maintenance",
         tags: ["Workplace services", "Networks & Infrastructure", "HD1 & HD2", "Security", "HW–SW", "Hosting"],
         description: [
-          "360° IT infrastructure — from multi-level help desk to data security, through to hosting and cloud.",
-          "Fast, proactive interventions for a system that is always up and running.",
+          "End-to-end 360° IT infrastructure — from multi-level help desk to data security, through to hosting and cloud.",
+          "We guarantee fast, proactive interventions for a system that is always up and running.",
         ],
       },
     ],
@@ -84,7 +85,7 @@ export const en: Dict = {
       },
       { name: "SAP", items: ["SAP ECC", "SAP S/4HANA", "Business ByDesign", "SAP B.One"] },
       { name: "IBM i-Series", items: ["SIGIP", "ACG", "STEALTH", "SMEUP", "GALILEO", "GEA"] },
-      { name: "Business Intelligence", items: ["Power BI", "Dashboard & Reporting", "Data analysis", "Data Integration"] },
+      { name: "Business Intelligence", items: ["Power BI", "Qlik", "Tableau", "SAP BO"] },
     ],
   },
   stats: {
@@ -105,9 +106,9 @@ export const en: Dict = {
       year: "2001",
       mid: ", based in ",
       city: "Treviso",
-      post: ". For over twenty years we have supported businesses in evolving and managing their IT systems.",
+      post: ". For over twenty years we have supported businesses in evolving and managing their IT systems, guiding them through the artificial-intelligence revolution with concrete solutions, integrated into their processes and results-oriented.",
     },
-    sectorsLabel: "Sectors",
+    sectorsLabel: "Sectors we work in",
     sectors: ["Retail", "Food", "Automotive", "Fashion", "Aerospace", "… and many more"],
   },
   projectsSec: {
@@ -137,20 +138,28 @@ export const en: Dict = {
     title: "Frequently asked questions",
     items: [
       {
-        q: "What does GAM Group do?",
-        a: "GAM Group is an IT consulting and system integration company active since 2001. We support businesses with ERP (SAP, IBM i-Series), applied consulting with AI and Business Intelligence, software development and systems support.",
-      },
-      {
-        q: "Where is GAM Group located?",
-        a: "Our office is in Treviso, Italy — Via Callalta 31/E. We work with clients across Italy, from SMEs to multinationals and public administration.",
+        q: "How do we start an AI journey if we're beginning from scratch?",
+        a: "We start from what you already have. We look at your processes and data, identify a concrete case where AI delivers a measurable advantage, and begin there — a small first project with a visible result, before scaling up. No revolution: one step at a time.",
       },
       {
         q: "Which systems and technologies do you work with?",
-        a: "SAP (ECC, S/4HANA), IBM i-Series (AS400), Microsoft 365 with Power Platform and Copilot, and Business Intelligence tools such as Power BI.",
+        a: "We support the leading ERP systems, including SAP, IBM i-Series (AS400), JDE, Infor, Oracle Cloud and NetSuite. On the Microsoft side we work with the 365 ecosystem, Power Platform, Copilot and Azure AI. For data we mainly use Power BI and Business Intelligence tools.",
       },
       {
-        q: "How can I request a consultation?",
-        a: "Fill in the form in the Contact section, write to info@gamgroup.it or call +39 0422 583693 — we will get back to you as soon as possible.",
+        q: "How do you train people on AI and new systems?",
+        a: "We support teams through adoption, with paths tailored to roles and to the company's real processes. The goal is to identify practical adoption cases straight away and experiment with them during the training sessions, so that these technologies become part of the everyday work of the people involved.",
+      },
+      {
+        q: "How do you work with public administration?",
+        a: "We support several public bodies with training and up-skilling on artificial intelligence, with attention to the procedural constraints and data-management requirements that context demands, in compliance with the regulations in force.",
+      },
+      {
+        q: "How does a collaboration with GAM Group begin?",
+        a: "Our approach follows no predefined path: every project is built to measure, taking into account the company's specific needs and characteristics, weighed against the experience we have gained in the field. It always starts with an open dialogue, followed by an in-depth analysis of the process in question, so we can pinpoint the concrete impact our work — whether consulting or development — can generate. This lets us offer genuinely effective, targeted solutions that deliver tangible value from the very start.",
+      },
+      {
+        q: "How can we request a first contact?",
+        a: "You can write to info@gamgroup.it, call +39 0422 583693, or fill in the form in the Contact section below.",
       },
     ],
   },
