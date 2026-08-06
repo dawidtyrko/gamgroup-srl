@@ -600,3 +600,11 @@ summary:focus-visible {
     grid-template-columns: 1fr !important;
   }
 }
+/* Short viewports (landscape laptops / split windows): the hero content is
+   vertically centred, so a bottom-pinned cue can overlap the CTA buttons.
+   The width rule above only covers narrow screens — this covers short ones. */
+@media (max-height: 760px) {
+  [data-scroll-cue] {
+    display: none !important;
+  }
+}

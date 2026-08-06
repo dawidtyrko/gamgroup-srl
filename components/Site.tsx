@@ -336,6 +336,13 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
   const activeJob = jobIndex != null ? jobs[jobIndex] : null;
   const privacyHref = locale === "en" ? "/en/privacy" : "/privacy";
 
+  // Persist a manual language choice so the geo middleware never overrides it.
+  // The switch always targets the other locale; remember that target.
+  const rememberLangChoice = () => {
+    const target = locale === "it" ? "en" : "it";
+    document.cookie = `gam_locale=${target}; path=/; max-age=31536000; samesite=lax`;
+  };
+
   const submitForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
@@ -511,6 +518,7 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
           <a
             data-lang
             href={dict.langSwitch.href}
+            onClick={rememberLangChoice}
             className="lang-switch"
             aria-label={locale === "it" ? "English version" : "Versione italiana"}
             style={{ fontFamily: MONO, fontSize: 12, letterSpacing: ".08em", color: "rgba(255,255,255,.92)", textDecoration: "none", border: "1px solid rgba(255,255,255,.5)", borderRadius: 999, padding: "8px 13px", transition: "color .3s ease,border-color .3s ease" }}
@@ -590,6 +598,18 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
         </div>
       </section>
 
+      {/* ---- Claim (sits above the bridge graphic per copy-review markup) ---- */}
+      <section style={{ background: "#fff", padding: "clamp(110px,15vw,220px) 6vw" }}>
+        <div style={{ maxWidth: 1080, margin: "0 auto" }}>
+          <p data-rise style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(30px,4.6vw,62px)", lineHeight: 1.16, letterSpacing: "-.02em", color: INK }}>
+            <span style={{ color: MUT }}>{dict.claim.muted}</span>{dict.claim.strong}
+            <span style={{ display: "block", marginTop: 18, fontFamily: "'Manrope', sans-serif", fontWeight: 300, fontSize: "clamp(17px,1.6vw,21px)", lineHeight: 1.65, color: GREY, maxWidth: 680 }}>
+              {dict.claim.sub}
+            </span>
+          </p>
+        </div>
+      </section>
+
       {/* ---- Bridge graphic (business ↔ IT, powered by AI) — the signature
              element (visual spec §6). Animated SVG (SMIL + CSS) served as an
              <img>: the browser keeps the pulses/glow running. ---- */}
@@ -601,18 +621,6 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
           alt={dict.bridge.alt}
           style={{ display: "block", width: "100%", maxWidth: 960, height: "auto", margin: "0 auto" }}
         />
-      </section>
-
-      {/* ---- Claim ---- */}
-      <section style={{ background: "#fff", padding: "clamp(110px,15vw,220px) 6vw" }}>
-        <div style={{ maxWidth: 1080, margin: "0 auto" }}>
-          <p data-rise style={{ margin: 0, fontFamily: GRO, fontWeight: 500, fontSize: "clamp(30px,4.6vw,62px)", lineHeight: 1.16, letterSpacing: "-.02em", color: INK }}>
-            <span style={{ color: MUT }}>{dict.claim.muted}</span>{dict.claim.strong}
-            <span style={{ display: "block", marginTop: 18, fontFamily: "'Manrope', sans-serif", fontWeight: 300, fontSize: "clamp(17px,1.6vw,21px)", lineHeight: 1.65, color: GREY, maxWidth: 680 }}>
-              {dict.claim.sub}
-            </span>
-          </p>
-        </div>
       </section>
 
       {/* ---- I progetti (pinned horizontal gallery) ---- */}
@@ -727,7 +735,8 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                       <div data-svc-detail style={{ paddingBottom: "clamp(28px,3.4vw,46px)" }}>
                         {/* content column centered in the panel */}
                         <div style={{ maxWidth: 760, margin: "0 auto" }}>
-                          {svc.description.map((par) => (
+                          {/* "prima della grafica": intro paragraph before the diagram */}
+                          {svc.description.slice(0, 1).map((par) => (
                             <p key={par} style={{ margin: "0 0 12px", fontWeight: 300, fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: S2 }}>{par}</p>
                           ))}
                           {serviceDetailGraphics[si] && (
@@ -740,6 +749,10 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                               dangerouslySetInnerHTML={{ __html: serviceDetailGraphics[si] }}
                             />
                           )}
+                          {/* "dopo la grafica": remaining paragraph(s) below the diagram */}
+                          {svc.description.slice(1).map((par) => (
+                            <p key={par} style={{ margin: "clamp(20px,2.4vw,32px) 0 0", fontWeight: 300, fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: S2 }}>{par}</p>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -919,7 +932,7 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                   {f.q}
                   <span className="faq-mark" aria-hidden style={{ flex: "none", fontFamily: MONO, fontSize: 20, color: TEAL, transition: "transform .3s ease" }}>+</span>
                 </summary>
-                <p style={{ margin: 0, padding: "0 0 clamp(22px,2.6vw,32px)", maxWidth: 760, fontWeight: 300, fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: S2 }}>{f.a}</p>
+                <p style={{ margin: 0, padding: "0 0 clamp(22px,2.6vw,32px)", maxWidth: 760, fontWeight: 300, fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: S2 }}>{linkifyContacts(f.a)}</p>
               </details>
             ))}
           </div>
@@ -1095,7 +1108,7 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                 {label}
               </a>
             ))}
-            <a href={dict.langSwitch.href} style={{ fontFamily: MONO, fontSize: 16, letterSpacing: ".08em", color: GREY, textDecoration: "none", padding: "22px 0", borderTop: "1px solid #DDE6E8", marginTop: 10 }}>
+            <a href={dict.langSwitch.href} onClick={rememberLangChoice} style={{ fontFamily: MONO, fontSize: 16, letterSpacing: ".08em", color: GREY, textDecoration: "none", padding: "22px 0", borderTop: "1px solid #DDE6E8", marginTop: 10 }}>
               {dict.langSwitch.menuLabel}
             </a>
           </nav>
@@ -1176,4 +1189,84 @@ function ModalBlock({ label, first, children }: { label: string; first?: boolean
       {children}
     </div>
   );
+}
+
+/**
+ * Inline contact (email / phone) rendered as a click-to-copy link.
+ * Keeps a real mailto:/tel: href for right-click + mobile long-press, but a
+ * normal click copies the value to the clipboard and flashes "Copiato!".
+ */
+function ContactCopy({ value, kind }: { value: string; kind: "email" | "tel" }) {
+  const [copied, setCopied] = useState(false);
+  const href = kind === "email" ? `mailto:${value}` : `tel:${value.replace(/\s+/g, "")}`;
+  const copy = (e: MouseEvent<HTMLAnchorElement>) => {
+    // primary action is copy, not navigation — don't open the mail/phone app
+    e.preventDefault();
+    navigator.clipboard
+      ?.writeText(value)
+      .then(() => {
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 1400);
+      })
+      .catch(() => {});
+  };
+  return (
+    <a
+      href={href}
+      onClick={copy}
+      aria-label={copied ? `${value} copiato` : `Copia ${value}`}
+      title={copied ? "Copiato" : "Copia"}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 5,
+        color: TEALD,
+        textDecoration: "none",
+        borderBottom: `1px solid rgba(77,147,162,.45)`,
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {value}
+      <svg
+        aria-hidden
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={copied ? 2.6 : 1.9}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{ flex: "none", color: copied ? TEALD : TEAL, opacity: copied ? 1 : 0.65, transition: "opacity .2s ease, color .2s ease", transform: "translateY(.5px)" }}
+      >
+        {copied ? (
+          <path d="M20 6 9 17l-5-5" />
+        ) : (
+          <>
+            <rect x="9" y="9" width="12" height="12" rx="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </>
+        )}
+      </svg>
+    </a>
+  );
+}
+
+// Split a plain string into text + clickable email/phone nodes.
+const CONTACT_RE = /([\w.+-]+@[\w-]+\.[\w.-]+)|(\+\d[\d\s]{6,}\d)/g;
+function linkifyContacts(text: string): React.ReactNode[] {
+  const out: React.ReactNode[] = [];
+  let last = 0;
+  let m: RegExpExecArray | null;
+  CONTACT_RE.lastIndex = 0;
+  let i = 0;
+  while ((m = CONTACT_RE.exec(text)) !== null) {
+    if (m.index > last) out.push(text.slice(last, m.index));
+    if (m[1]) out.push(<ContactCopy key={`c${i++}`} value={m[1]} kind="email" />);
+    else out.push(<ContactCopy key={`c${i++}`} value={m[2].trim()} kind="tel" />);
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) out.push(text.slice(last));
+  return out;
 }
