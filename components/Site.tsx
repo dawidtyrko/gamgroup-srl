@@ -579,20 +579,22 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
           <button
             onClick={nav("servizi")}
             className="btn-navy"
-            style={{ background: TEALD, color: "#fff", border: "none", borderRadius: 999, padding: "16px 34px", fontSize: 16, fontWeight: 600, cursor: "pointer", transition: "background .3s ease,transform .3s ease" }}
+            style={{ minWidth: 260, textAlign: "center", background: TEALD, color: "#fff", border: "none", borderRadius: 999, padding: "16px 34px", fontSize: 16, fontWeight: 600, cursor: "pointer", transition: "background .3s ease,transform .3s ease" }}
           >
             {dict.hero.ctaServices}
           </button>
           <button
             onClick={nav("contatti")}
             className="btn-ghost-light"
-            style={{ background: "rgba(255,255,255,.06)", color: "#fff", border: "1.5px solid rgba(255,255,255,.55)", borderRadius: 999, padding: "16px 34px", fontSize: 16, fontWeight: 600, cursor: "pointer", transition: "border-color .3s ease,background .3s ease" }}
+            style={{ minWidth: 260, textAlign: "center", background: "rgba(255,255,255,.06)", color: "#fff", border: "1.5px solid rgba(255,255,255,.55)", borderRadius: 999, padding: "16px 34px", fontSize: 16, fontWeight: 600, cursor: "pointer", transition: "border-color .3s ease,background .3s ease" }}
           >
             {dict.hero.ctaContact}
           </button>
         </div>
-        {/* scroll cue: desktop-only — on small screens it collides with the wrapped CTA buttons */}
-        <div data-scroll-cue style={{ position: "absolute", zIndex: 1, bottom: 16, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+        {/* scroll cue: in normal flow, centred directly under the seam between
+            the two equal-width CTAs — so it reads as "between" them and can never
+            overlap the buttons, whatever the viewport height */}
+        <div data-scroll-cue style={{ position: "relative", zIndex: 1, marginTop: "clamp(26px,3.4vh,40px)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
           <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: ".24em", color: "rgba(255,255,255,.72)", textTransform: "uppercase" }}>{dict.hero.scroll}</span>
           <span style={{ display: "block", width: 1, height: 42, background: "linear-gradient(180deg,rgba(255,255,255,.7),transparent)", animation: "gam-cue 1.8s ease-in-out infinite" }} />
         </div>
