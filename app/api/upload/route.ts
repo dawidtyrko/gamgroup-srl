@@ -64,7 +64,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, url: blob.url });
   } catch (err) {
     console.error("[api/upload] failed:", err);
-    const detail = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: `Upload non riuscito: ${detail}` }, { status: 500 });
+    return NextResponse.json({ error: "Upload non riuscito." }, { status: 500 });
   }
 }
