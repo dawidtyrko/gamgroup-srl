@@ -106,10 +106,33 @@ function ProjectsPanel({ password }: { password: string }) {
   const [status, setStatus] = useState<Status>({ state: "idle" });
   const [projects, setProjects] = useState<Project[]>([]);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const set = (k: keyof typeof emptyProject) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const uploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-selecting the same file later
+    if (!file) return;
+    if (!password) { setStatus({ state: "error", message: "Inserisci la password prima di caricare." }); return; }
+    setUploading(true);
+    setStatus({ state: "loading" });
+    try {
+      const data = new FormData();
+      data.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", headers: { "x-admin-password": password }, body: data });
+      const json = await res.json();
+      if (!res.ok) { setStatus({ state: "error", message: json.error || "Upload non riuscito." }); return; }
+      setForm((f) => ({ ...f, image: json.url }));
+      setStatus({ state: "ok", message: "Immagine caricata." });
+    } catch {
+      setStatus({ state: "error", message: "Rete non raggiungibile." });
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const refreshList = useCallback(async () => {
     try {
@@ -206,7 +229,23 @@ function ProjectsPanel({ password }: { password: string }) {
           <Row label="Area tecnica (opzionale)"><input type="text" value={form.area} onChange={set("area")} style={inputStyle} placeholder="es. AMS, EDI, AS400" /></Row>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
-          <Row label="URL immagine (opzionale)"><input type="text" value={form.image} onChange={set("image")} style={inputStyle} placeholder="https://... oppure /photos/nome.jpg" /></Row>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <span style={labelStyle}>Immagine (opzionale)</span>
+            <input type="text" value={form.image} onChange={set("image")} style={inputStyle} placeholder="https://... oppure /photos/nome.jpg" />
+            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+              <label style={{ ...btnSmall(TEAL, uploading), display: "inline-block", cursor: uploading ? "wait" : "pointer" }}>
+                {uploading ? "Caricamento…" : "Carica file"}
+                <input type="file" accept="image/*" onChange={uploadImage} disabled={uploading} style={{ display: "none" }} />
+              </label>
+              {form.image && (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={form.image} alt="" width={44} height={44} style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 8, border: "1px solid #DDE6E8" }} />
+                  <button type="button" onClick={() => setForm((f) => ({ ...f, image: "" }))} style={{ background: "none", border: "none", color: "#b3261e", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Rimuovi</button>
+                </>
+              )}
+            </div>
+          </div>
           <Row label="Etichetta immagine (se manca la foto)"><input type="text" value={form.img} onChange={set("img")} style={inputStyle} placeholder="es. [ punto vendita ]" /></Row>
         </div>
         <Row label="Titolo"><input type="text" required value={form.title} onChange={set("title")} style={inputStyle} placeholder="Titolo del case study" /></Row>
