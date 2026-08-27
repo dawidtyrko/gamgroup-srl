@@ -91,7 +91,7 @@ export const en: Dict = {
   stats: {
     eyebrow: "Numbers are our strength",
     items: [
-      { value: 20, label: "Years of experience" },
+      { value: 25, label: "Years of experience" },
       { value: 60, label: "Qualified experts" },
       { value: 130, label: "Satisfied clients" },
       { value: 20, label: "Partners" },
