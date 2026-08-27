@@ -206,7 +206,7 @@ export const DEFAULT_JOBS: Job[] = [
       title: "Senior IT Consultant",
       sede: "Remoto / Treviso / Padova",
       type: "Contratto Commercio / Tempo indeterminato",
-      tags: ["SAP", "AS/400", "5+ anni"],
+      tags: ["SAP", "PWR", "5+ anni"],
       description: [
         "Siamo alla ricerca di un Senior IT Consultant con una solida esperienza in ambito economico e tecnico, e con competenze avanzate nel settore IT.",
         "Il candidato ideale ha attitudini sviluppate nel lavoro di squadra e nei rapporti interpersonali, ed è in grado di supportare progetti complessi, portando valore aggiunto con la sua esperienza.",
@@ -217,7 +217,7 @@ export const DEFAULT_JOBS: Job[] = [
           items: [
             "Esperienza di almeno 4-5 anni in uno dei seguenti ambiti:",
             "Implementazione e gestione di SAP nelle aree logistica (WM, EWM, PP-PS, VC, SD-LE) o amministrazione e finanza (FI, CO, RE, BPC, TR)",
-            "Gestione di sistemi AS/400",
+            "Gestione di sistemi PWR",
           ],
         },
         {
@@ -233,7 +233,7 @@ export const DEFAULT_JOBS: Job[] = [
       title: "Senior IT Consultant",
       sede: "Remote / Treviso / Padua",
       type: "Commerce contract / Permanent",
-      tags: ["SAP", "AS/400", "5+ years"],
+      tags: ["SAP", "PWR", "5+ years"],
       description: [
         "We are looking for a Senior IT Consultant with solid experience in the economic and technical fields, and advanced IT expertise.",
         "The ideal candidate has well-developed teamwork and interpersonal skills, and is able to support complex projects, adding value through their experience.",
@@ -244,7 +244,7 @@ export const DEFAULT_JOBS: Job[] = [
           items: [
             "At least 4-5 years of experience in one of the following areas:",
             "Implementation and management of SAP in logistics (WM, EWM, PP-PS, VC, SD-LE) or administration and finance (FI, CO, RE, BPC, TR)",
-            "Management of AS/400 systems",
+            "Management of PWR systems",
           ],
         },
         {

@@ -42,7 +42,7 @@ export const en: Dict = {
         title: "ERP Technical Consulting",
         tags: ["JDE", "SAP", "IBM i-Series", "Infor", "Oracle Cloud", "NetSuite", "BI", "Zucchetti", "CyberPlan"],
         description: [
-          "Over 30 years of hands-on experience — from implementation to customisation, from upgrades to AMS. GAM Group manages the leading ERP systems, including SAP, AS400 (IBM i-Series), JDE, Infor, Oracle Cloud and NetSuite.",
+          "Over 30 years of hands-on experience — from implementation to customisation, from upgrades to AMS. GAM Group manages the leading ERP systems, including SAP, PWR (IBM i-Series), JDE, Infor, Oracle Cloud and NetSuite.",
           "Our team of experts knows the systems and the needs of your business. On that foundation we integrate automations and AI agents to take manual work off orders, master data and reporting.",
         ],
       },
@@ -143,7 +143,7 @@ export const en: Dict = {
       },
       {
         q: "Which systems and technologies do you work with?",
-        a: "We support the leading ERP systems, including SAP, IBM i-Series (AS400), JDE, Infor, Oracle Cloud and NetSuite. On the Microsoft side we work with the 365 ecosystem, Power Platform, Copilot and Azure AI. For data we mainly use Power BI and Business Intelligence tools.",
+        a: "We support the leading ERP systems, including SAP, IBM i-Series (PWR), JDE, Infor, Oracle Cloud and NetSuite. On the Microsoft side we work with the 365 ecosystem, Power Platform, Copilot and Azure AI. For data we mainly use Power BI and Business Intelligence tools.",
       },
       {
         q: "How do you train people on AI and new systems?",

@@ -41,7 +41,7 @@ export const it: Dict = {
         title: "Consulenza Tecnica ERP",
         tags: ["JDE", "SAP", "IBM i-Series", "Infor", "Oracle Cloud", "NetSuite", "BI", "Zucchetti", "CyberPlan"],
         description: [
-          "Oltre 30 anni di esperienza sul campo, dall’implementazione alla personalizzazione, dall’aggiornamento all’AMS, GAM Group gestisce i principali sistemi ERP, tra cui SAP, AS400 (IBM i-Series), JDE, Infor, Oracle Cloud e NetSuite.",
+          "Oltre 30 anni di esperienza sul campo, dall’implementazione alla personalizzazione, dall’aggiornamento all’AMS, GAM Group gestisce i principali sistemi ERP, tra cui SAP, PWR (IBM i-Series), JDE, Infor, Oracle Cloud e NetSuite.",
           "Il nostro team di esperti conosce i sistemi e le esigenze del tuo business. Su questa base integriamo automazioni e agenti AI per togliere lavoro manuale su ordini, anagrafiche e reportistica.",
         ],
       },
@@ -146,7 +146,7 @@ export const it: Dict = {
       },
       {
         q: "Su quali gestionali e tecnologie lavorate?",
-        a: "Seguiamo i principali sistemi ERP, tra cui SAP, IBM i-Series (AS400), JDE, Infor, Oracle Cloud e NetSuite. Sul fronte Microsoft lavoriamo con l’ecosistema 365, Power Platform, Copilot e Azure AI. Per i dati usiamo principalmente Power BI e strumenti di Business Intelligence.",
+        a: "Seguiamo i principali sistemi ERP, tra cui SAP, IBM i-Series (PWR), JDE, Infor, Oracle Cloud e NetSuite. Sul fronte Microsoft lavoriamo con l’ecosistema 365, Power Platform, Copilot e Azure AI. Per i dati usiamo principalmente Power BI e strumenti di Business Intelligence.",
       },
       {
         q: "Come formate le persone sull’AI e sui nuovi sistemi?",

@@ -226,7 +226,7 @@ function ProjectsPanel({ password }: { password: string }) {
         <PanelHeading title={isEdit ? "Modifica progetto" : "Nuovo progetto"} onCancel={isEdit ? resetForm : undefined} />
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
           <Row label="Settore (pill)"><input type="text" required value={form.sector} onChange={set("sector")} style={inputStyle} placeholder="es. Retail" /></Row>
-          <Row label="Area tecnica (opzionale)"><input type="text" value={form.area} onChange={set("area")} style={inputStyle} placeholder="es. AMS, EDI, AS400" /></Row>
+          <Row label="Area tecnica (opzionale)"><input type="text" value={form.area} onChange={set("area")} style={inputStyle} placeholder="es. AMS, EDI, PWR" /></Row>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

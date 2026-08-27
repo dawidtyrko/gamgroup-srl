@@ -27,7 +27,7 @@ export type Project = {
   description: string;
   benefits: string[];
   featured?: boolean; // shown in the "Case study in evidenza" block on the homepage
-  area?: string; // technical area badge, e.g. "AMS", "EDI", "AS400"
+  area?: string; // technical area badge, e.g. "AMS", "EDI", "PWR"
   image?: string; // photo URL (absolute or /photos/...); rendered with the duotone treatment
   en?: ProjectEn; // English fields — anything missing falls back to Italian
 };
@@ -84,14 +84,14 @@ export const DEFAULT_PROJECTS: Project[] = [
   {
     id: "seed-automotive-as400",
     sector: "Automotive",
-    area: "AS400",
+    area: "PWR",
     image: "/photos/automotive.jpg",
     img: "[ linea automotive ]",
-    title: "Innovazione e Supporto Continuo nell’Area AS400",
+    title: "Innovazione e Supporto Continuo nell’Area PWR",
     challenge:
       "Mantenere ed evolvere sistemi gestionali IBM i-Series critici per la produzione, senza interruzioni del servizio.",
     description:
-      "Manutenzione correttiva ed evolutiva su AS400, con sviluppi mirati e affiancamento costante ai team interni del cliente.",
+      "Manutenzione correttiva ed evolutiva su PWR, con sviluppi mirati e affiancamento costante ai team interni del cliente.",
     benefits: [
       "Sistemi sempre disponibili",
       "Evoluzioni rilasciate in sicurezza",
