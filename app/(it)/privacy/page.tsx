@@ -56,9 +56,9 @@ export default function PrivacyPage() {
 
         <h2 style={h2}>1. Titolare del trattamento</h2>
         <p style={p}>
-          <strong style={{ fontWeight: 600, color: NAVY }}>GAM Group Srl</strong> — Via Callalta 31/E, 31100 Treviso (TV), Italia
+          <strong style={{ fontWeight: 600, color: NAVY }}>GAM Group Srl</strong> — Via Siora Andriana del Vescovo, 5/C, 31100 Treviso (TV), Italia
           <br />
-          P.IVA: 03641560267 · Email: <a href="mailto:info@gamgroup.it" style={{ color: NAVY, borderBottom: `1px solid ${TEAL}`, textDecoration: "none" }}>info@gamgroup.it</a> · Tel: +39 0422 583693
+          P.IVA: 03641560267 · Email: <a href="mailto:info@gamgroup.it" style={{ color: NAVY, borderBottom: `1px solid ${TEAL}`, textDecoration: "none" }}>info@gamgroup.it</a>
         </p>
 
         <h2 style={h2}>2. Dati trattati e finalità</h2>

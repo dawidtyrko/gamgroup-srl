@@ -83,7 +83,7 @@ export const it: Dict = {
         items: ["MS365 Suite", "Power Automate", "Power Apps", "SharePoint", "Dynamics 365", "Power BI", "Copilot 365", "Copilot Studio", "Azure AI", "AI Hub"],
       },
       { name: "SAP", items: ["SAP ECC", "SAP S/4HANA", "Business ByDesign", "SAP B.One"] },
-      { name: "IBM i-Series", items: ["SIGIP", "ACG", "STEALTH", "SMEUP", "GALILEO", "GEA"] },
+      { name: "IBM i-Series", items: ["SIGIP", "ACG", "STEALTH", "SMEUP", "GALILEO", "GEA", "Gipros"] },
       // Per new spec the 4th channel is Business Intelligence (was Infor).
       // List confirmed from the approved copy review (GAM-copy-sito).
       { name: "Business Intelligence", items: ["Power BI", "Qlik", "Tableau", "SAP BO"] },
@@ -162,14 +162,14 @@ export const it: Dict = {
       },
       {
         q: "Come possiamo richiedere un primo contatto?",
-        a: "Potete scrivere a info@gamgroup.it, chiamare il +39 0422 583693, oppure compilare il modulo nella sezione Contattaci che segue.",
+        a: "Potete scrivere a info@gamgroup.it oppure compilare il modulo nella sezione Contattaci che segue.",
       },
     ],
   },
   contact: {
     eyebrow: "Contatti",
     title: "Scopriamo insieme cosa possiamo fare.",
-    address: "Via Callalta 31/E – 31100 Treviso",
+    address: "Via Siora Andriana del Vescovo, 5/C – 31100 Treviso",
     nome: "Nome",
     cognome: "Cognome",
     email: "Email aziendale",
@@ -200,7 +200,7 @@ export const it: Dict = {
     close: "Chiudi",
   },
   footer: {
-    copyright: "© 2026 GAM Group Srl — Via Callalta 31/E, 31100 Treviso (TV) — P.IVA 03641560267",
+    copyright: "© 2026 GAM Group Srl — Via Siora Andriana del Vescovo, 5/C, 31100 Treviso (TV) — P.IVA 03641560267",
     privacy: "Privacy",
   },
   langSwitch: { label: "EN", href: "/en", menuLabel: "English →" },

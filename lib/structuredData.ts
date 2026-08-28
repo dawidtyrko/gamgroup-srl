@@ -12,16 +12,15 @@ export function orgLd(locale: Locale) {
         : "IT consulting and system integration since 2001: ERP (SAP, IBM i-Series), AI & Business Intelligence, software development, support and maintenance.",
     foundingDate: "2001",
     email: "info@gamgroup.it",
-    telephone: "+39 0422 583693",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Via Callalta 31/E",
+      streetAddress: "Via Siora Andriana del Vescovo, 5/C",
       postalCode: "31100",
       addressLocality: "Treviso",
       addressRegion: "TV",
       addressCountry: "IT",
     },
-    geo: { "@type": "GeoCoordinates", latitude: 45.66099553158068, longitude: 12.276944105971117 },
+    geo: { "@type": "GeoCoordinates", latitude: 45.6706739, longitude: 12.2550351 },
   };
 }
 

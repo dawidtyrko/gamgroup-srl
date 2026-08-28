@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 import type { Map as LeafletMap } from "leaflet";
 
-const LAT = 45.66099553158068;
-const LNG = 12.276944105971117;
+const LAT = 45.6706739;
+const LNG = 12.2550351;
 
 /**
  * Office map. Rendered via next/dynamic with ssr:false from <Site> (Leaflet
@@ -148,13 +148,13 @@ export default function GamMap({
             color: "#6B7686",
           }}
         >
-          Via Callalta 31/E
+          Via Siora Andriana del Vescovo, 5/C
           <br />
           31100 Treviso (TV)
         </p>
         <a
           className="map-dir"
-          href="https://www.google.com/maps/dir/?api=1&destination=45.66099553158068,12.276944105971117"
+          href="https://www.google.com/maps/dir/?api=1&destination=45.6706739,12.2550351"
           target="_blank"
           rel="noopener"
           style={{

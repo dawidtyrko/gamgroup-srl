@@ -949,7 +949,6 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
             <div data-rise style={{ marginTop: 44, display: "flex", flexDirection: "column", gap: 16, fontWeight: 300, fontSize: 18 }}>
               <span style={{ color: "rgba(255,255,255,.75)" }}>{dict.contact.address}</span>
               <a href="mailto:info@gamgroup.it" className="link-teal-white" style={{ color: TEALLT, textDecoration: "none", transition: "color .3s ease" }}>info@gamgroup.it</a>
-              <a href="tel:+390422583693" className="link-teal-white" style={{ color: TEALLT, textDecoration: "none", transition: "color .3s ease" }}>+39 0422 583693</a>
             </div>
           </div>
           <div data-rise>
