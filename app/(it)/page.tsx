@@ -1,39 +1,15 @@
-import type { Metadata } from "next";
-import Site from "@/components/Site";
-import { getProjects } from "@/lib/projects";
-import { getJobs, localizeJob } from "@/lib/jobs";
+import { HomePage } from "@/components/site/pages";
 import { it } from "@/lib/i18n/it";
-import { orgLd, faqLd } from "@/lib/structuredData";
+import { pageMetadata } from "@/lib/pageMeta";
+import { ldJson, orgLd } from "@/lib/structuredData";
 
-/**
- * ISR: the page is statically rendered and cached, then revalidated at most
- * once per minute. Adding a project via /admin-cms also calls
- * revalidatePath("/") + revalidatePath("/en") so new case studies appear
- * without a redeploy, while regular visitors still get a flash-fast cached page.
- */
-export const revalidate = 60;
+export const metadata = pageMetadata("home", "it");
 
-export const metadata: Metadata = {
-  alternates: {
-    canonical: "/",
-    languages: { it: "/", en: "/en", "x-default": "/" },
-  },
-};
-
-export default async function HomePage() {
-  const projects = await getProjects();
-  const jobs = (await getJobs()).map((j) => ({ id: j.id, ...localizeJob(j, "it") }));
+export default function Page() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd("it")) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd(it)) }}
-      />
-      <Site projects={projects} jobs={jobs} dict={it} locale="it" />
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldJson(orgLd("it"))} />
+      <HomePage dict={it} locale="it" />
     </>
   );
 }

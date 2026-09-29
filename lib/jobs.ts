@@ -3,8 +3,8 @@ import { randomUUID } from "crypto";
 import type { Locale } from "./i18n/types";
 
 /**
- * Job board data — stored in a Redis LIST `gam:jobs` (one Job per element),
- * mirroring lib/projects.ts. Bilingual: Italian is the base content, English
+ * Job board data — stored in a Redis LIST `gam:jobs`, one Job per element.
+ * Bilingual: Italian is the base content, English
  * is an optional per-field override (empty EN fields fall back to Italian at
  * render time — see localizeJob).
  */
@@ -286,7 +286,7 @@ export function localizeJob(job: Job, locale: Locale): JobContent {
 
 const SEED_LOCK = "gam:jobs:seedlock";
 
-/** Race-safe seed of the defaults into an empty store (NX lock — see projects). */
+/** Race-safe seed of the defaults into an empty store (NX lock). */
 async function ensureSeeded(): Promise<void> {
   if ((await kv.llen(JOBS_KEY)) > 0) return;
   const lock = await kv.set(SEED_LOCK, "1", { nx: true, ex: 30 });

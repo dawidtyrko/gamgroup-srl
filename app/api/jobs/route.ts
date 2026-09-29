@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import { href } from "@/lib/routes";
 import { addJob, getJobs, parseJobInput } from "@/lib/jobs";
 import { adminGuard } from "@/lib/adminAuth";
 
@@ -34,8 +35,8 @@ export async function POST(req: Request) {
 
   try {
     const job = await addJob(parsed.input);
-    revalidatePath("/");
-    revalidatePath("/en");
+    revalidatePath(href("lavora", "it"));
+    revalidatePath(href("lavora", "en"));
     return NextResponse.json({ ok: true, job });
   } catch (err) {
     console.error("[api/jobs] add failed:", err);

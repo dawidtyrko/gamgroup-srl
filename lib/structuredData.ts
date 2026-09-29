@@ -28,10 +28,15 @@ export function faqLd(dict: Dict) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: dict.faq.items.map((f) => ({
+    mainEntity: dict.faq.map((f) => ({
       "@type": "Question",
       name: f.q,
       acceptedAnswer: { "@type": "Answer", text: f.a },
     })),
   };
+}
+
+/** `<script type="application/ld+json">` payload helper. */
+export function ldJson(data: object) {
+  return { __html: JSON.stringify(data) };
 }
