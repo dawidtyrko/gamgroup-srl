@@ -107,19 +107,6 @@ export function Photo({
   );
 }
 
-export function StatsBand({ dict }: { dict: Dict }) {
-  return (
-    <section className="band">
-      {dict.stats.map((s) => (
-        <div key={s.label}>
-          <b>{s.value}+</b>
-          <span>{s.label}</span>
-        </div>
-      ))}
-    </section>
-  );
-}
-
 export function Chips({ items, outline }: { items: string[]; outline?: boolean }) {
   return (
     <div className={`chips${outline ? " o" : ""}`}>

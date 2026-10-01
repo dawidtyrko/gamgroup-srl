@@ -8,6 +8,7 @@ import { ADDRESS, ADDRESS_LINE, EMAIL, RECRUITMENT_EMAIL } from "@/lib/contact";
 import { CONTACT_FAQ } from "@/lib/faq";
 import ContactForm from "./ContactForm";
 import JobsList from "./JobsList";
+import StatsBand from "./StatsBand";
 import {
   AiCards,
   AiList,
@@ -22,7 +23,6 @@ import {
   SectionHead,
   ServiceCards,
   Shell,
-  StatsBand,
   Steps,
 } from "./ui";
 
@@ -371,10 +371,11 @@ export function ContactPage({ dict, locale }: P) {
             <small>{c.candidatureLbl}</small>
             <a href={`mailto:${RECRUITMENT_EMAIL}`}>{RECRUITMENT_EMAIL}</a>
           </div>
-          <GamMap directions={dict.map.directions} />
         </div>
         <ContactForm t={c} privacyHref={href("privacy", locale)} />
       </section>
+
+      <GamMap label={dict.map.label} directions={dict.map.directions} />
 
       <section className="pad">
         <SectionHead lbl={c.faqLbl} title={c.faqTitle} />

@@ -2,18 +2,19 @@
 
 import { useEffect, useRef } from "react";
 import type { Map as LeafletMap } from "leaflet";
-import { GEO } from "@/lib/contact";
+import { ADDRESS, GEO } from "@/lib/contact";
 
 const { lat: LAT, lng: LNG } = GEO;
 
 /**
- * Office map, shown inside the dark info card of the Contatti page.
+ * Office map — full width at the foot of the Contatti page, with the address
+ * floating over the bottom-left corner (the treatment from the previous site).
  * Leaflet is imported inside the effect, so this never touches `window` on the server.
  * The map container uses `isolation: isolate` so Leaflet's internal panes
  * (z-index 400–700) stay inside their own stacking context and never cover
  * the header or the mobile menu, which sit above it in the page's stacking order.
  */
-export default function GamMap({ directions }: { directions: string }) {
+export default function GamMap({ label, directions }: { label: string; directions: string }) {
   const elRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
 
@@ -68,16 +69,25 @@ export default function GamMap({ directions }: { directions: string }) {
   }, []);
 
   return (
-    <div className="map-box">
+    <div className="map-wrap">
       <div ref={elRef} className="map-canvas" />
-      <a
-        className="map-dir"
-        href={`https://www.google.com/maps/dir/?api=1&destination=${LAT},${LNG}`}
-        target="_blank"
-        rel="noopener"
-      >
-        {directions}
-      </a>
+      <div className="map-card">
+        <p className="map-card-lbl">{label}</p>
+        <p className="map-card-name">GAM Group Srl</p>
+        <p className="map-card-addr">
+          {ADDRESS.street}
+          <br />
+          {ADDRESS.postalCode} {ADDRESS.city} ({ADDRESS.province})
+        </p>
+        <a
+          className="map-dir"
+          href={`https://www.google.com/maps/dir/?api=1&destination=${LAT},${LNG}`}
+          target="_blank"
+          rel="noopener"
+        >
+          {directions}
+        </a>
+      </div>
     </div>
   );
 }
