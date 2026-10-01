@@ -71,6 +71,14 @@ button {
 }
 
 /* ---------- Header ---------- */
+/* The header is not sticky, but it must still win the stacking order against
+   anything that creates its own context further down the page (the Leaflet map
+   on Contatti, the hero photos' border-radius clipping). */
+.site-header {
+  position: relative;
+  z-index: 10;
+  background: #fff;
+}
 .header-row {
   display: flex;
   justify-content: space-between;

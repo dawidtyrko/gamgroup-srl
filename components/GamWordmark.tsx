@@ -55,7 +55,7 @@ export default function GamWordmark({
           data-logo-tagline={dataLogo ? "" : undefined}
           style={{
             marginTop: "0.18em",
-            fontFamily: "'Manrope', sans-serif",
+            fontFamily: "'Inter', sans-serif",
             fontWeight: 500,
             fontSize: "0.32em",
             color: taglineColor ?? color,

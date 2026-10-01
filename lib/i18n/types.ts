@@ -5,6 +5,21 @@ export type Marked = { pre: string; mark: string; post?: string };
 
 export type ContactBlockText = { lbl: string; title: string; cta: string };
 
+/**
+ * Stable key for a FAQ entry. Services and the contact page select which
+ * questions to show by id rather than by position, so reordering or adding an
+ * entry in one locale file can no longer silently point at the wrong question
+ * (or past the end of the array).
+ */
+export type FaqId =
+  | "avvio-ai"
+  | "gestionali"
+  | "formazione"
+  | "pa"
+  | "collaborazione"
+  | "contatto"
+  | "ai-persone";
+
 export type ServiceText = {
   num: string;
   title: string;
@@ -19,7 +34,7 @@ export type ServiceText = {
   step: number; // 1-4: which step of the journey this service is
   stepText: string;
   pathLead: string;
-  faq: number[]; // indices into `faq`
+  faq: FaqId[]; // which questions this service shows
   contactTitle: string;
 };
 
@@ -112,7 +127,7 @@ export interface Dict {
   /** "L'AI in pratica": cards on the home page, numbered list on the AI & BI page. */
   ai: { lbl: string; listLbl: string; title: string; intro: string; close: string; areas: { title: string; text: string }[] };
 
-  faq: { q: string; a: string }[];
+  faq: { id: FaqId; q: string; a: string }[];
 
   contact: {
     lbl: string;

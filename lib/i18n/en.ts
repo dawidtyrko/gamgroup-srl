@@ -101,7 +101,7 @@ export const en: Dict = {
         step: 2,
         stepText: "Implementation, customisation, upgrades and AMS of the leading ERP systems.",
         pathLead: "The same team follows you through every phase: ERP is the heart of step 2.",
-        faq: [1, 4],
+        faq: ["gestionali", "collaborazione"],
         contactTitle: "Tell us about your ERP.",
       },
       aiBi: {
@@ -126,7 +126,7 @@ export const en: Dict = {
         step: 1,
         stepText: "We look at processes and data and find where AI and BI bring a measurable advantage.",
         pathLead: "The same team follows you through every phase: analysing data and processes is step 1.",
-        faq: [6, 0, 2],
+        faq: ["ai-persone", "avvio-ai", "formazione"],
         contactTitle: "Tell us about your data.",
       },
       integrazione: {
@@ -144,7 +144,7 @@ export const en: Dict = {
         step: 3,
         stepText: "Custom software and connected systems in a single ecosystem, with clean, accessible data.",
         pathLead: "The same team follows you through every phase: development and integration are step 3.",
-        faq: [4, 1],
+        faq: ["collaborazione", "gestionali"],
         contactTitle: "Tell us what you need to connect.",
       },
       assistenza: {
@@ -161,7 +161,7 @@ export const en: Dict = {
         step: 4,
         stepText: "Multi-level help desk, networks, security, hosting: your systems keep running over time.",
         pathLead: "The same team follows you through every phase: support is step 4.",
-        faq: [5, 4],
+        faq: ["contatto", "collaborazione"],
         contactTitle: "Tell us about your infrastructure.",
       },
     },
@@ -257,30 +257,37 @@ export const en: Dict = {
 
   faq: [
     {
+      id: "avvio-ai",
       q: "How do we start an AI journey if we're beginning from scratch?",
       a: "We start from what you already have. We look at your processes and data, identify a concrete case where AI delivers a measurable advantage, and begin there — a small first project with a visible result, before scaling up. No revolution: one step at a time.",
     },
     {
+      id: "gestionali",
       q: "Which systems and technologies do you work with?",
       a: "We support the leading ERP systems, including SAP, IBM i-Series (PWR), JDE, Infor, Oracle Cloud and NetSuite. On the Microsoft side we work with the 365 ecosystem, Power Platform, Copilot and Azure AI. For data we mainly use Power BI and Business Intelligence tools.",
     },
     {
+      id: "formazione",
       q: "How do you train people on AI and new systems?",
       a: "We support teams through adoption, with paths tailored to roles and to the company's real processes. The goal is to identify practical adoption cases straight away and experiment with them during the training sessions, so that these technologies become part of the everyday work of the people involved.",
     },
     {
+      id: "pa",
       q: "How do you work with public administration?",
       a: "We support several public bodies with training and up-skilling on artificial intelligence, with attention to the procedural constraints and data-management requirements that context demands, in compliance with the regulations in force.",
     },
     {
+      id: "collaborazione",
       q: "How does a collaboration with GAM Group begin?",
       a: "Our approach follows no predefined path: every project is built to measure, taking into account the company's specific needs and characteristics, weighed against the experience we have gained in the field. It always starts with an open dialogue, followed by an in-depth analysis of the process in question, so we can pinpoint the concrete impact our work — whether consulting or development — can generate. This lets us offer genuinely effective, targeted solutions that deliver tangible value from the very start.",
     },
     {
+      id: "contatto",
       q: "How can we request a first contact?",
       a: "You can write to info@gamgroup.it or fill in the form on the Contact page.",
     },
     {
+      id: "ai-persone",
       q: "Will artificial intelligence replace people in the company?",
       a: "No: we use it to remove repetitive work, not people. The goal is to give those who work with the systems more time for tasks that need experience and judgement. That is why every project starts with training and involves the people who will actually use the tool.",
     },

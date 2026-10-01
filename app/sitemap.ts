@@ -11,7 +11,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     return (["it", "en"] as const).map((locale) => ({
       url: languages[locale],
       changeFrequency,
-      priority: locale === "it" ? priority : Math.round(priority * 9) / 10,
+      // the EN page of a pair ranks a touch below the Italian original
+      priority: locale === "it" ? priority : Math.round(priority * 90) / 100,
       alternates: { languages },
     }));
   });

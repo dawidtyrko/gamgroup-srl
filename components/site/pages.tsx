@@ -4,6 +4,8 @@ import type { Dict, Locale } from "@/lib/i18n/types";
 import type { JobView } from "@/lib/jobs";
 import { href, type ServiceKey } from "@/lib/routes";
 import { partnerLogos, servicePhoto } from "@/lib/siteData";
+import { ADDRESS, ADDRESS_LINE, EMAIL, RECRUITMENT_EMAIL } from "@/lib/contact";
+import { CONTACT_FAQ } from "@/lib/faq";
 import ContactForm from "./ContactForm";
 import JobsList from "./JobsList";
 import {
@@ -25,6 +27,30 @@ import {
 } from "./ui";
 
 type P = { dict: Dict; locale: Locale };
+
+/**
+ * `sizes` per layout, matching the grids in globals.css (breakpoints 640/900).
+ * Without these every photo would be fetched at the full 2000px source width.
+ */
+const HERO_SIZES = "(max-width: 640px) 100vw, 45vw"; // .hero-photos, 3 columns
+const ROW_LEAD_SIZES = "(max-width: 640px) 100vw, 45vw"; // .photo-row / .gallery, wide first cell
+const ROW_SIZES = "(max-width: 640px) 50vw, 30vw"; // .photo-row, the two narrow cells
+const GALLERY_LEAD_SIZES = "(max-width: 640px) 100vw, 50vw"; // .gallery first cell (2fr, spans 2 rows)
+const GALLERY_SIZES = "(max-width: 640px) 50vw, 25vw"; // .gallery, the four small cells
+const SVC_SIZES = "(max-width: 900px) 100vw, 60vw"; // .svc-top, 1.3fr of 2.3fr
+
+const MailLink = ({ to }: { to: string }) => (
+  <a href={`mailto:${to}`} className="inline-link">
+    {to}
+  </a>
+);
+
+/** The contact block's subtitle on the home and chi-siamo pages. */
+const AddressAndEmail = () => (
+  <>
+    {ADDRESS_LINE} · <MailLink to={EMAIL} />
+  </>
+);
 
 /* ------------------------------------------------------------------ Home */
 export function HomePage({ dict, locale }: P) {
@@ -49,9 +75,11 @@ export function HomePage({ dict, locale }: P) {
           </a>
         </div>
         <div className="hero-photos">
-          <Photo k="libreria" dict={dict} priority />
-          <Photo k="tavolo" dict={dict} priority />
-          <Photo k="lavoro" dict={dict} priority />
+          {/* only the centre photo is preloaded: it is the largest, and below
+              640px it is reordered to the top (`.hero-photos .photo:nth-child(2)`) */}
+          <Photo k="libreria" dict={dict} eager sizes={HERO_SIZES} />
+          <Photo k="tavolo" dict={dict} priority sizes={HERO_SIZES} />
+          <Photo k="lavoro" dict={dict} eager sizes={HERO_SIZES} />
         </div>
       </section>
 
@@ -83,12 +111,7 @@ export function HomePage({ dict, locale }: P) {
         cta={h.contact.cta}
         to={href("contatti", locale)}
         sub={
-          <>
-            Via Siora Andriana del Vescovo, 5/C, 31100 Treviso ·{" "}
-            <a href="mailto:info@gamgroup.it" className="inline-link">
-              info@gamgroup.it
-            </a>
-          </>
+<AddressAndEmail />
         }
       />
     </Shell>
@@ -110,7 +133,7 @@ export function AboutPage({ dict, locale }: P) {
           {a.p.post}
         </p>
       </PageHero>
-      <Photo k="tavolo" dict={dict} className="photo-wide" priority />
+      <Photo k="tavolo" dict={dict} className="photo-wide" priority sizes="100vw" />
 
       <section className="pad">
         <StatsBand dict={dict} />
@@ -141,11 +164,11 @@ export function AboutPage({ dict, locale }: P) {
       <section className="pad">
         <SectionHead lbl={a.company.lbl} title={a.company.title} lead={a.company.lead} />
         <div className="gallery">
-          <Photo k="salotto" dict={dict} />
-          <Photo k="caffe" dict={dict} />
-          <Photo k="f1" dict={dict} />
-          <Photo k="modellini" dict={dict} />
-          <Photo k="vespa" dict={dict} />
+          <Photo k="salotto" dict={dict} sizes={GALLERY_LEAD_SIZES} />
+          <Photo k="caffe" dict={dict} sizes={GALLERY_SIZES} />
+          <Photo k="f1" dict={dict} sizes={GALLERY_SIZES} />
+          <Photo k="modellini" dict={dict} sizes={GALLERY_SIZES} />
+          <Photo k="vespa" dict={dict} sizes={GALLERY_SIZES} />
         </div>
       </section>
 
@@ -165,12 +188,7 @@ export function AboutPage({ dict, locale }: P) {
         cta={a.contact.cta}
         to={href("contatti", locale)}
         sub={
-          <>
-            Via Siora Andriana del Vescovo, 5/C, 31100 Treviso ·{" "}
-            <a href="mailto:info@gamgroup.it" className="inline-link">
-              info@gamgroup.it
-            </a>
-          </>
+<AddressAndEmail />
         }
       />
     </Shell>
@@ -203,7 +221,7 @@ export function ServicePage({ dict, locale, service }: P & { service: ServiceKey
       </PageHero>
 
       <section className="svc-top">
-        <Photo k={servicePhoto[service]} dict={dict} priority />
+        <Photo k={servicePhoto[service]} dict={dict} priority sizes={SVC_SIZES} />
         <div className="svc-highlight">
           <p>{s.highlight}</p>
           <div>
@@ -255,9 +273,7 @@ export function ServicePage({ dict, locale, service }: P & { service: ServiceKey
         cta={dict.home.contact.cta}
         to={href("contatti", locale)}
         sub={
-          <a href="mailto:info@gamgroup.it" className="inline-link">
-            info@gamgroup.it
-          </a>
+<MailLink to={EMAIL} />
         }
       />
     </Shell>
@@ -286,9 +302,7 @@ export function ClientsPage({ dict, locale }: P) {
         cta={c.contact.cta}
         to={href("contatti", locale)}
         sub={
-          <a href="mailto:info@gamgroup.it" className="inline-link">
-            info@gamgroup.it
-          </a>
+<MailLink to={EMAIL} />
         }
       />
     </Shell>
@@ -306,9 +320,9 @@ export function JobsPage({ dict, locale, jobs }: P & { jobs: JobView[] }) {
         <p>{j.lead}</p>
       </PageHero>
       <div className="photo-row">
-        <Photo k="f1" dict={dict} priority />
-        <Photo k="caffe" dict={dict} priority />
-        <Photo k="vespa" dict={dict} priority />
+        <Photo k="f1" dict={dict} priority sizes={ROW_LEAD_SIZES} />
+        <Photo k="caffe" dict={dict} eager sizes={ROW_SIZES} />
+        <Photo k="vespa" dict={dict} eager sizes={ROW_SIZES} />
       </div>
 
       <section className="pad">
@@ -320,13 +334,10 @@ export function JobsPage({ dict, locale, jobs }: P & { jobs: JobView[] }) {
         lbl={j.spontaneous.lbl}
         title={j.spontaneous.title}
         cta={j.spontaneous.cta}
-        to="mailto:recruitment@gamgroup.it"
+        to={`mailto:${RECRUITMENT_EMAIL}`}
         sub={
           <>
-            {j.spontaneous.textPre}{" "}
-            <a href="mailto:recruitment@gamgroup.it" className="inline-link">
-              recruitment@gamgroup.it
-            </a>
+            {j.spontaneous.textPre} <MailLink to={RECRUITMENT_EMAIL} />
           </>
         }
       />
@@ -348,17 +359,17 @@ export function ContactPage({ dict, locale }: P) {
         <div className="info">
           <div>
             <small>{c.sedeLbl}</small>
-            Via Siora Andriana del Vescovo, 5/C
+            {ADDRESS.street}
             <br />
-            31100 Treviso (TV)
+            {ADDRESS.postalCode} {ADDRESS.city} ({ADDRESS.province})
           </div>
           <div>
             <small>{c.emailLbl}</small>
-            <a href="mailto:info@gamgroup.it">info@gamgroup.it</a>
+            <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
           </div>
           <div>
             <small>{c.candidatureLbl}</small>
-            <a href="mailto:recruitment@gamgroup.it">recruitment@gamgroup.it</a>
+            <a href={`mailto:${RECRUITMENT_EMAIL}`}>{RECRUITMENT_EMAIL}</a>
           </div>
           <GamMap directions={dict.map.directions} />
         </div>
@@ -367,7 +378,7 @@ export function ContactPage({ dict, locale }: P) {
 
       <section className="pad">
         <SectionHead lbl={c.faqLbl} title={c.faqTitle} />
-        <FaqList dict={dict} items={[0, 1, 2, 3, 4]} />
+        <FaqList dict={dict} items={CONTACT_FAQ} />
       </section>
       <div className="end-space" />
     </Shell>

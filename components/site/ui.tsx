@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import type { Dict, Locale, Marked } from "@/lib/i18n/types";
+import type { Dict, FaqId, Locale, Marked } from "@/lib/i18n/types";
 import { href, SERVICE_KEYS, type PageKey, type ServiceKey } from "@/lib/routes";
+import { pickFaq } from "@/lib/faqSelect";
 import { clientLogos, photos, type PhotoKey } from "@/lib/siteData";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -67,16 +69,39 @@ export function PageHero({ lbl, title, children }: { lbl: string; title: Marked;
   );
 }
 
-export function Photo({ k, dict, className, priority }: { k: PhotoKey; dict: Dict; className?: string; priority?: boolean }) {
+/**
+ * Office photo. The sources are 2000px wide but `.photo` renders them inside
+ * fixed-height grid cells (300–460px tall), so next/image is what keeps the
+ * payload honest: it emits a WebP srcset and `sizes` tells the browser which
+ * width to actually fetch. Always pass the `sizes` that matches the container —
+ * the 100vw default only suits full-width photos.
+ */
+export function Photo({
+  k,
+  dict,
+  className,
+  priority,
+  eager,
+  sizes = "100vw",
+}: {
+  k: PhotoKey;
+  dict: Dict;
+  className?: string;
+  /** Preloads the image — use for the one LCP candidate per page, no more. */
+  priority?: boolean;
+  /** Above the fold but not the LCP: fetch immediately, without a preload hint. */
+  eager?: boolean;
+  sizes?: string;
+}) {
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <Image
       src={photos[k]}
       alt={dict.photoAlts[k]}
       width={2000}
       height={1331}
-      loading={priority ? "eager" : "lazy"}
-      decoding="async"
+      priority={priority}
+      loading={!priority && eager ? "eager" : undefined}
+      sizes={sizes}
       className={`photo${className ? ` ${className}` : ""}`}
     />
   );
@@ -98,8 +123,9 @@ export function StatsBand({ dict }: { dict: Dict }) {
 export function Chips({ items, outline }: { items: string[]; outline?: boolean }) {
   return (
     <div className={`chips${outline ? " o" : ""}`}>
-      {items.map((c) => (
-        <span key={c}>{c}</span>
+      {/* positional keys: these are free-form string lists, not a keyed set */}
+      {items.map((c, i) => (
+        <span key={i}>{c}</span>
       ))}
     </div>
   );
@@ -170,18 +196,15 @@ export function ClientLogos({ variant }: { variant: "strip" | "grid" }) {
   );
 }
 
-export function FaqList({ dict, items }: { dict: Dict; items: number[] }) {
+export function FaqList({ dict, items }: { dict: Dict; items: FaqId[] }) {
   return (
     <div className="faq">
-      {items.map((i, n) => {
-        const f = dict.faq[i];
-        return (
-          <details key={f.q} open={n === 0}>
-            <summary>{f.q}</summary>
-            <p>{linkify(f.a)}</p>
-          </details>
-        );
-      })}
+      {pickFaq(dict, items).map((f, n) => (
+        <details key={f.id} open={n === 0}>
+          <summary>{f.q}</summary>
+          <p>{linkify(f.a)}</p>
+        </details>
+      ))}
     </div>
   );
 }

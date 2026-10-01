@@ -2,16 +2,16 @@
 
 import { useEffect, useRef } from "react";
 import type { Map as LeafletMap } from "leaflet";
+import { GEO } from "@/lib/contact";
 
-const LAT = 45.6706739;
-const LNG = 12.2550351;
+const { lat: LAT, lng: LNG } = GEO;
 
 /**
  * Office map, shown inside the dark info card of the Contatti page.
  * Leaflet is imported inside the effect, so this never touches `window` on the server.
  * The map container uses `isolation: isolate` so Leaflet's internal panes
  * (z-index 400–700) stay inside their own stacking context and never cover
- * the sticky header or the mobile menu.
+ * the header or the mobile menu, which sit above it in the page's stacking order.
  */
 export default function GamMap({ directions }: { directions: string }) {
   const elRef = useRef<HTMLDivElement>(null);

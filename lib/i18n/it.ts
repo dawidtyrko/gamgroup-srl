@@ -100,7 +100,7 @@ export const it: Dict = {
         step: 2,
         stepText: "Implementazione, personalizzazione, aggiornamento e AMS dei principali ERP.",
         pathLead: "Lo stesso team vi segue in ogni fase: l’ERP è il cuore del passo 2.",
-        faq: [1, 4],
+        faq: ["gestionali", "collaborazione"],
         contactTitle: "Raccontaci il tuo gestionale.",
       },
       aiBi: {
@@ -125,7 +125,7 @@ export const it: Dict = {
         step: 1,
         stepText: "Guardiamo processi e dati, individuiamo dove l’AI e la BI portano un vantaggio misurabile.",
         pathLead: "Lo stesso team vi segue in ogni fase: l’analisi di dati e processi è il passo 1.",
-        faq: [6, 0, 2],
+        faq: ["ai-persone", "avvio-ai", "formazione"],
         contactTitle: "Raccontaci i tuoi dati.",
       },
       integrazione: {
@@ -143,7 +143,7 @@ export const it: Dict = {
         step: 3,
         stepText: "Software su misura e sistemi collegati in un ecosistema unico, con dati puliti e accessibili.",
         pathLead: "Lo stesso team vi segue in ogni fase: sviluppo e integrazione sono il passo 3.",
-        faq: [4, 1],
+        faq: ["collaborazione", "gestionali"],
         contactTitle: "Raccontaci cosa vuoi collegare.",
       },
       assistenza: {
@@ -160,7 +160,7 @@ export const it: Dict = {
         step: 4,
         stepText: "Help desk multilivello, reti, sicurezza, hosting: il sistema resta operativo nel tempo.",
         pathLead: "Lo stesso team vi segue in ogni fase: l’assistenza è il passo 4.",
-        faq: [5, 4],
+        faq: ["contatto", "collaborazione"],
         contactTitle: "Raccontaci la tua infrastruttura.",
       },
     },
@@ -256,30 +256,37 @@ export const it: Dict = {
 
   faq: [
     {
+      id: "avvio-ai",
       q: "Come si inizia un percorso di AI se partiamo da zero?",
       a: "Si parte da quello che avete già. Guardiamo processi e dati, individuiamo un caso concreto dove l’AI porta un vantaggio misurabile e cominciamo da lì. Un primo progetto contenuto, con un risultato visibile, prima di allargare. Nessuna rivoluzione, si inizia un passo alla volta.",
     },
     {
+      id: "gestionali",
       q: "Su quali gestionali e tecnologie lavorate?",
       a: "Seguiamo i principali sistemi ERP, tra cui SAP, IBM i-Series (PWR), JDE, Infor, Oracle Cloud e NetSuite. Sul fronte Microsoft lavoriamo con l’ecosistema 365, Power Platform, Copilot e Azure AI. Per i dati usiamo principalmente Power BI e strumenti di Business Intelligence.",
     },
     {
+      id: "formazione",
       q: "Come formate le persone sull’AI e sui nuovi sistemi?",
       a: "Affianchiamo i team nell’adozione, con percorsi tarati sui ruoli e sui processi reali dell’azienda. L’obiettivo è quello di identificare subito casi pratici di adozione e di sperimentare su di essi durante le sessioni formative, così che queste tecnologie entrino nel lavoro di tutti i giorni delle figure coinvolte.",
     },
     {
+      id: "pa",
       q: "In che modo lavorate con la pubblica amministrazione?",
       a: "Affianchiamo diversi enti pubblici per la formazione e up-skilling sull’intelligenza artificiale, con attenzione ai vincoli di procedura e alla gestione dei dati che quel contesto richiede, in conformità con le normative vigenti in materia.",
     },
     {
+      id: "collaborazione",
       q: "Come nasce una collaborazione con GAM Group?",
       a: "Il nostro approccio non segue percorsi predefiniti, infatti ogni progetto viene costruito su misura, tenendo conto delle specifiche esigenze e delle peculiarità dell’azienda, confrontate con la nostra esperienza maturata nel settore. Si inizia sempre con un dialogo aperto, seguito da un’analisi approfondita del processo oggetto di interesse, così da individuare con precisione l’impatto concreto che il nostro intervento, sia esso consulenziale o di sviluppo, può generare. Questo ci permette di offrire soluzioni realmente efficaci e mirate, capaci di portare valore tangibile fin da subito.",
     },
     {
+      id: "contatto",
       q: "Come possiamo richiedere un primo contatto?",
       a: "Potete scrivere a info@gamgroup.it oppure compilare il modulo nella pagina Contatti.",
     },
     {
+      id: "ai-persone",
       q: "L’intelligenza artificiale sostituirà le persone in azienda?",
       a: "No: la usiamo per togliere il lavoro ripetitivo, non le persone. L’obiettivo è che chi lavora con i sistemi abbia più tempo per le attività che richiedono esperienza e giudizio. Per questo ogni progetto parte dalla formazione e coinvolge chi userà davvero lo strumento.",
     },
