@@ -1,13 +1,13 @@
 "use client";
 
 import { CSSProperties, FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import type { Project } from "@/lib/projects";
 import type { Job, ReqGroup } from "@/lib/jobs";
-import GamWordmark from "@/components/GamWordmark";
 
 const NAVY = "#1E333B";
 const TEAL = "#35707E";
-const MONO = "'Inter', sans-serif";
-const GRO = "'Inter', sans-serif";
+const MONO = "'Space Mono', monospace";
+const GRO = "'Space Grotesk', sans-serif";
 
 const labelStyle: CSSProperties = {
   fontFamily: MONO,
@@ -34,17 +34,17 @@ type Status =
   | { state: "error"; message: string };
 
 /* =========================================================================
-   Parent: shared password + the Job Board panel (the site's only editable content)
+   Parent: shared password + tab switch between Projects and Job Board panels
    ========================================================================= */
 export default function AdminCms() {
   const [password, setPassword] = useState("");
+  const [tab, setTab] = useState<"projects" | "jobs">("projects");
 
   return (
-    <main style={{ minHeight: "100vh", background: "#F1F5F6", padding: "clamp(40px,8vw,90px) 6vw", fontFamily: "'Inter', sans-serif" }}>
+    <main style={{ minHeight: "100vh", background: "#F1F5F6", padding: "clamp(40px,8vw,90px) 6vw", fontFamily: "'Manrope', sans-serif" }}>
       <div style={{ maxWidth: 720, margin: "0 auto" }}>
-        <div style={{ marginBottom: 24 }}>
-          <GamWordmark color={TEAL} size={30} />
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/gam-logo.svg" alt="GAM Group" width={67} height={40} style={{ display: "block", height: 40, width: "auto", marginBottom: 24 }} />
         <p style={{ ...labelStyle, color: TEAL, margin: "0 0 10px" }}>Admin CMS</p>
         <h1 style={{ margin: 0, fontFamily: GRO, fontWeight: 700, fontSize: "clamp(28px,4vw,46px)", letterSpacing: "-.02em", color: NAVY }}>
           Gestione contenuti
@@ -61,9 +61,238 @@ export default function AdminCms() {
           </label>
         </div>
 
-        <JobsPanel password={password} />
+        {/* Tabs */}
+        <div style={{ display: "flex", gap: 10, marginTop: 30, borderBottom: "1px solid #DDE6E8" }}>
+          {([["projects", "Progetti"], ["jobs", "Job Board"]] as const).map(([k, label]) => (
+            <button
+              key={k}
+              type="button"
+              onClick={() => setTab(k)}
+              style={{
+                background: "none",
+                border: "none",
+                borderBottom: tab === k ? `2px solid ${TEAL}` : "2px solid transparent",
+                color: tab === k ? NAVY : "#6B7686",
+                fontFamily: GRO,
+                fontWeight: 700,
+                fontSize: 16,
+                padding: "10px 6px",
+                marginBottom: -1,
+                cursor: "pointer",
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {tab === "projects" ? <ProjectsPanel password={password} /> : <JobsPanel password={password} />}
       </div>
     </main>
+  );
+}
+
+/* =========================================================================
+   Projects panel (case studies)
+   ========================================================================= */
+const emptyProject = {
+  sector: "", img: "", title: "", challenge: "", description: "", benefits: "", area: "", image: "",
+  enSector: "", enArea: "", enTitle: "", enChallenge: "", enDescription: "", enBenefits: "",
+};
+
+function ProjectsPanel({ password }: { password: string }) {
+  const [form, setForm] = useState(emptyProject);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [status, setStatus] = useState<Status>({ state: "idle" });
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const set = (k: keyof typeof emptyProject) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const uploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-selecting the same file later
+    if (!file) return;
+    if (!password) { setStatus({ state: "error", message: "Inserisci la password prima di caricare." }); return; }
+    setUploading(true);
+    setStatus({ state: "loading" });
+    try {
+      const data = new FormData();
+      data.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", headers: { "x-admin-password": password }, body: data });
+      const json = await res.json();
+      if (!res.ok) { setStatus({ state: "error", message: json.error || "Upload non riuscito." }); return; }
+      setForm((f) => ({ ...f, image: json.url }));
+      setStatus({ state: "ok", message: "Immagine caricata." });
+    } catch {
+      setStatus({ state: "error", message: "Rete non raggiungibile." });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const refreshList = useCallback(async () => {
+    try {
+      const res = await fetch("/api/projects", { cache: "no-store" });
+      const data = await res.json();
+      setProjects(data.projects ?? []);
+    } catch {
+      /* keep */
+    }
+  }, []);
+  useEffect(() => { refreshList(); }, [refreshList]);
+
+  const resetForm = () => { setForm(emptyProject); setEditingId(null); };
+
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!password) { setStatus({ state: "error", message: "Inserisci la password." }); return; }
+    setStatus({ state: "loading" });
+    const isEdit = editingId != null;
+    try {
+      const res = await fetch(isEdit ? `/api/projects/${editingId}` : "/api/projects", {
+        method: isEdit ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json", "x-admin-password": password },
+        body: JSON.stringify({
+          ...form,
+          en: { sector: form.enSector, area: form.enArea, title: form.enTitle, challenge: form.enChallenge, description: form.enDescription, benefits: form.enBenefits },
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setStatus({ state: "error", message: data.error || "Errore." }); return; }
+      setStatus({ state: "ok", message: isEdit ? `Aggiornato: ${data.project.title}.` : `Pubblicato: ${data.project.title}.` });
+      resetForm();
+      await refreshList();
+    } catch {
+      setStatus({ state: "error", message: "Rete non raggiungibile." });
+    }
+  };
+
+  const startEdit = (p: Project) => {
+    setEditingId(p.id);
+    setForm({
+      sector: p.sector, img: p.img, title: p.title, challenge: p.challenge, description: p.description,
+      benefits: p.benefits.join("\n"), area: p.area ?? "", image: p.image ?? "",
+      enSector: p.en?.sector ?? "", enArea: p.en?.area ?? "", enTitle: p.en?.title ?? "",
+      enChallenge: p.en?.challenge ?? "", enDescription: p.en?.description ?? "", enBenefits: p.en?.benefits?.join("\n") ?? "",
+    });
+    setStatus({ state: "idle" });
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const remove = async (p: Project) => {
+    if (!password) { setStatus({ state: "error", message: "Inserisci la password per eliminare." }); return; }
+    if (!window.confirm(`Eliminare definitivamente "${p.title}"?`)) return;
+    setBusyId(p.id);
+    setStatus({ state: "loading" });
+    try {
+      const res = await fetch(`/api/projects/${p.id}`, { method: "DELETE", headers: { "x-admin-password": password } });
+      const data = await res.json();
+      if (!res.ok) { setStatus({ state: "error", message: data.error || "Errore." }); return; }
+      if (editingId === p.id) resetForm();
+      setStatus({ state: "ok", message: `Eliminato: ${p.title}.` });
+      await refreshList();
+    } catch {
+      setStatus({ state: "error", message: "Rete non raggiungibile." });
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  const resetDefaults = async () => {
+    if (!password) { setStatus({ state: "error", message: "Inserisci la password." }); return; }
+    if (!window.confirm("Ripristinare i 4 progetti predefiniti? Sostituirà l'elenco attuale.")) return;
+    setStatus({ state: "loading" });
+    try {
+      const res = await fetch("/api/projects/reset", { method: "POST", headers: { "x-admin-password": password } });
+      const data = await res.json();
+      if (!res.ok) { setStatus({ state: "error", message: data.error || "Errore." }); return; }
+      resetForm();
+      setStatus({ state: "ok", message: `Ripristinati ${data.count} progetti predefiniti.` });
+      await refreshList();
+    } catch {
+      setStatus({ state: "error", message: "Rete non raggiungibile." });
+    }
+  };
+
+  const isEdit = editingId != null;
+
+  return (
+    <>
+      <form ref={formRef} onSubmit={submit} style={{ marginTop: 34, display: "flex", flexDirection: "column", gap: 22, scrollMarginTop: 24 }}>
+        <PanelHeading title={isEdit ? "Modifica progetto" : "Nuovo progetto"} onCancel={isEdit ? resetForm : undefined} />
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+          <Row label="Settore (pill)"><input type="text" required value={form.sector} onChange={set("sector")} style={inputStyle} placeholder="es. Retail" /></Row>
+          <Row label="Area tecnica (opzionale)"><input type="text" value={form.area} onChange={set("area")} style={inputStyle} placeholder="es. AMS, EDI, PWR" /></Row>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <span style={labelStyle}>Immagine (opzionale)</span>
+            <input type="text" value={form.image} onChange={set("image")} style={inputStyle} placeholder="https://... oppure /photos/nome.jpg" />
+            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+              <label style={{ ...btnSmall(TEAL, uploading), display: "inline-block", cursor: uploading ? "wait" : "pointer" }}>
+                {uploading ? "Caricamento…" : "Carica file"}
+                <input type="file" accept="image/*" onChange={uploadImage} disabled={uploading} style={{ display: "none" }} />
+              </label>
+              {form.image && (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={form.image} alt="" width={44} height={44} style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 8, border: "1px solid #DDE6E8" }} />
+                  <button type="button" onClick={() => setForm((f) => ({ ...f, image: "" }))} style={{ background: "none", border: "none", color: "#b3261e", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Rimuovi</button>
+                </>
+              )}
+            </div>
+          </div>
+          <Row label="Etichetta immagine (se manca la foto)"><input type="text" value={form.img} onChange={set("img")} style={inputStyle} placeholder="es. [ punto vendita ]" /></Row>
+        </div>
+        <Row label="Titolo"><input type="text" required value={form.title} onChange={set("title")} style={inputStyle} placeholder="Titolo del case study" /></Row>
+        <Row label="La sfida"><textarea required value={form.challenge} onChange={set("challenge")} rows={3} style={{ ...inputStyle, resize: "vertical" }} /></Row>
+        <Row label="Il progetto"><textarea required value={form.description} onChange={set("description")} rows={3} style={{ ...inputStyle, resize: "vertical" }} /></Row>
+        <Row label="Benefici (uno per riga)"><textarea required value={form.benefits} onChange={set("benefits")} rows={4} style={{ ...inputStyle, resize: "vertical" }} placeholder={"Riduzione dei tempi di fermo\nSLA rispettati con costanza"} /></Row>
+
+        <details style={{ border: "1px solid #DDE6E8", borderRadius: 14, padding: "16px 18px", background: "#fff" }}>
+          <summary style={{ cursor: "pointer", fontFamily: GRO, fontWeight: 700, fontSize: 16, color: NAVY }}>
+            English (opzionale) {form.enTitle ? "· EN ✓" : ""}
+          </summary>
+          <p style={{ margin: "10px 0 16px", color: "#6B7686", fontWeight: 300, fontSize: 14 }}>Traduzione mostrata su /en. I campi vuoti usano il testo italiano.</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <Row label="Sector (EN)"><input type="text" value={form.enSector} onChange={set("enSector")} style={inputStyle} /></Row>
+              <Row label="Technical area (EN)"><input type="text" value={form.enArea} onChange={set("enArea")} style={inputStyle} /></Row>
+            </div>
+            <Row label="Title (EN)"><input type="text" value={form.enTitle} onChange={set("enTitle")} style={inputStyle} /></Row>
+            <Row label="The challenge (EN)"><textarea value={form.enChallenge} onChange={set("enChallenge")} rows={3} style={{ ...inputStyle, resize: "vertical" }} /></Row>
+            <Row label="The project (EN)"><textarea value={form.enDescription} onChange={set("enDescription")} rows={3} style={{ ...inputStyle, resize: "vertical" }} /></Row>
+            <Row label="Benefits (EN — one per line)"><textarea value={form.enBenefits} onChange={set("enBenefits")} rows={4} style={{ ...inputStyle, resize: "vertical" }} /></Row>
+          </div>
+        </details>
+
+        <SubmitButton loading={status.state === "loading"} label={isEdit ? "Salva modifiche" : "Pubblica progetto"} />
+      </form>
+
+      <StatusBox status={status} />
+
+      <ListSection
+        title="Progetti pubblicati"
+        count={projects.length}
+        empty="Nessun progetto."
+        action={<button type="button" onClick={resetDefaults} style={btnSmall(TEAL)}>Ripristina predefiniti</button>}
+      >
+        {projects.map((p) => (
+          <ListRow
+            key={p.id}
+            eyebrow={`${p.sector}${p.en?.title ? " · EN ✓" : ""}`}
+            title={p.title}
+            busy={busyId === p.id}
+            onEdit={() => startEdit(p)}
+            onDelete={() => remove(p)}
+          />
+        ))}
+      </ListSection>
+    </>
   );
 }
 
@@ -200,7 +429,7 @@ function JobsPanel({ password }: { password: string }) {
           <summary style={{ cursor: "pointer", fontFamily: GRO, fontWeight: 700, fontSize: 16, color: NAVY }}>
             English (opzionale) {form.enTitle ? "· EN ✓" : ""}
           </summary>
-          <p style={{ margin: "10px 0 16px", color: "#6B7686", fontWeight: 300, fontSize: 14 }}>Traduzione mostrata sul sito inglese (Job Board). I campi vuoti usano il testo italiano.</p>
+          <p style={{ margin: "10px 0 16px", color: "#6B7686", fontWeight: 300, fontSize: 14 }}>Traduzione mostrata su /en. I campi vuoti usano il testo italiano.</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <Row label="Title (EN)"><input type="text" value={form.enTitle} onChange={set("enTitle")} style={inputStyle} /></Row>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>

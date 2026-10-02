@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@300;400;500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:'Manrope',system-ui,sans-serif;color:#1B2A4A;background:#fff;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+  ::selection{background:#3CC8BD;color:#06231f;}
+  input,textarea,button{font-family:inherit;}
+  [data-track]::-webkit-scrollbar{height:0;width:0;display:none;}
+  @keyframes gam-rise{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+  @keyframes gam-cue{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(10px);opacity:1}}
+  @keyframes gam-marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @keyframes gam-ping{0%{transform:scale(.6);opacity:.85}100%{transform:scale(2.4);opacity:0}}
+  .leaflet-container{background:#0f1828 !important;font-family:'Space Mono',monospace !important;}
+  .leaflet-control-attribution{font-size:9px !important;background:rgba(16,27,48,.5) !important;color:rgba(255,255,255,.4) !important;}
+  .leaflet-control-attribution a{color:rgba(255,255,255,.55) !important;}
+  .leaflet-bar a{background:#16233f !important;color:#fff !important;border-color:rgba(255,255,255,.12) !important;}
+  .leaflet-bar a:hover{background:#1B2A4A !important;}
+  @media (prefers-reduced-motion:no-preference){
+    @supports (animation-timeline:view()){
+      [data-rise]{animation:gam-rise both;animation-timeline:view();animation-range:entry 0% cover 26%;}
+    }
+  }
+  @media (max-width:960px){
+    [data-desktop-nav]{display:none !important;}
+    [data-burger]{display:flex !important;}
+    [data-grid-2]{grid-template-columns:1fr !important;}
+    [data-form-row]{grid-template-columns:1fr !important;}
+    [data-sticky]{position:static !important;}
+    [data-svc-row]{grid-template-columns:auto 1fr !important;}
+    [data-svc-tags]{grid-column:1 / -1 !important;padding-left:0 !important;margin-top:18px !important;}
+    [data-chan]{grid-template-columns:1fr 1fr !important;}
+    [data-job-row]{flex-direction:column !important;align-items:flex-start !important;gap:20px !important;}
+  }
+  @media (max-width:600px){ [data-chan]{grid-template-columns:1fr !important;} }
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="overflow-x:clip;">
+
+  <header ref="{{ headerRef }}" style="position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 6vw;transition:background .5s ease,box-shadow .5s ease,padding .5s ease;--navc:#1B2A4A;--navmut:#6B7686;">
+    <a href="#" onClick="{{ goHome }}" style="display:flex;flex-direction:column;text-decoration:none;line-height:1;cursor:pointer;">
+      <span style="font-family:'Space Grotesk';font-weight:700;font-size:26px;letter-spacing:-.01em;color:var(--navc);transition:color .5s ease;">GAM</span>
+      <span style="font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--navmut);transition:color .5s ease;margin-top:4px;">It&rsquo;s my world</span>
+    </a>
+    <nav ref="{{ navRef }}" data-desktop-nav style="display:flex;align-items:center;gap:38px;">
+      <a data-nav="home" href="#" onClick="{{ goHome }}" style="font-size:15px;font-weight:500;color:var(--navc);text-decoration:none;cursor:pointer;transition:color .3s ease;">Home</a>
+      <a data-nav="chisiamo" href="#chisiamo" onClick="{{ goChiSiamo }}" style="font-size:15px;font-weight:500;color:var(--navc);text-decoration:none;cursor:pointer;transition:color .3s ease;">Chi Siamo</a>
+      <a data-nav="servizi" href="#servizi" onClick="{{ goServizi }}" style="font-size:15px;font-weight:500;color:var(--navc);text-decoration:none;cursor:pointer;transition:color .3s ease;">Servizi</a>
+      <a data-nav="progetti" href="#progetti" onClick="{{ goProgetti }}" style="font-size:15px;font-weight:500;color:var(--navc);text-decoration:none;cursor:pointer;transition:color .3s ease;">Progetti</a>
+      <a data-nav="jobboard" href="#jobboard" onClick="{{ goJobBoard }}" style="font-size:15px;font-weight:500;color:var(--navc);text-decoration:none;cursor:pointer;transition:color .3s ease;">Job Board</a>
+      <a data-nav="contatti" href="#contatti" onClick="{{ goContatti }}" style="display:inline-flex;align-items:center;gap:9px;font-size:15px;font-weight:600;color:#fff;background:#1B2A4A;padding:11px 22px;border-radius:999px;text-decoration:none;cursor:pointer;transition:background .3s ease,transform .3s ease;" style-hover="background:#3CC8BD;transform:translateY(-2px);">Contattaci</a>
+    </nav>
+    <button data-burger onClick="{{ toggleMenu }}" aria-label="Menu" style="display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;">
+      <span style="display:block;width:26px;height:2px;background:var(--navc);border-radius:2px;"></span>
+      <span style="display:block;width:26px;height:2px;background:var(--navc);border-radius:2px;"></span>
+    </button>
+  </header>
+
+  <section id="top" style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:150px 6vw 70px;background:#fff;">
+    <span data-rise style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#9aa4b2;">Consulenza IT &mdash; System Integration &mdash; dal 2001</span>
+    <h1 style="margin:30px 0 0;font-family:'Space Grotesk';font-weight:700;font-size:clamp(58px,10vw,164px);line-height:.92;letter-spacing:-.035em;color:#1B2A4A;">
+      <span data-rise style="display:inline-block;">Benvenuti in</span><br><span data-rise style="display:inline-block;color:#3CC8BD;">GAM</span>
+    </h1>
+    <p data-rise style="margin:36px 0 0;max-width:540px;font-weight:300;font-size:clamp(17px,1.7vw,22px);line-height:1.62;color:#6B7686;">Evolviamo e ottimizziamo i processi aziendali dei nostri clienti, dalla consulenza ai sistemi.</p>
+    <div data-rise style="margin-top:44px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
+      <button onClick="{{ goServizi }}" style="background:#1B2A4A;color:#fff;border:none;border-radius:999px;padding:16px 34px;font-size:16px;font-weight:600;cursor:pointer;transition:background .3s ease,transform .3s ease;" style-hover="background:#3CC8BD;transform:translateY(-2px);">Scopri i servizi</button>
+      <button onClick="{{ goContatti }}" style="background:transparent;color:#1B2A4A;border:1.5px solid #d3dae4;border-radius:999px;padding:16px 34px;font-size:16px;font-weight:600;cursor:pointer;transition:border-color .3s ease,color .3s ease;" style-hover="border-color:#3CC8BD;color:#3CC8BD;">Contattaci</button>
+    </div>
+    <div style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.24em;color:#9aa4b2;text-transform:uppercase;">Scorri</span>
+      <span style="display:block;width:1px;height:42px;background:linear-gradient(180deg,#c3cbd6,transparent);animation:gam-cue 1.8s ease-in-out infinite;"></span>
+    </div>
+  </section>
+
+  <section style="position:relative;height:clamp(360px,52vw,640px);overflow:hidden;background:#101b30;">
+    <div ref="{{ heroMediaRef }}" style="position:absolute;inset:-12% 0;background:repeating-linear-gradient(135deg,rgba(60,200,189,.10) 0 18px,rgba(255,255,255,0) 18px 36px),linear-gradient(120deg,#1d3056,#16233f 60%,#101b30);display:flex;align-items:center;justify-content:center;will-change:transform;">
+      <span style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.18em;color:rgba(255,255,255,.22);text-transform:uppercase;">[ team gam &mdash; foto a tutta larghezza ]</span>
+    </div>
+  </section>
+
+  <section style="background:#fff;padding:clamp(110px,15vw,220px) 6vw;">
+    <div style="max-width:1080px;margin:0 auto;">
+      <p data-rise style="margin:0;font-family:'Space Grotesk';font-weight:500;font-size:clamp(30px,4.6vw,62px);line-height:1.16;letter-spacing:-.02em;color:#1B2A4A;">
+        <span style="color:#9aa4b2;">Portiamo il tuo business</span> al livello successivo.
+        <span style="display:block;margin-top:18px;font-family:'Manrope';font-weight:300;font-size:clamp(17px,1.6vw,21px);line-height:1.65;color:#6B7686;max-width:680px;">Innovare i sistemi IT riduce i costi, aumenta la flessibilit&agrave; e migliora la qualit&agrave; dei servizi.</span>
+      </p>
+    </div>
+  </section>
+
+  <section id="servizi" style="background:#F6F7F9;padding:clamp(90px,12vw,170px) 6vw;">
+    <div style="max-width:1180px;margin:0 auto;">
+      <div data-rise style="display:flex;align-items:baseline;gap:16px;margin-bottom:clamp(40px,5vw,70px);">
+        <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#3CC8BD;">01 &mdash; 04</span>
+        <h2 style="margin:0;font-family:'Space Grotesk';font-weight:700;font-size:clamp(30px,4.4vw,58px);letter-spacing:-.02em;color:#1B2A4A;">I nostri servizi</h2>
+      </div>
+      <div style="border-top:1px solid rgba(27,42,74,.12);">
+        <sc-for list="{{ services }}" as="svc" hint-placeholder-count="4">
+          <div data-svc-row style="display:grid;grid-template-columns:64px minmax(220px,1fr) 1.2fr;gap:28px;align-items:center;padding:clamp(28px,3.4vw,46px) 0;border-bottom:1px solid rgba(27,42,74,.12);transition:padding-left .4s ease;cursor:default;" style-hover="padding-left:14px;">
+            <span style="font-family:'Space Mono',monospace;font-size:14px;color:#3CC8BD;">{{ svc.num }}</span>
+            <div>
+              <h3 style="margin:0;font-family:'Space Grotesk';font-weight:500;font-size:clamp(22px,2.4vw,34px);line-height:1.1;letter-spacing:-.015em;color:#1B2A4A;">{{ svc.title }}</h3>
+            </div>
+            <div data-svc-tags style="display:flex;flex-wrap:wrap;gap:8px;">
+              <sc-for list="{{ svc.tags }}" as="t" hint-placeholder-count="5">
+                <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.04em;color:#56627a;border:1px solid rgba(27,42,74,.16);border-radius:999px;padding:6px 13px;">{{ t }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#fff;padding:clamp(90px,12vw,170px) 6vw;">
+    <div style="max-width:1180px;margin:0 auto;">
+      <div data-rise style="display:flex;align-items:baseline;gap:16px;margin-bottom:clamp(36px,4vw,56px);">
+        <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#3CC8BD;">Tecnologie</span>
+        <h2 style="margin:0;font-family:'Space Grotesk';font-weight:700;font-size:clamp(30px,4.4vw,58px);letter-spacing:-.02em;color:#1B2A4A;">I nostri canali</h2>
+      </div>
+      <div data-chan style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(27,42,74,.12);border-left:1px solid rgba(27,42,74,.12);">
+        <sc-for list="{{ channels }}" as="ch" hint-placeholder-count="4">
+          <div style="border-right:1px solid rgba(27,42,74,.12);border-bottom:1px solid rgba(27,42,74,.12);padding:clamp(26px,2.4vw,40px);min-height:260px;display:flex;flex-direction:column;transition:background .4s ease;" style-hover="background:#F6F7F9;">
+            <span style="font-family:'Space Grotesk';font-weight:700;font-size:clamp(22px,1.9vw,28px);letter-spacing:-.01em;color:#1B2A4A;">{{ ch.name }}</span>
+            <span style="width:26px;height:3px;background:#3CC8BD;margin:16px 0 22px;"></span>
+            <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;">
+              <sc-for list="{{ ch.items }}" as="line" hint-placeholder-count="4">
+                <li style="font-family:'Space Mono',monospace;font-size:12px;color:#6B7686;letter-spacing:.02em;">{{ line }}</li>
+              </sc-for>
+            </ul>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section ref="{{ statsRef }}" style="background:#1B2A4A;padding:clamp(90px,12vw,160px) 6vw;">
+    <div style="max-width:1180px;margin:0 auto;">
+      <p data-rise style="margin:0 0 clamp(40px,5vw,72px);font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#3CC8BD;text-align:center;">I numeri sono il nostro forte</p>
+      <div data-grid-2 style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:18px;border-right:1px solid rgba(255,255,255,.12);">
+            <div data-count="{{ s.value }}" data-suffix="+" style="font-family:'Space Grotesk';font-weight:700;font-size:clamp(50px,7vw,104px);line-height:1;letter-spacing:-.04em;color:#fff;">0+</div>
+            <div style="font-weight:300;font-size:clamp(14px,1.3vw,18px);color:rgba(255,255,255,.6);text-align:center;">{{ s.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="chisiamo" style="background:#fff;padding:clamp(90px,12vw,170px) 6vw;">
+    <div data-grid-2 style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,96px);align-items:start;">
+      <div data-sticky style="position:sticky;top:120px;">
+        <p style="margin:0 0 22px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#3CC8BD;">Chi siamo</p>
+        <h2 data-rise style="margin:0;font-family:'Space Grotesk';font-weight:700;font-size:clamp(34px,4.6vw,68px);line-height:1.02;letter-spacing:-.025em;color:#1B2A4A;">Il partner di cui ti puoi fidare.</h2>
+        <button data-rise onClick="{{ goContatti }}" style="margin-top:38px;display:inline-flex;align-items:center;gap:10px;background:transparent;color:#1B2A4A;border:1.5px solid #d3dae4;border-radius:999px;padding:15px 30px;font-size:15px;font-weight:600;cursor:pointer;transition:border-color .3s ease,color .3s ease;" style-hover="border-color:#3CC8BD;color:#3CC8BD;">Parla con noi &rarr;</button>
+      </div>
+      <div>
+        <p data-rise style="margin:0;font-weight:300;font-size:clamp(17px,1.7vw,22px);line-height:1.7;color:#475569;">GAM Group &egrave; un&rsquo;azienda italiana fondata nel <strong style="font-weight:600;color:#1B2A4A;">2001</strong>, con sede a <strong style="font-weight:600;color:#1B2A4A;">Treviso</strong>. Da oltre vent&rsquo;anni affianchiamo le imprese nell&rsquo;evoluzione e nella gestione dei loro sistemi IT.</p>
+        <div data-rise style="margin-top:40px;padding-top:34px;border-top:1px solid rgba(27,42,74,.12);">
+          <p style="margin:0 0 18px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9aa4b2;">Settori</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <sc-for list="{{ sectors }}" as="sec" hint-placeholder-count="6">
+              <span style="font-family:'Space Grotesk';font-weight:500;font-size:clamp(15px,1.4vw,19px);color:#1B2A4A;border:1px solid rgba(27,42,74,.16);border-radius:999px;padding:9px 18px;">{{ sec }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="progetti" style="background:#101b30;">
+    <div ref="{{ pinWrap }}" style="position:relative;height:340vh;">
+      <div style="position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;">
+        <div style="padding:0 6vw;margin-bottom:clamp(28px,4vh,52px);display:flex;align-items:baseline;gap:16px;">
+          <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#3CC8BD;">Case studies</span>
+          <h2 style="margin:0;font-family:'Space Grotesk';font-weight:700;font-size:clamp(30px,4.4vw,58px);letter-spacing:-.02em;color:#fff;">I progetti</h2>
+        </div>
+        <div ref="{{ pinTrack }}" style="display:flex;gap:28px;padding:0 6vw;will-change:transform;">
+          <sc-for list="{{ projects }}" as="p" hint-placeholder-count="4">
+            <div onClick="{{ p.open }}" style="flex:none;width:min(78vw,460px);background:#16233f;border:1px solid rgba(255,255,255,.08);border-radius:22px;overflow:hidden;cursor:pointer;transition:transform .4s ease,border-color .4s ease;" style-hover="transform:translateY(-6px);border-color:rgba(60,200,189,.45);">
+              <div style="height:clamp(200px,30vh,300px);position:relative;display:flex;align-items:flex-end;padding:20px;background:repeating-linear-gradient(135deg,rgba(60,200,189,.12) 0 16px,rgba(255,255,255,0) 16px 32px),linear-gradient(125deg,#22325a,#16233f);">
+                <span style="position:absolute;top:20px;left:20px;font-family:'Space Mono',monospace;font-size:11px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:#3CC8BD;border:1px solid rgba(60,200,189,.5);padding:6px 13px;border-radius:999px;">{{ p.sector }}</span>
+                <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;color:rgba(255,255,255,.4);text-transform:uppercase;">{{ p.img }}</span>
+              </div>
+              <div style="padding:30px;display:flex;flex-direction:column;gap:22px;min-height:200px;">
+                <h3 style="margin:0;font-family:'Space Grotesk';font-weight:500;font-size:clamp(20px,1.8vw,26px);line-height:1.28;color:#fff;">{{ p.title }}</h3>
+                <span style="margin-top:auto;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.04em;color:#3CC8BD;">Leggi il case study &rarr;</span>
+              </div>
+            </div>
+          </sc-for>
+          <div style="flex:none;width:40vw;display:flex;align-items:center;padding-left:10px;">
+            <span style="font-family:'Space Grotesk';font-weight:500;font-size:clamp(22px,2.4vw,34px);color:rgba(255,255,255,.4);max-width:14ch;line-height:1.15;">E molti altri progetti, in ogni settore.</span>
+          </div>
+        </div>
+        <p style="padding:0 6vw;margin:clamp(28px,4vh,52px) 0 0;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.35);">Scorri per esplorare &rarr;</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#fff;padding:clamp(70px,9vw,120px) 0;overflow:hidden;">
+    <p data-rise style="margin:0 0 clamp(40px,5vw,64px);text-align:center;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#9aa4b2;padding:0 6vw;">Alcuni dei nostri clienti</p>
+    <div style="display:flex;width:max-content;gap:88px;animation:gam-marq 28s linear infinite;padding-left:88px;">
+      <sc-for list="{{ clients }}" as="c" hint-placeholder-count="5">
+        <span style="font-family:'Space Grotesk';font-weight:700;font-size:clamp(26px,3.2vw,44px);letter-spacing:-.01em;color:#c2c9d3;white-space:nowrap;">{{ c }}</span>
+      </sc-for>
+      <sc-for list="{{ clients }}" as="c" hint-placeholder-count="5">
+        <span style="font-family:'Space Grotesk';font-weight:700;font-size:clamp(26px,3.2vw,44px);letter-spacing:-.01em;color:#c2c9d3;white-space:nowrap;">{{ c }}</span>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="jobboard" style="background:#F6F7F9;padding:clamp(90px,12vw,170px) 6vw;">
+    <div style="max-width:1180px;margin:0 auto;">
+      <div data-rise style="display:flex;align-items:baseline;gap:16px;margin-bottom:18px;">
+        <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#3CC8BD;">Lavora con noi</span>
+        <h2 style="margin:0;font-family:'Space Grotesk';font-weight:700;font-size:clamp(30px,4.4vw,58px);letter-spacing:-.02em;color:#1B2A4A;">Entra in GAM</h2>
+      </div>
+      <p data-rise style="margin:0 0 clamp(40px,5vw,64px);max-width:560px;font-weight:300;font-size:clamp(17px,1.6vw,21px);line-height:1.6;color:#6B7686;">Unisciti a un team di esperti IT. Le posizioni aperte, in continua crescita.</p>
+      <div style="border-top:1px solid rgba(27,42,74,.12);">
+        <sc-for list="{{ jobs }}" as="job" hint-placeholder-count="5">
+          <div data-job-row style="display:flex;justify-content:space-between;align-items:center;gap:32px;padding:clamp(26px,3vw,40px) 0;border-bottom:1px solid rgba(27,42,74,.12);transition:padding-left .4s ease;" style-hover="padding-left:14px;">
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <h3 style="margin:0;font-family:'Space Grotesk';font-weight:500;font-size:clamp(22px,2.4vw,32px);line-height:1.1;letter-spacing:-.015em;color:#1B2A4A;">{{ job.title }}</h3>
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;">
+                <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6B7686;">{{ job.sede }}</span>
+                <span style="width:3px;height:3px;border-radius:50%;background:#c2c9d3;"></span>
+                <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6B7686;">{{ job.type }}</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                <sc-for list="{{ job.tags }}" as="t" hint-placeholder-count="3">
+                  <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.04em;color:#56627a;border:1px solid rgba(27,42,74,.16);border-radius:999px;padding:6px 13px;">{{ t }}</span>
+                </sc-for>
+              </div>
+            </div>
+            <a href="mailto:recruitment@gamgroup.it?subject=Candidatura: {{ job.title }}" style="flex:none;display:inline-flex;align-items:center;gap:9px;background:#1B2A4A;color:#fff;border-radius:999px;padding:14px 28px;font-size:15px;font-weight:600;text-decoration:none;transition:background .3s ease,transform .3s ease;" style-hover="background:#3CC8BD;transform:translateY(-2px);">Candidati ora &rarr;</a>
+          </div>
+        </sc-for>
+      </div>
+      <p data-rise style="margin:clamp(36px,4vw,52px) 0 0;font-weight:300;font-size:16px;color:#6B7686;">Candidatura spontanea &mdash; invia il CV a <a href="mailto:recruitment@gamgroup.it" style="color:#1B2A4A;font-weight:500;text-decoration:none;border-bottom:1px solid #3CC8BD;">recruitment@gamgroup.it</a></p>
+    </div>
+  </section>
+
+  <section id="contatti" style="background:#1B2A4A;padding:clamp(90px,12vw,170px) 6vw;color:#fff;">
+    <div data-grid-2 style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(44px,7vw,110px);align-items:start;">
+      <div>
+        <p data-rise style="margin:0 0 22px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#3CC8BD;">Contatti</p>
+        <h2 data-rise style="margin:0;max-width:15ch;font-family:'Space Grotesk';font-weight:700;font-size:clamp(34px,4.8vw,66px);line-height:1.02;letter-spacing:-.025em;color:#fff;">Scopriamo insieme cosa possiamo fare.</h2>
+        <div data-rise style="margin-top:44px;display:flex;flex-direction:column;gap:16px;font-weight:300;font-size:18px;">
+          <span style="color:rgba(255,255,255,.75);">Via Callalta 31/E &ndash; 31100 Treviso</span>
+          <a href="mailto:info@gamgroup.it" style="color:#3CC8BD;text-decoration:none;transition:color .3s ease;" style-hover="color:#fff;">info@gamgroup.it</a>
+          <a href="tel:+390422583693" style="color:#3CC8BD;text-decoration:none;transition:color .3s ease;" style-hover="color:#fff;">+39 0422 583693</a>
+        </div>
+      </div>
+      <div data-rise>
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ submitForm }}" style="display:flex;flex-direction:column;gap:30px;">
+            <div data-form-row style="display:grid;grid-template-columns:1fr 1fr;gap:30px;">
+              <label style="display:flex;flex-direction:column;gap:10px;">
+                <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);">Nome</span>
+                <input type="text" required style="background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.25);color:#fff;padding:10px 0;font-size:17px;outline:none;transition:border-color .3s ease;" style-focus="border-bottom-color:#3CC8BD;" />
+              </label>
+              <label style="display:flex;flex-direction:column;gap:10px;">
+                <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);">Cognome</span>
+                <input type="text" required style="background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.25);color:#fff;padding:10px 0;font-size:17px;outline:none;transition:border-color .3s ease;" style-focus="border-bottom-color:#3CC8BD;" />
+              </label>
+            </div>
+            <label style="display:flex;flex-direction:column;gap:10px;">
+              <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);">Email</span>
+              <input type="email" required style="background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.25);color:#fff;padding:10px 0;font-size:17px;outline:none;transition:border-color .3s ease;" style-focus="border-bottom-color:#3CC8BD;" />
+            </label>
+            <label style="display:flex;flex-direction:column;gap:10px;">
+              <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);">Messaggio</span>
+              <textarea rows="3" placeholder="Scrivi qui il tuo messaggio" style="background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.25);color:#fff;padding:10px 0;font-size:17px;outline:none;resize:vertical;transition:border-color .3s ease;" style-focus="border-bottom-color:#3CC8BD;"></textarea>
+            </label>
+            <button type="submit" style="align-self:flex-start;background:#3CC8BD;color:#06231f;border:none;border-radius:999px;padding:16px 46px;font-size:16px;font-weight:700;cursor:pointer;transition:background .3s ease,transform .3s ease;" style-hover="background:#fff;transform:translateY(-2px);">Invia</button>
+          </form>
+        </sc-if>
+        <sc-if value="{{ formSent }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1px solid rgba(60,200,189,.4);border-radius:20px;padding:48px 40px;background:rgba(60,200,189,.08);">
+            <div style="font-size:40px;line-height:1;color:#3CC8BD;margin-bottom:18px;">&check;</div>
+            <h3 style="margin:0 0 12px;font-family:'Space Grotesk';font-weight:500;font-size:26px;color:#fff;">Grazie!</h3>
+            <p style="margin:0;font-weight:300;font-size:17px;line-height:1.6;color:rgba(255,255,255,.8);">Abbiamo ricevuto il tuo messaggio e ti risponderemo al pi&ugrave; presto.</p>
+          </div>
+        </sc-if>
+      </div>
+      <div data-rise style="grid-column:1 / -1;position:relative;margin-top:clamp(48px,6vw,84px);">
+        <div ref="{{ mapRef }}" style="height:clamp(340px,40vw,500px);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:#0f1828;isolation:isolate;"></div>
+        <div style="position:absolute;z-index:1000;left:clamp(16px,2vw,28px);bottom:clamp(16px,2vw,28px);background:#fff;border-radius:18px;padding:24px 26px;max-width:300px;box-shadow:0 20px 50px rgba(6,12,24,.4);">
+          <p style="margin:0 0 10px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#3CC8BD;">La nostra sede</p>
+          <p style="margin:0;font-family:'Space Grotesk';font-weight:700;font-size:18px;color:#1B2A4A;">GAM Group Srl</p>
+          <p style="margin:6px 0 16px;font-weight:300;font-size:15px;line-height:1.5;color:#6B7686;">Via Callalta 31/E<br>31100 Treviso (TV)</p>
+          <a href="https://www.google.com/maps/dir/?api=1&destination=45.66099553158068,12.276944105971117" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#1B2A4A;text-decoration:none;border-bottom:1px solid #3CC8BD;padding-bottom:2px;transition:color .3s ease;" style-hover="color:#3CC8BD;">Ottieni indicazioni &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background:#101b30;color:rgba(255,255,255,.55);padding:34px 6vw;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;font-weight:300;font-size:13px;">
+    <div style="display:flex;flex-direction:column;line-height:1;">
+      <span style="font-family:'Space Grotesk';font-weight:700;font-size:20px;color:#fff;">GAM</span>
+      <span style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:#3CC8BD;margin-top:4px;">It&rsquo;s my world</span>
+    </div>
+    <span>&copy; 2026 GAM Group Srl &mdash; Via Callalta 31/E, 31100 Treviso (TV)</span>
+  </footer>
+
+  <sc-if value="{{ projectOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeCase }}" style="position:fixed;inset:0;z-index:1200;background:rgba(16,27,48,.62);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px;">
+      <div onClick="{{ stop }}" style="background:#fff;border-radius:24px;max-width:720px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 40px 100px rgba(16,27,48,.45);">
+        <div style="position:relative;height:clamp(160px,22vw,220px);display:flex;align-items:flex-end;padding:24px;background:repeating-linear-gradient(135deg,rgba(60,200,189,.12) 0 16px,rgba(255,255,255,0) 16px 32px),linear-gradient(125deg,#22325a,#16233f);">
+          <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#3CC8BD;border:1px solid rgba(60,200,189,.5);padding:6px 13px;border-radius:999px;">{{ activeProject.sector }}</span>
+          <button onClick="{{ closeCase }}" aria-label="Chiudi" style="position:absolute;top:18px;right:18px;width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.12);color:#fff;font-size:24px;line-height:1;cursor:pointer;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);transition:background .3s ease;" style-hover="background:rgba(255,255,255,.24);">&times;</button>
+        </div>
+        <div style="padding:clamp(28px,4vw,48px);">
+          <h3 style="margin:0;font-family:'Space Grotesk';font-weight:700;font-size:clamp(24px,3vw,38px);line-height:1.12;letter-spacing:-.02em;color:#1B2A4A;">{{ activeProject.title }}</h3>
+          <div style="margin-top:clamp(28px,3.4vw,40px);">
+            <p style="margin:0 0 12px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#3CC8BD;">La sfida</p>
+            <p style="margin:0;font-weight:300;font-size:clamp(16px,1.5vw,19px);line-height:1.65;color:#475569;">{{ activeProject.challenge }}</p>
+          </div>
+          <div style="margin-top:clamp(26px,3vw,36px);">
+            <p style="margin:0 0 12px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#3CC8BD;">Il progetto</p>
+            <p style="margin:0;font-weight:300;font-size:clamp(16px,1.5vw,19px);line-height:1.65;color:#475569;">{{ activeProject.description }}</p>
+          </div>
+          <div style="margin-top:clamp(26px,3vw,36px);">
+            <p style="margin:0 0 16px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#3CC8BD;">Benefici</p>
+            <ul style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <sc-for list="{{ activeProject.benefits }}" as="b" hint-placeholder-count="4">
+                <li style="display:flex;gap:11px;align-items:flex-start;font-size:16px;font-weight:400;color:#1B2A4A;line-height:1.4;">
+                  <span style="margin-top:2px;color:#3CC8BD;font-size:16px;">&check;</span>
+                  <span>{{ b }}</span>
+                </li>
+              </sc-for>
+            </ul>
+          </div>
+          <button onClick="{{ goContatti }}" style="margin-top:clamp(30px,3.6vw,44px);background:#1B2A4A;color:#fff;border:none;border-radius:999px;padding:16px 34px;font-size:15px;font-weight:600;cursor:pointer;transition:background .3s ease,transform .3s ease;" style-hover="background:#3CC8BD;transform:translateY(-2px);">Parla con noi del tuo progetto &rarr;</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:1100;background:#fff;display:flex;flex-direction:column;padding:26px 6vw;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;flex-direction:column;line-height:1;">
+          <span style="font-family:'Space Grotesk';font-weight:700;font-size:24px;color:#1B2A4A;">GAM</span>
+          <span style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:#3CC8BD;margin-top:4px;">It&rsquo;s my world</span>
+        </div>
+        <button onClick="{{ closeMenu }}" aria-label="Chiudi" style="background:none;border:none;color:#1B2A4A;font-size:38px;line-height:1;cursor:pointer;font-weight:300;">&times;</button>
+      </div>
+      <nav style="display:flex;flex-direction:column;gap:4px;margin-top:48px;">
+        <a href="#" onClick="{{ goHome }}" style="font-family:'Space Grotesk';font-size:30px;font-weight:500;color:#1B2A4A;text-decoration:none;padding:14px 0;border-bottom:1px solid rgba(27,42,74,.1);">Home</a>
+        <a href="#chisiamo" onClick="{{ goChiSiamo }}" style="font-family:'Space Grotesk';font-size:30px;font-weight:500;color:#1B2A4A;text-decoration:none;padding:14px 0;border-bottom:1px solid rgba(27,42,74,.1);">Chi Siamo</a>
+        <a href="#servizi" onClick="{{ goServizi }}" style="font-family:'Space Grotesk';font-size:30px;font-weight:500;color:#1B2A4A;text-decoration:none;padding:14px 0;border-bottom:1px solid rgba(27,42,74,.1);">Servizi</a>
+        <a href="#progetti" onClick="{{ goProgetti }}" style="font-family:'Space Grotesk';font-size:30px;font-weight:500;color:#1B2A4A;text-decoration:none;padding:14px 0;border-bottom:1px solid rgba(27,42,74,.1);">Progetti</a>
+        <a href="#jobboard" onClick="{{ goJobBoard }}" style="font-family:'Space Grotesk';font-size:30px;font-weight:500;color:#1B2A4A;text-decoration:none;padding:14px 0;border-bottom:1px solid rgba(27,42,74,.1);">Job Board</a>
+        <a href="#contatti" onClick="{{ goContatti }}" style="font-family:'Space Grotesk';font-size:30px;font-weight:500;color:#3CC8BD;text-decoration:none;padding:14px 0;">Contattaci</a>
+      </nav>
+    </div>
+  </sc-if>
+
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { menuOpen: false, formSent: false, projectIndex: null };
+    this.rootRef = React.createRef();
+    this.headerRef = React.createRef();
+    this.navRef = React.createRef();
+    this.heroMediaRef = React.createRef();
+    this.statsRef = React.createRef();
+    this.pinWrap = React.createRef();
+    this.pinTrack = React.createRef();
+    this.mapRef = React.createRef();
+    this._solid = null;
+    this._curNav = null;
+    this._countersDone = false;
+  }
+
+  componentDidMount() {
+    this._tickBound = this._tick.bind(this);
+    this._safety = setTimeout(() => { if (!this._countersDone) { this._countersDone = true; this.runCounters(); } }, 3200);
+    this._tick();
+    this._onResize = () => { try { this._measure(); } catch (e) {} };
+    window.addEventListener('resize', this._onResize, { passive: true });
+    window.addEventListener('scroll', this._onResize, { passive: true });
+    this.initMap();
+  }
+
+  initMap() {
+    const L = window.L;
+    if (!L || !this.mapRef.current) {
+      this._mapTry = (this._mapTry || 0) + 1;
+      if (this._mapTry < 80) setTimeout(() => this.initMap(), 100);
+      return;
+    }
+    if (this._map) return;
+    const lat = 45.66099553158068, lng = 12.276944105971117;
+    const map = L.map(this.mapRef.current, { zoomControl: true, scrollWheelZoom: false, attributionControl: true }).setView([lat, lng], 14);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd', maxZoom: 19,
+      attribution: '&copy; OpenStreetMap &copy; CARTO'
+    }).addTo(map);
+    const icon = L.divIcon({
+      className: '',
+      html: '<div style="position:relative;width:28px;height:28px;"><span style="position:absolute;inset:0;border-radius:50%;background:rgba(60,200,189,.4);animation:gam-ping 2s ease-out infinite;"></span><span style="position:absolute;top:8px;left:8px;width:12px;height:12px;border-radius:50%;background:#3CC8BD;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.5);"></span></div>',
+      iconSize: [28, 28], iconAnchor: [14, 14]
+    });
+    L.marker([lat, lng], { icon: icon }).addTo(map);
+    this._map = map;
+    setTimeout(() => { try { map.invalidateSize(); } catch (e) {} }, 300);
+  }
+
+  componentWillUnmount() {
+    if (this._raf) cancelAnimationFrame(this._raf);
+    if (this._safety) clearTimeout(this._safety);
+    window.removeEventListener('resize', this._onResize);
+    window.removeEventListener('scroll', this._onResize);
+  }
+
+  _tick() {
+    try { this._measure(); } catch (e) {}
+    this._raf = requestAnimationFrame(this._tickBound);
+  }
+
+  _measure() {
+    const root = this.rootRef.current;
+    if (!root) return;
+    const vh = window.innerHeight || document.documentElement.clientHeight || 700;
+    const scrolled = -root.getBoundingClientRect().top;
+
+    if (this.heroMediaRef.current) {
+      const m = this.heroMediaRef.current;
+      const r = m.parentElement.getBoundingClientRect();
+      const off = (r.top + r.height / 2 - vh / 2) * -0.12;
+      m.style.transform = 'translateY(' + off + 'px)';
+    }
+
+    const h = this.headerRef.current;
+    if (h) {
+      const solid = scrolled > 60;
+      if (solid !== this._solid) {
+        this._solid = solid;
+        h.style.background = solid ? 'rgba(255,255,255,.85)' : 'transparent';
+        h.style.backdropFilter = solid ? 'saturate(180%) blur(16px)' : 'none';
+        h.style.webkitBackdropFilter = solid ? 'saturate(180%) blur(16px)' : 'none';
+        h.style.boxShadow = solid ? '0 1px 0 rgba(27,42,74,.08)' : 'none';
+        h.style.padding = solid ? '16px 6vw' : '26px 6vw';
+      }
+    }
+
+    const pw = this.pinWrap.current, pt = this.pinTrack.current;
+    if (pw && pt) {
+      const total = pw.offsetHeight - vh;
+      let prog = total > 0 ? (-pw.getBoundingClientRect().top) / total : 0;
+      prog = Math.max(0, Math.min(1, prog));
+      const overflow = Math.max(0, pt.scrollWidth - window.innerWidth + window.innerWidth * 0.12);
+      pt.style.transform = 'translateX(' + (-prog * overflow) + 'px)';
+    }
+
+    const order = [['contatti', 'contatti'], ['jobboard', 'jobboard'], ['progetti', 'progetti'], ['chisiamo', 'chisiamo'], ['servizi', 'servizi'], ['home', 'top']];
+    let cur = 'home';
+    for (let i = 0; i < order.length; i++) {
+      const el = document.getElementById(order[i][1]);
+      if (el && el.getBoundingClientRect().top <= vh * 0.4) { cur = order[i][0]; break; }
+    }
+    if (cur !== this._curNav) { this._curNav = cur; this.setActiveNav(cur); }
+
+    this.checkStats(vh);
+  }
+
+  checkStats(vh) {
+    if (this._countersDone) return;
+    const sec = this.statsRef.current;
+    if (!sec) return;
+    if (sec.getBoundingClientRect().top < vh * 0.78) {
+      this._countersDone = true;
+      this.runCounters();
+    }
+  }
+
+  runCounters() {
+    const sec = this.statsRef.current;
+    if (!sec) return;
+    sec.querySelectorAll('[data-count]').forEach(el => {
+      const target = parseInt(el.getAttribute('data-count'), 10) || 0;
+      const suffix = el.getAttribute('data-suffix') || '';
+      const dur = 1700, start = performance.now();
+      const step = (now) => {
+        const p = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * eased) + suffix;
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+  }
+
+  setActiveNav(key) {
+    const nav = this.navRef.current;
+    if (!nav) return;
+    nav.querySelectorAll('[data-nav]').forEach(a => {
+      if (a.getAttribute('data-nav') === 'contatti') return;
+      a.style.color = (a.getAttribute('data-nav') === key) ? '#3CC8BD' : 'var(--navc)';
+    });
+  }
+
+  goto(id) {
+    this.setState({ menuOpen: false, projectIndex: null });
+    if (id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    const el = document.getElementById(id);
+    if (el) {
+      const y = el.getBoundingClientRect().top + (window.scrollY || window.pageYOffset || -document.documentElement.getBoundingClientRect().top) - 70;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }
+
+  renderVals() {
+    const services = [
+      { num: '01', title: 'Consulenza Tecnica ERP', tags: ['JDE', 'SAP', 'IBM i-Series', 'Infor', 'Oracle Cloud', 'NetSuite', 'BI', 'Zucchetti', 'CyberPlan'] },
+      { num: '02', title: 'Consulenza Applicativa, AI & BI', tags: ['Project Management', 'Lean Management', 'AI', 'Business Intelligence', 'AI Agents / Copilots'] },
+      { num: '03', title: 'Sviluppo & System Integration', tags: ['Application Maintenance', 'Sviluppo SW', 'Integrazione & Migrazione'] },
+      { num: '04', title: 'Assistenza & Manutenzione', tags: ['Attivit\u00e0 PdL', 'Reti & Infrastruttura', 'HD1 & HD2', 'Sicurezza', 'HW\u2013SW', 'Hosting'] }
+    ];
+    const channels = [
+      { name: 'MS 365', items: ['MS365 Suite', 'Power Automate', 'Power Apps', 'SharePoint', 'Dynamics 365', 'Power BI', 'Copilot 365', 'Copilot Studio', 'Azure AI', 'AI Hub'] },
+      { name: 'SAP', items: ['SAP ECC', 'SAP S/4HANA', 'Business ByDesign', 'SAP B.One'] },
+      { name: 'IBM i-Series', items: ['SIGIP', 'ACG', 'STEALTH', 'SMEUP', 'GALILEO', 'GEA'] },
+      { name: 'Infor', items: ['BAAN', 'LN', 'M3', 'CloudSuite'] }
+    ];
+    const stats = [
+      { value: 20, label: 'Anni di esperienza' },
+      { value: 50, label: 'Esperti qualificati' },
+      { value: 130, label: 'Clienti soddisfatti' },
+      { value: 15, label: 'Partner' }
+    ];
+    const sectors = ['Retail', 'Food', 'Automotive', 'Fashion', 'Aerospace', '\u2026 and many more'];
+    const rawProjects = [
+      {
+        sector: 'Fashion', img: '[ fashion retail ]',
+        title: 'Help Desk e Supporto Sistemistico per l\u2019Efficienza Operativa',
+        challenge: 'Garantire la continuit\u00e0 operativa tra sede e punti vendita, con tempi di risposta rapidi su postazioni, reti e applicativi di negozio.',
+        description: 'Abbiamo attivato un servizio di Help Desk HD1 e HD2 con presidio sistemistico dedicato, gestendo richieste, incidenti e manutenzione di postazioni e infrastruttura.',
+        benefits: ['Riduzione dei tempi di fermo', 'SLA rispettati con costanza', 'Un unico punto di contatto', 'Maggiore continuit\u00e0 operativa']
+      },
+      {
+        sector: 'Automotive', img: '[ linea automotive ]',
+        title: 'Innovazione e Supporto Continuo nell\u2019Area AS400',
+        challenge: 'Mantenere ed evolvere sistemi gestionali IBM i-Series critici per la produzione, senza interruzioni del servizio.',
+        description: 'Manutenzione correttiva ed evolutiva su AS400, con sviluppi mirati e affiancamento costante ai team interni del cliente.',
+        benefits: ['Sistemi sempre disponibili', 'Evoluzioni rilasciate in sicurezza', 'Know-how preservato nel tempo', 'Costi di gestione ottimizzati']
+      },
+      {
+        sector: 'Manufacturing', img: '[ stabilimento ]',
+        title: 'Soluzioni EDI e Budgeting per un\u2019Operativit\u00e0 Globale',
+        challenge: 'Integrare i flussi documentali con partner internazionali e strutturare il processo di budgeting su pi\u00f9 sedi.',
+        description: 'Implementazione di flussi EDI e di strumenti di budgeting integrati con l\u2019ERP, allineando i processi a livello globale.',
+        benefits: ['Scambio dati automatizzato', 'Meno errori manuali', 'Visibilit\u00e0 puntuale sui costi', 'Processi allineati tra le sedi']
+      },
+      {
+        sector: 'Farmaceutico', img: '[ laboratorio ]',
+        title: 'Supporto AMS Affidabile per la Crescita Continua',
+        challenge: 'Assicurare una manutenzione applicativa affidabile in un settore regolamentato e in espansione.',
+        description: 'Servizio AMS strutturato con presidio applicativo, gestione delle richieste e miglioramento continuo delle soluzioni.',
+        benefits: ['Applicazioni stabili e monitorate', 'Richieste gestite con SLA', 'Conformit\u00e0 mantenuta', 'Supporto scalabile con la crescita']
+      }
+    ];
+    const projects = rawProjects.map((p, i) => Object.assign({}, p, {
+      open: (e) => { if (e) e.preventDefault(); this.setState({ projectIndex: i }); }
+    }));
+    const idx = this.state.projectIndex;
+    const activeProject = (idx != null && rawProjects[idx]) ? rawProjects[idx] : { sector: '', title: '', challenge: '', description: '', benefits: [] };
+    const clients = ['Maserati', 'Miele', 'CNH Industrial', 'Geox', 'Safilo'];
+    const jobs = [
+      { title: 'Consulente SAP S/4HANA', sede: 'Treviso', type: 'Tempo indeterminato', tags: ['SAP S/4HANA', 'FI/CO o MM/SD', '3+ anni'] },
+      { title: 'Service Manager AMS', sede: 'Treviso', type: 'Tempo indeterminato', tags: ['ITIL', 'Gestione team', 'AMS'] },
+      { title: 'Analista SAP Tecnico-Funzionale', sede: 'Treviso', type: 'Tempo indeterminato', tags: ['ABAP', 'Moduli SAP', 'Analisi funzionale'] },
+      { title: 'IT Specialist', sede: 'Treviso', type: 'Tempo indeterminato', tags: ['Sistemistica', 'Reti', 'Help Desk'] },
+      { title: 'Senior IT Consultant', sede: 'Treviso', type: 'Tempo indeterminato', tags: ['ERP', 'Project Management', '5+ anni'] }
+    ];
+
+    return {
+      rootRef: this.rootRef, headerRef: this.headerRef, navRef: this.navRef,
+      heroMediaRef: this.heroMediaRef, statsRef: this.statsRef, pinWrap: this.pinWrap, pinTrack: this.pinTrack, mapRef: this.mapRef,
+      services, channels, stats, sectors, projects, clients, jobs,
+      activeProject,
+      projectOpen: this.state.projectIndex != null,
+      closeCase: () => this.setState({ projectIndex: null }),
+      stop: (e) => { if (e) e.stopPropagation(); },
+      menuOpen: this.state.menuOpen,
+      formSent: this.state.formSent,
+      notSent: !this.state.formSent,
+      goHome: (e) => { if (e) e.preventDefault(); this.goto('top'); },
+      goServizi: (e) => { if (e) e.preventDefault(); this.goto('servizi'); },
+      goChiSiamo: (e) => { if (e) e.preventDefault(); this.goto('chisiamo'); },
+      goProgetti: (e) => { if (e) e.preventDefault(); this.goto('progetti'); },
+      goJobBoard: (e) => { if (e) e.preventDefault(); this.goto('jobboard'); },
+      goContatti: (e) => { if (e) e.preventDefault(); this.goto('contatti'); },
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      submitForm: (e) => { e.preventDefault(); this.setState({ formSent: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

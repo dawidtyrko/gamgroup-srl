@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { href } from "@/lib/routes";
 import { deleteJob, updateJob, parseJobInput } from "@/lib/jobs";
 import { adminGuard } from "@/lib/adminAuth";
 
@@ -28,8 +27,8 @@ export async function PUT(req: Request, { params }: Ctx) {
   try {
     const job = await updateJob(params.id, parsed.input);
     if (!job) return NextResponse.json({ error: "Offerta non trovata." }, { status: 404 });
-    revalidatePath(href("lavora", "it"));
-    revalidatePath(href("lavora", "en"));
+    revalidatePath("/");
+    revalidatePath("/en");
     return NextResponse.json({ ok: true, job });
   } catch (err) {
     console.error("[api/jobs/:id] update failed:", err);
@@ -46,8 +45,8 @@ export async function DELETE(req: Request, { params }: Ctx) {
   try {
     const ok = await deleteJob(params.id);
     if (!ok) return NextResponse.json({ error: "Offerta non trovata." }, { status: 404 });
-    revalidatePath(href("lavora", "it"));
-    revalidatePath(href("lavora", "en"));
+    revalidatePath("/");
+    revalidatePath("/en");
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[api/jobs/:id] delete failed:", err);

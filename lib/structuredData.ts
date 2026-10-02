@@ -1,6 +1,4 @@
-import { ADDRESS, EMAIL, GEO } from "./contact";
-import type { Dict, FaqId, Locale } from "./i18n/types";
-import { pickFaq } from "./faqSelect";
+import type { Dict, Locale } from "./i18n/types";
 
 // Structured data: company/office (local search) + FAQ (rich results, AI engines).
 export function orgLd(locale: Locale) {
@@ -13,37 +11,27 @@ export function orgLd(locale: Locale) {
         ? "Consulenza IT e system integration dal 2001: ERP (SAP, IBM i-Series), AI & Business Intelligence, sviluppo software, assistenza e manutenzione."
         : "IT consulting and system integration since 2001: ERP (SAP, IBM i-Series), AI & Business Intelligence, software development, support and maintenance.",
     foundingDate: "2001",
-    email: EMAIL,
+    email: "info@gamgroup.it",
     address: {
       "@type": "PostalAddress",
-      streetAddress: ADDRESS.street,
-      postalCode: ADDRESS.postalCode,
-      addressLocality: ADDRESS.city,
-      addressRegion: ADDRESS.province,
-      addressCountry: ADDRESS.country,
+      streetAddress: "Via Siora Andriana del Vescovo, 5/C",
+      postalCode: "31100",
+      addressLocality: "Treviso",
+      addressRegion: "TV",
+      addressCountry: "IT",
     },
-    geo: { "@type": "GeoCoordinates", latitude: GEO.lat, longitude: GEO.lng },
+    geo: { "@type": "GeoCoordinates", latitude: 45.6706739, longitude: 12.2550351 },
   };
 }
 
-/**
- * FAQPage markup for exactly the questions rendered on the page — Google
- * requires the structured data to match the visible content, so the caller
- * passes the same id list it gives <FaqList>.
- */
-export function faqLd(dict: Dict, ids: FaqId[]) {
+export function faqLd(dict: Dict) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: pickFaq(dict, ids).map((f) => ({
+    mainEntity: dict.faq.items.map((f) => ({
       "@type": "Question",
       name: f.q,
       acceptedAnswer: { "@type": "Answer", text: f.a },
     })),
   };
-}
-
-/** `<script type="application/ld+json">` payload helper. */
-export function ldJson(data: object) {
-  return { __html: JSON.stringify(data) };
 }

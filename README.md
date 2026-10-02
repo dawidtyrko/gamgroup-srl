@@ -1,56 +1,45 @@
 # GAM Group — Sito Aziendale
 
-Multi-page Next.js 14 site (App Router, TypeScript), Italian + English.
-Design direction **"H · Percorso"**, approved 28/09/2026: white, cobalt `#2D4BF0`,
-coral `#FF7A59`, Inter; the GAM wordmark (Zilla Slab, scanline effect) keeps its
-original teal `#35707E`.
+Next.js (App Router) recreation of the GAM Group single-page marketing site, with
+an automatic, code-free Case Study CMS backed by **Vercel KV (Redis)**.
 
-## Pages
-| Italiano | English |
-| --- | --- |
-| `/` | `/en` |
-| `/chi-siamo` | `/en/about` |
-| `/servizi/consulenza-erp`, `/servizi/ai-bi`, `/servizi/sviluppo-integrazione`, `/servizi/assistenza` | `/en/services/erp-consulting`, `/en/services/ai-bi`, `/en/services/development-integration`, `/en/services/support` |
-| `/clienti` | `/en/clients` |
-| `/lavora-con-noi` | `/en/job-board` |
-| `/contatti` | `/en/contact` |
-| `/privacy` | `/en/privacy` |
+The original design handoff (prototype `.dc.html`, `support.js`, and the spec
+`README.md`) lives in [`design-reference/`](./design-reference) and is **not**
+shipped — it is the source of truth for copy, colours, and behaviour.
 
-`/servizi` and `/en/services` redirect to the first service. `/admin-cms` is the hidden editor for open positions.
+## Stack
+- **Next.js 14** (App Router, TypeScript), plain CSS + inline styles (pixel-faithful to the prototype)
+- **Vercel KV** for case studies (`@vercel/kv`)
+- **Leaflet 1.9.4** for the office map (CARTO dark tiles, no API key)
 
-## Where things live
-- **Texts** — `lib/i18n/it.ts` and `lib/i18n/en.ts` (same shape, enforced by `lib/i18n/types.ts`).
-- **URLs** — `lib/routes.ts`: one key per page, mapped to its IT/EN path. The language switch, sitemap and hreflang all use it.
-- **Logos & photos** — `lib/siteData.ts` (`public/clients`, `public/partners`, `public/azienda`).
-- **Page layouts** — `components/site/pages.tsx`; shared blocks in `components/site/ui.tsx`; header/footer, contact form and jobs list next to them.
-- **Styles** — `app/globals.css` (desktop, tablet ≤900px, phone ≤640px).
+## Case Study CMS (automatic, no code edits after deploy)
+1. **Data** — projects live in a Redis LIST `gam:projects` (one Project per element). See `lib/projects.ts`. Fields map to the modal blocks: `challenge` → *La sfida*, `description` → *Il progetto*, `benefits[]` → *Benefici*. An empty store is auto-seeded with the four reference case studies.
+2. **Admin** — `/admin-cms` is a hidden (noindex), password-protected form that POSTs to `/api/projects`. The password is the `ADMIN_CMS_PASSWORD` env var.
+3. **ISR** — `app/page.tsx` is statically cached with `revalidate = 60`. Adding a project calls `revalidatePath("/")`, so new case studies appear immediately without a redeploy, while visitors keep getting a flash-fast cached page.
 
-## Open positions (Job Board)
-Stored in Vercel KV (`lib/jobs.ts`), managed at `/admin-cms` (password `ADMIN_CMS_PASSWORD`).
-The job pages are cached (`revalidate = 60`) and every admin change calls
-`revalidatePath()` on `/lavora-con-noi` and `/en/job-board`, so updates appear at once.
-Without KV credentials the site still runs with the default positions.
-
-## Contact form
-`/api/contact` sends mail through Resend (`RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM`).
-Without the key the form shows "Invio non riuscito" — expected in local dev.
-
-## Language routing
-`middleware.ts` redirects the Italian home to `/en` for visitors outside Italy,
-unless they picked a language (cookie `gam_locale`, set by the header switch).
+## Key design guarantees (per the handoff)
+- Root wrapper uses **`overflow-x: clip`** (not `hidden`) so the pinned horizontal Projects gallery's `position: sticky` works.
+- Case studies open in a **modal** (`z-index: 1200`, backdrop blur).
+- Leaflet map uses **dynamic import** (`ssr: false`), **`isolation: isolate`** on the map container, and **`z-index: 1000`** on the floating address card.
 
 ## Local development
 ```bash
 npm install
-cp .env.example .env.local   # KV + ADMIN_CMS_PASSWORD + RESEND_API_KEY
+cp .env.example .env.local   # fill in KV + ADMIN_CMS_PASSWORD
 npm run dev
 ```
-Type check: `node node_modules/typescript/bin/tsc --noEmit`.
+Without KV credentials the site still runs and renders the four default case
+studies (KV writes are disabled until configured).
+
+## Deploy to Vercel
+1. Push the repo and import it into Vercel.
+2. **Storage → Create → KV** and connect it to the project (injects `KV_REST_API_URL` / `KV_REST_API_TOKEN`).
+3. Add **`ADMIN_CMS_PASSWORD`** in Project → Settings → Environment Variables.
+4. Deploy. Manage case studies at `https://<domain>/admin-cms`.
 
 ## Environment variables
 | Variable | Purpose |
 | --- | --- |
-| `KV_REST_API_URL`, `KV_REST_API_TOKEN` | Vercel KV (auto-injected on Vercel) |
-| `ADMIN_CMS_PASSWORD` | Protects `/admin-cms` and the `/api/jobs` write routes |
-| `RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM` | Contact form e-mail |
-| `NEXT_PUBLIC_SITE_URL` | Canonical base URL for metadata and sitemap |
+| `KV_REST_API_URL` | Vercel KV REST endpoint (auto-injected) |
+| `KV_REST_API_TOKEN` | Vercel KV REST token (auto-injected) |
+| `ADMIN_CMS_PASSWORD` | Password protecting `/admin-cms` and `POST /api/projects` |

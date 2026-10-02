@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GAM · Assistenza & Manutenzione</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:32px;
+     font-family:'Poppins',system-ui,sans-serif}
+.graphic{width:100%;max-width:620px}
+.graphic svg{width:100%;height:auto;display:block}
+.core{fill:#4D93A2}
+.halo{fill:none;stroke:#4D93A2;opacity:.32;animation:halo 3.2s ease-out infinite}
+@keyframes halo{0%{transform:scale(.76);opacity:.42}100%{transform:scale(1.45);opacity:0}}
+.g{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.gf{fill:#fff}
+.link{fill:none;stroke:#DDE6E8;stroke-width:1.8}
+.link-on{fill:none;stroke:#BFD9DE;stroke-width:2}
+.dot{fill:#4D93A2}
+.chip{fill:#fff;stroke:#4D93A2;stroke-width:1.6}
+.chip-l{fill:#fff;stroke:#C6D2D8;stroke-width:1.6}
+.ring{fill:none;stroke:#DDE6E8;stroke-width:1.8}
+.arc{fill:none;stroke:#BFD9DE;stroke-width:2;stroke-linecap:round}
+.mono{font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;fill:#8CA0AE}
+.lbl{font-size:13px;font-weight:500;fill:#1E333B}
+.tealtxt{fill:#35707E}
+.bar{fill:#4D93A2}
+.bar-l{fill:#BFD9DE}
+@media(prefers-reduced-motion:reduce){.dot,.halo,.spin{display:none;animation:none}}
+</style>
+</head>
+<body>
+  <div class="graphic">
+    <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="L'infrastruttura protetta e monitorata da un presidio continuo">
+      <ellipse class="ring" id="orbit" cx="300" cy="170" rx="152" ry="120"/>
+      <ellipse class="ring" cx="300" cy="170" rx="108" ry="84" stroke-dasharray="3 8" stroke="#BFD9DE" stroke-width="1.6"/>
+
+      <g class="chip">
+        <rect x="264" y="34" width="72" height="30" rx="15"/>
+        <rect x="420" y="155" width="72" height="30" rx="15"/>
+        <rect x="264" y="276" width="72" height="30" rx="15"/>
+        <rect x="108" y="155" width="72" height="30" rx="15"/>
+      </g>
+      <g stroke="#4D93A2" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M292,49 h16 M300,41 v16"/>
+        <path d="M448,163 l8,7 -8,7 M464,163 l-8,7 8,7"/>
+        <path d="M292,291 h16 M300,283 v16"/>
+        <path d="M136,285 m0,0" />
+        <circle cx="144" cy="170" r="5"/><path d="M152,170 h10"/>
+      </g>
+
+      <path d="M300,116 L344,134 V176 C344,204 324,222 300,230 C276,222 256,204 256,176 V134 Z"
+            fill="#4D93A2"/>
+      <g class="g">
+        <path d="M280,172 L294,186 L322,156"/>
+      </g>
+      <circle class="halo" cx="300" cy="173" r="58" style="transform-origin:300px 173px"/>
+
+      <circle class="dot" r="5.5">
+        <animateMotion dur="5.4s" repeatCount="indefinite"><mpath href="#orbit"/></animateMotion>
+      </circle>
+      <circle class="dot" r="4" opacity=".45">
+        <animateMotion dur="5.4s" begin="-2.7s" repeatCount="indefinite"><mpath href="#orbit"/></animateMotion>
+      </circle>
+    </svg>
+  </div>
+</body>
+</html>

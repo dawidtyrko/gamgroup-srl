@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GAM · Consulenza Tecnica ERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:32px;
+     font-family:'Poppins',system-ui,sans-serif}
+.graphic{width:100%;max-width:620px}
+.graphic svg{width:100%;height:auto;display:block}
+.core{fill:#4D93A2}
+.halo{fill:none;stroke:#4D93A2;opacity:.32;animation:halo 3.2s ease-out infinite}
+@keyframes halo{0%{transform:scale(.76);opacity:.42}100%{transform:scale(1.45);opacity:0}}
+.g{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.gf{fill:#fff}
+.link{fill:none;stroke:#DDE6E8;stroke-width:1.8}
+.link-on{fill:none;stroke:#BFD9DE;stroke-width:2}
+.dot{fill:#4D93A2}
+.chip{fill:#fff;stroke:#4D93A2;stroke-width:1.6}
+.chip-l{fill:#fff;stroke:#C6D2D8;stroke-width:1.6}
+.ring{fill:none;stroke:#DDE6E8;stroke-width:1.8}
+.arc{fill:none;stroke:#BFD9DE;stroke-width:2;stroke-linecap:round}
+.mono{font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;fill:#8CA0AE}
+.lbl{font-size:13px;font-weight:500;fill:#1E333B}
+.tealtxt{fill:#35707E}
+.bar{fill:#4D93A2}
+.bar-l{fill:#BFD9DE}
+@media(prefers-reduced-motion:reduce){.dot,.halo,.spin{display:none;animation:none}}
+</style>
+</head>
+<body>
+  <div class="graphic">
+    <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="Il sistema ERP al centro, gestito lungo tutto il suo ciclo di vita, con i gestionali collegati">
+      <ellipse class="ring" cx="300" cy="170" rx="150" ry="118"/>
+      <path class="arc" d="M300,52 A150,118 0 0 1 450,170" marker-end="url(#ah)"/>
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+          <path d="M0,1 L9,5 L0,9" fill="none" stroke="#BFD9DE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <g class="chip">
+        <rect x="256" y="36" width="88" height="32" rx="16"/>
+        <rect x="418" y="154" width="88" height="32" rx="16"/>
+        <rect x="256" y="272" width="88" height="32" rx="16"/>
+        <rect x="94" y="154" width="88" height="32" rx="16"/>
+      </g>
+      <g class="dotsm" fill="#4D93A2">
+        <circle cx="300" cy="52" r="4"/><circle cx="450" cy="170" r="4"/>
+        <circle cx="300" cy="288" r="4"/><circle cx="150" cy="170" r="4"/>
+      </g>
+      <g class="g" stroke="#4D93A2">
+        <path d="M292,52 h16 M300,44 v16"/>
+      </g>
+
+      <circle class="halo" cx="300" cy="170" r="62" style="transform-origin:300px 170px"/>
+      
+      <rect x="248" y="130" width="104" height="80" rx="14" fill="#4D93A2"/>
+      <g class="g">
+        <path d="M268,148 H332"/>
+        <path d="M268,162 H332"/>
+        <path d="M268,176 H312"/>
+        <path d="M268,190 H312"/>
+      </g>
+      <circle cx="326" cy="188" r="3.5" fill="#BFD9DE"/>
+    </svg>
+  </div>
+</body>
+</html>

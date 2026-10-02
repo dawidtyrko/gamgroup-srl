@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { href } from "@/lib/routes";
 import { resetJobs } from "@/lib/jobs";
 import { adminGuard } from "@/lib/adminAuth";
 
@@ -19,8 +18,8 @@ export async function POST(req: Request) {
 
   try {
     const jobs = await resetJobs();
-    revalidatePath(href("lavora", "it"));
-    revalidatePath(href("lavora", "en"));
+    revalidatePath("/");
+    revalidatePath("/en");
     return NextResponse.json({ ok: true, count: jobs.length });
   } catch (err) {
     console.error("[api/jobs/reset] failed:", err);
