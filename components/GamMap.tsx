@@ -43,17 +43,16 @@ export default function GamMap({
         attributionControl: true,
       }).setView([LAT, LNG], 14);
 
-      L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-        {
-          subdomains: "abcd",
-          maxZoom: 19,
-          attribution: "&copy; OpenStreetMap &copy; CARTO",
-        }
-      ).addTo(map);
+      // OpenStreetMap standard tiles: no API key needed. CARTO's
+      // basemaps.cartocdn.com started answering "API KEY REQUIRED" on its tiles
+      // in 2026, which stamped that text across the whole map — don't go back.
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(map);
 
       // Drop Leaflet's default prefix (the "Leaflet" name + Ukrainian flag),
-      // keeping the licence-required OSM/CARTO attribution.
+      // keeping the licence-required OSM attribution.
       map.attributionControl?.setPrefix(false);
 
       // Custom teal pulsing pin via divIcon (avoids the default-marker 404).
