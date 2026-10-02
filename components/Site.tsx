@@ -83,13 +83,53 @@ const partnerLogos = [
   { name: "AWS", src: "/partners/aws.png" },
 ];
 
-// Client logos (shown full-colour, per the old site).
-const clientLogos = [
+// Client logos (shown full-colour, per the old site). Expanded from 5 to 36 on
+// 2026-10-02 with the list gathered for the (since reverted) new site; each logo
+// is taken from the company's own site. `invert` marks the ones whose official
+// site only publishes a white-on-dark version — those need inverting to be
+// visible on this section's white background.
+const clientLogos: { name: string; src: string; invert?: boolean }[] = [] = [
   { name: "Maserati", src: "/clients/maserati.png" },
   { name: "Miele", src: "/clients/miele.png" },
   { name: "CNH Industrial", src: "/clients/cnh.png" },
   { name: "Geox", src: "/clients/geox.png" },
   { name: "Safilo", src: "/clients/safilo.png" },
+  { name: "Iveco", src: "/clients/iveco.svg" },
+  { name: "Leonardo", src: "/clients/leonardo.svg" },
+  { name: "Magneti Marelli", src: "/clients/marelli.svg" },
+  { name: "Valeo", src: "/clients/valeo.svg" },
+  { name: "Diadora", src: "/clients/diadora.svg" },
+  { name: "Air Liquide", src: "/clients/airliquide.svg" },
+  { name: "ArcelorMittal CLN", src: "/clients/arcelormittal.svg" },
+  // the official site only publishes the white (dark-background) variant — inverted for white
+  { name: "CLN Group", src: "/clients/cln.svg", invert: true },
+  { name: "Fassa Bortolo", src: "/clients/fassabortolo.png" },
+  { name: "Selle Royal", src: "/clients/selleroyal.png" },
+  { name: "Iseo Serrature", src: "/clients/iseo.svg" },
+  { name: "Grandi Molini Italiani", src: "/clients/grandimolini.png" },
+  // ex Industria Italiana Autobus, back to the Menarini name in 2024
+  { name: "Menarini", src: "/clients/menarini.png" },
+  { name: "Provincia di Treviso", src: "/clients/treviso.png" },
+  // added 29/09/2026 (meeting) — each logo taken from the company's official site;
+  // `invert` = the site only publishes a white version
+  { name: "3B S.p.A.", src: "/clients/3b.svg", invert: true },
+  { name: "Friul Intagli Industries", src: "/clients/friulintagli.svg", invert: true },
+  { name: "Bitron", src: "/clients/bitron.svg", invert: true },
+  { name: "SEWS-CABIND", src: "/clients/sews-cabind.svg" },
+  { name: "DENSO Thermal Systems", src: "/clients/denso.png" },
+  { name: "Colfert", src: "/clients/colfert.svg" },
+  // ex DTR VMS, now part of DN Automotive (official site vms.dnautomotive.com)
+  { name: "DN Automotive (ex DTR VMS)", src: "/clients/dn-automotive.png", invert: true },
+  { name: "Favero Health Projects", src: "/clients/favero.png" },
+  { name: "ICI Caldaie", src: "/clients/ici.png", invert: true },
+  { name: "MBF", src: "/clients/mbf.svg" },
+  { name: "Sappi", src: "/clients/sappi.svg" },
+  { name: "Tomasella", src: "/clients/tomasella.svg" },
+  { name: "SHL Production", src: "/clients/shl.png", invert: true },
+  { name: "SuperJet International", src: "/clients/superjet.png" },
+  { name: "Officine Biglia", src: "/clients/biglia.png" },
+  { name: "OLSA", src: "/clients/olsa.svg" },
+  { name: "Moretto", src: "/clients/moretto.svg" },
 ];
 
 // Service imagery shown in the expanded accordion panel (locale-independent).
@@ -666,7 +706,7 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
         <div data-rise style={{ maxWidth: 1180, margin: "0 auto", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "clamp(36px,6vw,80px)" }}>
           {clientLogos.map((cl) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={cl.name} src={cl.src} alt={cl.name} style={{ display: "block", maxHeight: "clamp(44px,5vw,72px)", maxWidth: "clamp(120px,15vw,200px)", width: "auto", height: "auto" }} />
+            <img key={cl.name} src={cl.src} alt={cl.name} loading="lazy" style={{ display: "block", maxHeight: "clamp(44px,5vw,72px)", maxWidth: "clamp(120px,15vw,200px)", width: "auto", height: "auto", ...(cl.invert ? { filter: "invert(1) grayscale(1)" } : null) }} />
           ))}
         </div>
       </section>
@@ -789,6 +829,31 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
         </div>
       </section>
 
+      {/* ---- L'AI in pratica (concrete use cases — added 2026-10-02) ---- */}
+      <section style={{ background: LIGHT, padding: "clamp(90px,12vw,170px) 6vw" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+          <div data-rise style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: "clamp(22px,2.4vw,34px)" }}>
+            <span style={eyebrow()}>{dict.ai.eyebrow}</span>
+            <h2 style={{ ...h2, color: INK }}>{dict.ai.title}</h2>
+          </div>
+          <p data-rise style={{ margin: "0 0 clamp(40px,5vw,64px)", maxWidth: 760, fontWeight: 300, fontSize: "clamp(17px,1.7vw,21px)", lineHeight: 1.7, color: S2 }}>
+            {dict.ai.intro}
+          </p>
+          <div data-ai-grid style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 18 }}>
+            {dict.ai.areas.map((a) => (
+              <div key={a.title} className="ai-card" style={{ background: "#fff", border: `1px solid ${LINE}`, borderRadius: 18, padding: "clamp(24px,2.2vw,32px)", transition: "border-color .3s ease, transform .3s ease" }}>
+                <span style={{ display: "block", width: 10, height: 10, borderRadius: "50%", background: TEAL, marginBottom: 20 }} />
+                <h3 style={{ margin: "0 0 10px", fontFamily: GRO, fontWeight: 700, fontSize: "clamp(17px,1.5vw,21px)", letterSpacing: "-.01em", color: INK }}>{a.title}</h3>
+                <p style={{ margin: 0, fontWeight: 300, fontSize: 15, lineHeight: 1.6, color: S2 }}>{a.text}</p>
+              </div>
+            ))}
+          </div>
+          <p data-rise style={{ margin: "clamp(36px,4vw,54px) 0 0", fontFamily: GRO, fontWeight: 500, fontSize: "clamp(17px,1.6vw,21px)", lineHeight: 1.6, color: INK }}>
+            {dict.ai.close}
+          </p>
+        </div>
+      </section>
+
       {/* ---- Numeri ---- */}
       <section ref={statsRef} style={{ position: "relative", overflow: "hidden", background: NAVY, padding: "clamp(90px,12vw,160px) 6vw" }}>
         {/* barely-visible duotone backdrop behind the counters (Vittoria: darker,
@@ -831,6 +896,38 @@ export default function Site({ projects, jobs, dict, locale }: { projects: Proje
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---- L'azienda (office photo gallery — added 2026-10-02) ---- */}
+      <section style={{ background: LIGHT, padding: "clamp(90px,12vw,170px) 6vw" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+          <div data-rise style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: "clamp(22px,2.4vw,34px)" }}>
+            <span style={eyebrow()}>{dict.gallery.eyebrow}</span>
+            <h2 style={{ ...h2, color: INK }}>{dict.gallery.title}</h2>
+          </div>
+          <p data-rise style={{ margin: "0 0 clamp(40px,5vw,60px)", maxWidth: 720, fontWeight: 300, fontSize: "clamp(17px,1.7vw,21px)", lineHeight: 1.7, color: S2 }}>
+            {dict.gallery.lead}
+          </p>
+          <div data-gallery style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gridTemplateRows: "230px 230px", gap: 16 }}>
+            {([
+              ["/azienda/salotto.jpg", dict.gallery.alts.salotto, true],
+              ["/azienda/angolo-caffe.jpg", dict.gallery.alts.caffe, false],
+              ["/azienda/team-f1.jpg", dict.gallery.alts.f1, false],
+              ["/azienda/modellini.jpg", dict.gallery.alts.modellini, false],
+              ["/azienda/vespa-casco.jpg", dict.gallery.alts.vespa, false],
+            ] as [string, string, boolean][]).map(([src, alt, tall]) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={src}
+                src={src}
+                alt={alt}
+                loading="lazy"
+                decoding="async"
+                style={{ display: "block", width: "100%", height: "100%", objectFit: "cover", borderRadius: 18, background: LINE, ...(tall ? { gridRow: "span 2" } : null) }}
+              />
+            ))}
           </div>
         </div>
       </section>

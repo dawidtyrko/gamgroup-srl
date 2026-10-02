@@ -98,6 +98,35 @@ export const it: Dict = {
       { value: 20, label: "Partner" },
     ],
   },
+  ai: {
+    eyebrow: "L’AI in pratica",
+    title: "Intelligenza artificiale, senza paura.",
+    intro:
+      "Non la usiamo per stupire: la applichiamo ai processi di tutti i giorni, per togliere lavoro manuale, ridurre gli errori e far risparmiare tempo e costi. Partiamo da un caso concreto, misuriamo il risultato, poi allarghiamo.",
+    close: "Grazie all’AI stiamo ottimizzando i processi aziendali dei nostri clienti, facendo risparmiare tempo e costi.",
+    areas: [
+      { title: "Formazione AI per manager", text: "Corsi pratici per chi guida l’azienda: capire cosa l’AI può fare nei propri processi e da dove partire, senza tecnicismi." },
+      { title: "Gare e appalti", text: "Abbiamo affrontato tante gare d’appalto e, grazie all’AI, sempre con successo." },
+      { title: "Risorse umane", text: "Automazioni e assistenti AI per le attività ripetitive dell’HR, dalla gestione delle richieste ai documenti del personale." },
+      { title: "Acquisti", text: "Analisi di ordini, fornitori e offerte con l’AI, per decidere più in fretta e con dati più affidabili." },
+      { title: "Gestione doganale", text: "Documenti e pratiche doganali preparati e controllati con l’AI, per ridurre errori e tempi." },
+      { title: "Riconciliazione documenti", text: "Con Rivelio confrontiamo in automatico documenti e dati del gestionale, segnalando solo ciò che non torna." },
+      { title: "Documentazione di produzione", text: "Con ProcederAI trasformiamo video, manuali e l’esperienza degli operatori in procedure e documentazione sempre aggiornata, consultabile direttamente in produzione." },
+      { title: "Dark factory", text: "Siamo coinvolti in progetti di fabbriche automatizzate “a luci spente” insieme a realtà internazionali." },
+    ],
+  },
+  gallery: {
+    eyebrow: "L’azienda",
+    title: "Dove nascono i nostri progetti.",
+    lead: "Un ufficio luminoso a Treviso, un team affiatato e qualche passione in comune per i motori. È qui che ogni giorno costruiamo soluzioni insieme ai nostri clienti.",
+    alts: {
+      salotto: "L’angolo salotto dell’ufficio GAM",
+      caffe: "L’angolo caffè dell’ufficio con la scritta GAM",
+      f1: "Due persone del team GAM davanti a monoposto di Formula 1 in un museo",
+      modellini: "Modellini di elicottero, Vespa, jeep e Maserati su una mensola",
+      vespa: "Un casco e un modellino di Vespa su uno scaffale bianco",
+    },
+  },
   about: {
     eyebrow: "Chi siamo",
     title: "Il partner di cui ti puoi fidare.",
@@ -110,7 +139,7 @@ export const it: Dict = {
       post: ". Da oltre vent’anni affianchiamo le imprese nell’evoluzione e nella gestione dei loro sistemi IT, accompagnandole nella rivoluzione dell’intelligenza artificiale con soluzioni concrete, integrate nei processi e orientate ai risultati.",
     },
     sectorsLabel: "Settori in cui operiamo",
-    sectors: ["Retail", "Food", "Automotive", "Fashion", "Aerospace", "… e molti altri"],
+    sectors: ["Retail", "Food", "Automotive", "Fashion", "Aerospace", "Pubblica amministrazione", "… e molti altri"],
   },
   projectsSec: {
     eyebrow: "Case studies",
@@ -163,6 +192,10 @@ export const it: Dict = {
       {
         q: "Come possiamo richiedere un primo contatto?",
         a: "Potete scrivere a info@gamgroup.it oppure compilare il modulo nella sezione Contattaci che segue.",
+      },
+      {
+        q: "L’intelligenza artificiale sostituirà le persone in azienda?",
+        a: "No. L’AI toglie il lavoro ripetitivo — ricopiare dati, controllare documenti, cercare informazioni — e lascia alle persone le decisioni e le relazioni. Nei progetti che seguiamo il risultato è che il tempo si sposta dalle attività manuali a quelle che portano valore.",
       },
     ],
   },

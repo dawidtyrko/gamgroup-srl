@@ -39,6 +39,21 @@ export interface Dict {
     items: { name: string; items: string[] }[];
   };
   stats: { eyebrow: string; items: { value: number; label: string }[] };
+  /** "L'AI in pratica" — the concrete AI use cases (added 2026-10-02). */
+  ai: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    close: string;
+    areas: { title: string; text: string }[];
+  };
+  /** Office photo gallery under Chi Siamo (added 2026-10-02). */
+  gallery: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    alts: { salotto: string; caffe: string; f1: string; modellini: string; vespa: string };
+  };
   about: {
     eyebrow: string;
     title: string;

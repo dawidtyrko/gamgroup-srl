@@ -186,6 +186,10 @@ html {
   transition: padding-left 0.4s ease, background 0.3s ease, box-shadow 0.3s ease !important;
 }
 @media (hover: hover) {
+  .ai-card:hover {
+    border-color: rgba(77, 147, 162, 0.55);
+    transform: translateY(-3px);
+  }
   .svc-row:not(.svc-row--open):hover,
   .job-row:hover {
     padding-left: 18px !important;
@@ -417,38 +421,13 @@ html {
   overflow: hidden;
   z-index: 0;
 }
+/* One still frame since 2026-10-02 (was a crossfading Ken-Burns slideshow —
+   see components/HeroBackground.tsx). */
 .hero-bg-frame {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  opacity: 0;
-  will-change: opacity, transform;
-  animation-name: hero-kenburns;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-}
-/* each frame is visible for one 1/7 slice with a ~3% crossfade either side,
-   and drifts from scale 1.05 -> 1.12 while on screen */
-@keyframes hero-kenburns {
-  0% {
-    opacity: 0;
-    transform: scale(1.05);
-  }
-  3% {
-    opacity: 1;
-  }
-  14.28% {
-    opacity: 1;
-  }
-  17.28% {
-    opacity: 0;
-    transform: scale(1.12);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.05);
-  }
 }
 .hero-bg-veil {
   position: absolute;
@@ -463,13 +442,6 @@ html {
 }
 @media (prefers-reduced-motion: reduce) {
   /* freeze on the first frame, no zoom/crossfade */
-  .hero-bg-frame {
-    animation: none;
-  }
-  .hero-bg-frame:first-of-type {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 /* nav links: teal on hover (scroll-spy sets the active colour inline) */
@@ -577,6 +549,18 @@ summary:focus-visible {
   [data-chan] {
     grid-template-columns: 1fr 1fr !important;
   }
+  [data-ai-grid] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  /* gallery: the tall first cell goes full width and the rest pair up */
+  [data-gallery] {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: 200px 150px 150px !important;
+  }
+  [data-gallery] > img:first-child {
+    grid-row: auto !important;
+    grid-column: 1 / -1 !important;
+  }
   /* stats: 2 columns on mobile (per handoff README) */
   [data-stats-grid] {
     grid-template-columns: 1fr 1fr !important;
@@ -597,6 +581,9 @@ summary:focus-visible {
 }
 @media (max-width: 600px) {
   [data-chan] {
+    grid-template-columns: 1fr !important;
+  }
+  [data-ai-grid] {
     grid-template-columns: 1fr !important;
   }
 }

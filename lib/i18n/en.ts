@@ -97,6 +97,35 @@ export const en: Dict = {
       { value: 20, label: "Partners" },
     ],
   },
+  ai: {
+    eyebrow: "AI in practice",
+    title: "Artificial intelligence, without fear.",
+    intro:
+      "We don’t use it to impress: we apply it to everyday processes, to remove manual work, reduce errors and save time and money. We start from a concrete case, measure the result, then scale up.",
+    close: "Thanks to AI we are optimising our clients’ business processes, saving them time and money.",
+    areas: [
+      { title: "AI training for managers", text: "Hands-on courses for the people who run the company: what AI can do in their own processes and where to start, without jargon." },
+      { title: "Tenders", text: "We have taken part in many tenders and, thanks to AI, always successfully." },
+      { title: "Human resources", text: "Automations and AI assistants for repetitive HR work, from handling requests to staff documents." },
+      { title: "Purchasing", text: "AI analysis of orders, suppliers and quotes, to decide faster and with more reliable data." },
+      { title: "Customs management", text: "Customs documents and procedures prepared and checked with AI, to reduce errors and lead times." },
+      { title: "Document reconciliation", text: "With Rivelio we automatically match documents against ERP data, flagging only what doesn’t add up." },
+      { title: "Production documentation", text: "With ProcederAI we turn videos, manuals and operators’ know-how into always up-to-date procedures and documentation, available right on the production floor." },
+      { title: "Dark factory", text: "We are involved in fully automated “lights-out” factory projects together with international partners." },
+    ],
+  },
+  gallery: {
+    eyebrow: "The company",
+    title: "Where our projects take shape.",
+    lead: "A bright office in Treviso, a close-knit team and a shared passion for engines. This is where we build solutions alongside our clients every day.",
+    alts: {
+      salotto: "The lounge corner of the GAM office",
+      caffe: "The office coffee corner with the GAM lettering",
+      f1: "Two members of the GAM team in front of Formula 1 cars in a museum",
+      modellini: "Model helicopter, Vespa, jeep and Maserati on a shelf",
+      vespa: "A helmet and a model Vespa on a white shelf",
+    },
+  },
   about: {
     eyebrow: "About us",
     title: "The partner you can trust.",
@@ -109,7 +138,7 @@ export const en: Dict = {
       post: ". For over twenty years we have supported businesses in evolving and managing their IT systems, guiding them through the artificial-intelligence revolution with concrete solutions, integrated into their processes and results-oriented.",
     },
     sectorsLabel: "Sectors we work in",
-    sectors: ["Retail", "Food", "Automotive", "Fashion", "Aerospace", "… and many more"],
+    sectors: ["Retail", "Food", "Automotive", "Fashion", "Aerospace", "Public administration", "… and many more"],
   },
   projectsSec: {
     eyebrow: "Case studies",
@@ -160,6 +189,10 @@ export const en: Dict = {
       {
         q: "How can we request a first contact?",
         a: "You can write to info@gamgroup.it or fill in the form in the Contact section below.",
+      },
+      {
+        q: "Will artificial intelligence replace people in the company?",
+        a: "No. AI removes the repetitive work — re-keying data, checking documents, hunting for information — and leaves decisions and relationships to people. In the projects we run, the result is that time shifts from manual tasks to the ones that add value.",
       },
     ],
   },
