@@ -9,18 +9,18 @@ type Ctx = { params: { id: string } };
 
 /**
  * PUT /api/projects/:id — update an existing case study.
- * Auth: `x-admin-password` header (or `password` in the body).
+ * Auth: `x-admin-password` header.
  */
 export async function PUT(req: Request, { params }: Ctx) {
+  const denied = await adminGuard(req);
+  if (denied) return denied;
+
   let body: Record<string, unknown>;
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
-
-  const denied = adminGuard(req, body);
-  if (denied) return denied;
 
   const parsed = parseProjectInput(body);
   if ("error" in parsed) {
@@ -44,10 +44,10 @@ export async function PUT(req: Request, { params }: Ctx) {
 
 /**
  * DELETE /api/projects/:id — remove a case study.
- * Auth: `x-admin-password` header. (DELETE has no body, so header is required.)
+ * Auth: `x-admin-password` header.
  */
 export async function DELETE(req: Request, { params }: Ctx) {
-  const denied = adminGuard(req, {});
+  const denied = await adminGuard(req);
   if (denied) return denied;
 
   try {

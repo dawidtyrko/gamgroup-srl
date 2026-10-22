@@ -7,13 +7,7 @@ export const dynamic = "force-dynamic";
 
 /** POST /api/projects/reset — replace the list with the 4 built-in defaults. */
 export async function POST(req: Request) {
-  let body: Record<string, unknown> = {};
-  try {
-    body = await req.json();
-  } catch {
-    /* header auth still works */
-  }
-  const denied = adminGuard(req, body);
+  const denied = await adminGuard(req);
   if (denied) return denied;
 
   try {

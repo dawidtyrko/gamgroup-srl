@@ -9,15 +9,15 @@ type Ctx = { params: { id: string } };
 
 /** PUT /api/jobs/:id — update an opening. */
 export async function PUT(req: Request, { params }: Ctx) {
+  const denied = await adminGuard(req);
+  if (denied) return denied;
+
   let body: Record<string, unknown>;
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
-
-  const denied = adminGuard(req, body);
-  if (denied) return denied;
 
   const parsed = parseJobInput(body);
   if ("error" in parsed) {
@@ -39,7 +39,7 @@ export async function PUT(req: Request, { params }: Ctx) {
 
 /** DELETE /api/jobs/:id — remove an opening. */
 export async function DELETE(req: Request, { params }: Ctx) {
-  const denied = adminGuard(req, {});
+  const denied = await adminGuard(req);
   if (denied) return denied;
 
   try {

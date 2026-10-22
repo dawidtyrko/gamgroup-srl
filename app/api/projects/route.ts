@@ -14,20 +14,20 @@ export async function GET() {
 
 /**
  * POST /api/projects — add a new case study.
- * Auth: `x-admin-password` header (or `password` in the body) === ADMIN_CMS_PASSWORD.
+ * Auth: `x-admin-password` header === ADMIN_CMS_PASSWORD.
  * On success the homepage ISR cache is revalidated so the new project appears
  * without a redeploy.
  */
 export async function POST(req: Request) {
+  const denied = await adminGuard(req);
+  if (denied) return denied;
+
   let body: Record<string, unknown>;
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
-
-  const denied = adminGuard(req, body);
-  if (denied) return denied;
 
   const parsed = parseProjectInput(body);
   if ("error" in parsed) {

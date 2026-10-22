@@ -21,8 +21,22 @@ const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/avif", "image/g
 const blobToken = () =>
   process.env.blob_gam_READ_WRITE_TOKEN || process.env.BLOB_READ_WRITE_TOKEN;
 
+/**
+ * Build a safe blob key from a client-supplied filename. The name reaches us
+ * straight from the browser, so strip any directory component and keep only
+ * characters that cannot reshape the key path.
+ */
+function safeName(name: string): string {
+  const base = name.split(/[\\/]/).pop() ?? "";
+  const cleaned = base
+    .replace(/[^a-zA-Z0-9._-]/g, "-") // anything exotic becomes a dash
+    .replace(/^\.+/, "") // no leading dots -> no ".." and no hidden files
+    .slice(0, 100);
+  return cleaned || "image";
+}
+
 export async function POST(req: Request) {
-  const denied = adminGuard(req, {});
+  const denied = await adminGuard(req);
   if (denied) return denied;
 
   const token = blobToken();
@@ -55,7 +69,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const blob = await put(`projects/${file.name}`, file, {
+    const blob = await put(`projects/${safeName(file.name)}`, file, {
       access: "public",
       addRandomSuffix: true,
       contentType: file.type,

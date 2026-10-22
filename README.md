@@ -42,4 +42,4 @@ studies (KV writes are disabled until configured).
 | --- | --- |
 | `KV_REST_API_URL` | Vercel KV REST endpoint (auto-injected) |
 | `KV_REST_API_TOKEN` | Vercel KV REST token (auto-injected) |
-| `ADMIN_CMS_PASSWORD` | Password protecting `/admin-cms` and `POST /api/projects` |
+| `ADMIN_CMS_PASSWORD` | Password protecting `/admin-cms` and `POST /api/projects`. Sent as the `x-admin-password` header; failed attempts are locked out per IP (10 / 10 min) when KV is configured |

@@ -13,19 +13,19 @@ export async function GET() {
 
 /**
  * POST /api/jobs — add a new opening.
- * Auth via `x-admin-password` header (or `password` body field). Revalidates
+ * Auth via the `x-admin-password` header. Revalidates
  * both localized homepages so the change appears without a redeploy.
  */
 export async function POST(req: Request) {
+  const denied = await adminGuard(req);
+  if (denied) return denied;
+
   let body: Record<string, unknown>;
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
-
-  const denied = adminGuard(req, body);
-  if (denied) return denied;
 
   const parsed = parseJobInput(body);
   if ("error" in parsed) {
